@@ -1,135 +1,233 @@
-# Turborepo starter
+# Trainer Tracker
 
-This Turborepo starter is maintained by the Turborepo core team.
+A comprehensive fitness training management system built with Next.js, featuring AI-powered program generation, client management, and progress tracking aligned with the NASM OPT model.
 
-## Using this example
+## 🚀 Features
 
-Run the following command:
+### Core Functionality
+- **🔐 Authentication System** - JWT-based user registration and login
+- **👥 Client Management** - Complete CRUD operations for client profiles
+- **📋 Assessment Tracking** - PARQ, movement assessments, and health evaluations
+- **🏋️ AI Program Generation** - OPT model-aligned training plans with real exercises
+- **📊 Progress Tracking** - Integrated progress updates tied to training plans
+- **💪 Exercise Database** - 200+ exercises with proper acute variables
+- **📄 Export Functionality** - PDF reports for clients and programs
+- **🎨 Professional UI** - Responsive, modern design with excellent UX
 
-```sh
-npx create-turbo@latest
-```
+### Training Features
+- **OPT Model Integration** - Full NASM Optimum Performance Training model support
+- **Phase-Based Programming** - Stabilization, Strength, and Power phases
+- **Exercise Progression** - Systematic exercise advancement with acute variables
+- **Progress Monitoring** - Three types of progress tracking (General, Workout, Assessment)
+- **Training Plan Display** - Detailed workout plans with exercises and parameters
 
-## What's inside?
+## 🛠️ Tech Stack
 
-This Turborepo includes the following packages/apps:
+### Frontend
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **CSS Modules** - Scoped styling
+- **Turbopack** - Fast development builds
 
-### Apps and Packages
+### Backend
+- **Next.js API Routes** - Serverless API endpoints
+- **Prisma ORM** - Database management and migrations
+- **SQLite** - Development database (easily switchable to PostgreSQL/MySQL)
+- **JWT Authentication** - Secure token-based auth
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### AI & Data
+- **OpenAI Integration** - AI-powered program generation
+- **Comprehensive Exercise Database** - 200+ exercises with acute variables
+- **OPT Model Compliance** - NASM-aligned training methodology
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Development Tools
+- **Turborepo** - Monorepo management
+- **ESLint** - Code quality and consistency
+- **TypeScript Config** - Shared type definitions
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 📁 Project Structure
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+trainer-tracker/
+├── apps/
+│   ├── api/                 # Backend API (Next.js)
+│   │   ├── prisma/         # Database schema and migrations
+│   │   ├── src/app/api/    # API routes
+│   │   └── src/lib/        # Exercise database and utilities
+│   ├── web/                # Frontend application (Next.js)
+│   │   ├── app/           # App Router pages and components
+│   │   └── src/           # Shared components and utilities
+│   └── docs/               # Documentation site
+├── packages/
+│   ├── eslint-config/      # Shared ESLint configuration
+│   ├── typescript-config/  # Shared TypeScript configuration
+│   └── ui/                # Shared UI components
+└── turbo.json             # Turborepo configuration
 ```
 
-### Develop
+## 🚀 Quick Start
 
-To develop all apps and packages, run the following command:
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Git
 
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd trainer-tracker
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cd apps/api
+   cp .env.example .env
+   ```
+   
+   Edit `.env` with your configuration:
+   ```env
+   DATABASE_URL="file:./dev.db"
+   JWT_SECRET="your-secret-key"
+   OPENAI_API_KEY="your-openai-key"
+   ```
+
+4. **Set up the database**
+   ```bash
+   cd apps/api
+   npx prisma migrate dev
+   npx prisma db seed
+   ```
+
+5. **Start the development servers**
+   ```bash
+   npm run dev
+   ```
+
+### Access Points
+- **Frontend**: http://localhost:3000
+- **API**: http://localhost:3001
+- **Documentation**: http://localhost:3002
+
+## 📊 Database Schema
+
+### Core Entities
+- **Users** - Trainer accounts with authentication
+- **Clients** - Client profiles and information
+- **Assessments** - Health and movement evaluations
+- **Programs** - Training programs with OPT phases
+- **Progress** - Progress tracking and updates
+
+### Key Features
+- **Multi-tenant** - Each trainer has isolated data
+- **Relational** - Proper foreign key relationships
+- **Flexible** - JSON fields for complex data structures
+- **Auditable** - Created/updated timestamps
+
+## 🎯 Training System
+
+### OPT Model Integration
+The system follows the NASM Optimum Performance Training model:
+
+1. **Stabilization Endurance** - Foundation and movement quality
+2. **Strength Endurance** - Muscular endurance and strength
+3. **Muscular Development** - Hypertrophy and muscle building
+4. **Maximal Strength** - Peak strength development
+5. **Power** - Explosive strength and performance
+
+### AI Program Generation
+- **Client Assessment Integration** - Uses client data for personalized programs
+- **Exercise Selection** - Real exercises with proper acute variables
+- **Progression Planning** - Systematic advancement through phases
+- **Training Parameters** - Sets, reps, rest periods, and intensity
+
+### Progress Tracking
+Three types of progress updates:
+- **General Progress** - Weight, body composition, general notes
+- **Workout Performance** - Exercise-specific performance tracking
+- **Assessment Results** - Structured evaluation updates
+
+## 🔧 Development
+
+### Available Scripts
+```bash
+# Development
+npm run dev          # Start all development servers
+npm run build        # Build all applications
+npm run lint         # Lint all packages
+npm run type-check   # Type check all packages
+
+# Database
+npm run db:generate  # Generate Prisma client
+npm run db:migrate   # Run database migrations
+npm run db:seed      # Seed database with sample data
+npm run db:studio    # Open Prisma Studio
 ```
-cd my-turborepo
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+### Adding New Features
+1. **API Routes** - Add to `apps/api/src/app/api/`
+2. **Frontend Components** - Add to `apps/web/app/` or `apps/web/src/`
+3. **Database Changes** - Update `apps/api/prisma/schema.prisma`
+4. **Shared Code** - Add to `packages/` for reusable components
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+## 🚀 Deployment
+
+### Environment Setup
+- Set production environment variables
+- Configure database connection
+- Set up OpenAI API key
+- Configure JWT secret
+
+### Build and Deploy
+```bash
+npm run build
+# Deploy to your preferred platform (Vercel, Netlify, etc.)
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 📈 Roadmap
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+### Planned Enhancements
+- [ ] **Mobile App** - React Native companion app
+- [ ] **Advanced Analytics** - Progress visualization and insights
+- [ ] **Nutrition Tracking** - Meal planning and macro tracking
+- [ ] **Social Features** - Client-trainer communication
+- [ ] **Video Integration** - Exercise demonstration videos
+- [ ] **Calendar Integration** - Scheduling and session management
+- [ ] **Payment Processing** - Subscription and billing management
+- [ ] **Multi-language Support** - Internationalization
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+### Technical Improvements
+- [ ] **Performance Optimization** - Caching and optimization
+- [ ] **Testing Suite** - Unit and integration tests
+- [ ] **CI/CD Pipeline** - Automated testing and deployment
+- [ ] **Monitoring** - Error tracking and performance monitoring
+- [ ] **Security Audit** - Comprehensive security review
 
-### Remote Caching
+## 🤝 Contributing
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+## 📄 License
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-```
-cd my-turborepo
+## 🆘 Support
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
+For support and questions:
+- Create an issue in the repository
+- Check the documentation at `/docs`
+- Review the API documentation
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
+---
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+**Built with ❤️ for fitness professionals**
