@@ -1,28 +1,32 @@
 {
-  "name": "docs",
+  "name": "api",
   "version": "0.1.0",
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack --port 3002",
+    "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@repo/ui": "*",
-    "next": "^15.3.0",
+    "@prisma/client": "^6.11.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "next": "^15.4.0-canary.116",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.30.0",
+    "tsx": "^4.20.3",
     "typescript": "5.8.2"
   }
 }
