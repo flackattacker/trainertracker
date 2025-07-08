@@ -951,10 +951,152 @@
 .trainingObjectives li {
   margin-bottom: 4px;
   color: #1f2937;
+  font-weight: 500;
 }
 
 .weeklyPlans {
   margin-bottom: 20px;
+}
+
+/* Ensure better contrast in progress view context */
+.progressView .trainingObjectives,
+.progressView .weeklyPlans {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.progressView .trainingObjectives strong,
+.progressView .weeklyPlans strong {
+  color: #1f2937;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.progressView .trainingObjectives ul {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+}
+
+.progressView .trainingObjectives li {
+  margin-bottom: 6px;
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.progressView .weeklyPlans .weekPlan {
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.progressView .weeklyPlans .weekPlan h5 {
+  color: #1f2937;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.progressView .weeklyPlans .workoutCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.progressView .weeklyPlans .workoutHeader {
+  background: #f3f4f6;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.progressView .weeklyPlans .workoutHeader h6 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.progressView .weeklyPlans .exercisesList {
+  padding: 16px;
+}
+
+.progressView .weeklyPlans .exerciseItem {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progressView .weeklyPlans .exerciseItem:last-child {
+  margin-bottom: 0;
+}
+
+.progressView .weeklyPlans .exerciseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progressView .weeklyPlans .exerciseName {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 0.95rem;
+}
+
+.progressView .weeklyPlans .exerciseId {
+  font-size: 0.75rem;
+  color: #374151;
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+}
+
+.progressView .weeklyPlans .exerciseDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progressView .weeklyPlans .exerciseParams {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.progressView .weeklyPlans .param {
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.progressView .weeklyPlans .param strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.progressView .weeklyPlans .exerciseNotes {
+  font-size: 0.875rem;
+  color: #374151;
+  font-style: italic;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border-left: 3px solid #6b7280;
 }
 
 .weekPlan {
@@ -1469,6 +1611,146 @@
   margin-bottom: 20px;
 }
 
+/* Ensure better contrast in program view context */
+.programView .trainingObjectives,
+.programView .weeklyPlans {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.programView .trainingObjectives strong,
+.programView .weeklyPlans strong {
+  color: #1f2937;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.programView .trainingObjectives ul,
+.programView .weeklyPlans ul {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+}
+
+.programView .trainingObjectives li,
+.programView .weeklyPlans li {
+  margin-bottom: 6px;
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.programView .weeklyPlans .weekPlan {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.programView .weeklyPlans .weekPlan h5 {
+  background: #f3f4f6;
+  margin: 0;
+  padding: 12px 16px;
+  color: #1f2937;
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.programView .weeklyPlans .workoutCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin: 12px;
+  overflow: hidden;
+}
+
+.programView .weeklyPlans .workoutHeader {
+  background: #f9fafb;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.programView .weeklyPlans .workoutHeader h6 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.programView .weeklyPlans .exercisesList {
+  padding: 16px;
+}
+
+.programView .weeklyPlans .exerciseItem {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.programView .weeklyPlans .exerciseItem:last-child {
+  margin-bottom: 0;
+}
+
+.programView .weeklyPlans .exerciseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.programView .weeklyPlans .exerciseName {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 0.95rem;
+}
+
+.programView .weeklyPlans .exerciseId {
+  font-size: 0.8rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.programView .weeklyPlans .exerciseDetails {
+  margin-top: 8px;
+}
+
+.programView .weeklyPlans .exerciseParams {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.programView .weeklyPlans .param {
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.programView .weeklyPlans .param strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.programView .weeklyPlans .exerciseNotes {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 8px;
+  padding: 8px;
+  background: #f9fafb;
+  border-radius: 4px;
+}
+
 .trainingPlanSection h3 {
   margin: 0 0 20px 0;
   color: #1f2937;
@@ -1604,4 +1886,231 @@
   margin-top: 12px;
   display: flex;
   gap: 8px;
+}
+
+/* Enhanced Dashboard Styles */
+.dashboardHeader {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.dashboardHeader h2 {
+  margin: 0 0 10px 0;
+  color: #1f2937;
+  font-size: 2rem;
+}
+
+.dashboardHeader p {
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Client Lifecycle Workflow */
+.lifecycleWorkflow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding: 30px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.workflowStep {
+  flex: 1;
+  text-align: center;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.workflowStep:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stepHeader {
+  margin-bottom: 15px;
+}
+
+.stepIcon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.stepHeader h3 {
+  margin: 0 0 5px 0;
+  color: #1f2937;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.stepCount {
+  background: #3b82f6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.stepContent p {
+  color: #6b7280;
+  margin: 0 0 15px 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.stepActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.workflowButton {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.workflowButton:hover {
+  background: #2563eb;
+}
+
+.stepStats {
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.stepStats span {
+  background: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.workflowArrow {
+  font-size: 2rem;
+  color: #3b82f6;
+  font-weight: bold;
+  margin: 0 10px;
+}
+
+/* Quick Actions */
+.quickActions {
+  margin-bottom: 40px;
+}
+
+.quickActions h3 {
+  margin: 0 0 20px 0;
+  color: #1f2937;
+  font-size: 1.5rem;
+}
+
+.actionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.actionCard {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.actionCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.actionIcon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.actionCard h4 {
+  margin: 0 0 10px 0;
+  color: #1f2937;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.actionCard p {
+  color: #6b7280;
+  margin: 0 0 20px 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.actionButton {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.actionButton:hover {
+  background: #059669;
+}
+
+/* Responsive Design for Workflow */
+@media (max-width: 1024px) {
+  .lifecycleWorkflow {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .workflowArrow {
+    transform: rotate(90deg);
+    margin: 10px 0;
+  }
+  
+  .workflowStep {
+    margin: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .actionGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stepStats {
+    flex-direction: column;
+    gap: 5px;
+  }
 }

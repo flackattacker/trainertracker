@@ -844,39 +844,41 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Navigation */}
-      <nav className={styles.navigation}>
-        <button 
-          className={`${styles.navButton} ${currentView === 'dashboard' ? styles.active : ''}`}
-          onClick={() => setCurrentView('dashboard')}
-        >
-          Dashboard
-        </button>
-        <button 
-          className={`${styles.navButton} ${currentView === 'clients' ? styles.active : ''}`}
-          onClick={() => setCurrentView('clients')}
-        >
-          Clients
-        </button>
-        <button 
-          className={`${styles.navButton} ${currentView === 'assessments' ? styles.active : ''}`}
-          onClick={() => setCurrentView('assessments')}
-        >
-          Assessments
-        </button>
-        <button 
-          className={`${styles.navButton} ${currentView === 'programs' ? styles.active : ''}`}
-          onClick={() => setCurrentView('programs')}
-        >
-          Programs
-        </button>
-        <button 
-          className={`${styles.navButton} ${currentView === 'progress' ? styles.active : ''}`}
-          onClick={() => setCurrentView('progress')}
-        >
-          Progress
-        </button>
-      </nav>
+      {/* Navigation - Only show when not on dashboard */}
+      {currentView !== 'dashboard' && (
+        <nav className={styles.navigation}>
+          <button 
+            className={styles.navButton}
+            onClick={() => setCurrentView('dashboard')}
+          >
+            ← Back to Dashboard
+          </button>
+          <button 
+            className={`${styles.navButton} ${currentView === 'clients' ? styles.active : ''}`}
+            onClick={() => setCurrentView('clients')}
+          >
+            Clients
+          </button>
+          <button 
+            className={`${styles.navButton} ${currentView === 'assessments' ? styles.active : ''}`}
+            onClick={() => setCurrentView('assessments')}
+          >
+            Assessments
+          </button>
+          <button 
+            className={`${styles.navButton} ${currentView === 'programs' ? styles.active : ''}`}
+            onClick={() => setCurrentView('programs')}
+          >
+            Programs
+          </button>
+          <button 
+            className={`${styles.navButton} ${currentView === 'progress' ? styles.active : ''}`}
+            onClick={() => setCurrentView('progress')}
+          >
+            Progress
+          </button>
+        </nav>
+      )}
 
       {/* Main Content */}
       <main className={styles.main}>
@@ -889,32 +891,175 @@ export default function Home() {
         {/* Dashboard View */}
         {currentView === 'dashboard' && (
           <div className={styles.dashboard}>
-            <h2>Dashboard</h2>
-            <div className={styles.statsGrid}>
-              <div className={styles.statCard}>
-                <h3>Total Clients</h3>
-                <p className={styles.statNumber}>{clients.length}</p>
-                <p className={styles.statDetail}>
-                  {clients.filter(c => c.status === 'active').length} active
-                </p>
+            <div className={styles.dashboardHeader}>
+              <h2>Client Lifecycle Dashboard</h2>
+              <p>Manage your clients through their complete fitness journey</p>
+            </div>
+
+            {/* Client Lifecycle Workflow */}
+            <div className={styles.lifecycleWorkflow}>
+              <div className={styles.workflowStep}>
+                <div className={styles.stepHeader}>
+                  <div className={styles.stepIcon}>👤</div>
+                  <h3>1. Client Onboarding</h3>
+                  <span className={styles.stepCount}>{clients.length} clients</span>
+                </div>
+                <div className={styles.stepContent}>
+                  <p>Add new clients and capture essential information</p>
+                  <div className={styles.stepActions}>
+                    <Button 
+                      appName="web" 
+                      onClick={() => setCurrentView('clients')} 
+                      className={styles.workflowButton}
+                    >
+                      Manage Clients
+                    </Button>
+                    <div className={styles.stepStats}>
+                      <span>{clients.filter(c => c.status === 'active').length} active</span>
+                      <span>{clients.filter(c => c.status === 'prospect').length} prospects</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className={styles.statCard}>
-                <h3>Assessments</h3>
-                <p className={styles.statNumber}>{assessments.length}</p>
-                <p className={styles.statDetail}>Total assessments</p>
+
+              <div className={styles.workflowArrow}>→</div>
+
+              <div className={styles.workflowStep}>
+                <div className={styles.stepHeader}>
+                  <div className={styles.stepIcon}>📋</div>
+                  <h3>2. Assessment</h3>
+                  <span className={styles.stepCount}>{assessments.length} assessments</span>
+                </div>
+                <div className={styles.stepContent}>
+                  <p>Conduct fitness assessments and evaluations</p>
+                  <div className={styles.stepActions}>
+                    <Button 
+                      appName="web" 
+                      onClick={() => setCurrentView('assessments')} 
+                      className={styles.workflowButton}
+                    >
+                      View Assessments
+                    </Button>
+                    <div className={styles.stepStats}>
+                      <span>{assessments.filter(a => a.status === 'COMPLETED').length} completed</span>
+                      <span>{assessments.filter(a => a.status === 'SCHEDULED').length} scheduled</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className={styles.statCard}>
-                <h3>Programs</h3>
-                <p className={styles.statNumber}>{programs.length}</p>
-                <p className={styles.statDetail}>Active programs</p>
+
+              <div className={styles.workflowArrow}>→</div>
+
+              <div className={styles.workflowStep}>
+                <div className={styles.stepHeader}>
+                  <div className={styles.stepIcon}>🏋️</div>
+                  <h3>3. Program Design</h3>
+                  <span className={styles.stepCount}>{programs.length} programs</span>
+                </div>
+                <div className={styles.stepContent}>
+                  <p>Create personalized training programs with AI assistance</p>
+                  <div className={styles.stepActions}>
+                    <Button 
+                      appName="web" 
+                      onClick={() => setCurrentView('programs')} 
+                      className={styles.workflowButton}
+                    >
+                      Manage Programs
+                    </Button>
+                    <div className={styles.stepStats}>
+                      <span>{programs.filter(p => new Date(p.endDate || '') > new Date()).length} active</span>
+                      <span>{programs.filter(p => new Date(p.endDate || '') <= new Date()).length} completed</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className={styles.statCard}>
-                <h3>Progress Records</h3>
-                <p className={styles.statNumber}>{progress.length}</p>
-                <p className={styles.statDetail}>Tracked progress</p>
+
+              <div className={styles.workflowArrow}>→</div>
+
+              <div className={styles.workflowStep}>
+                <div className={styles.stepHeader}>
+                  <div className={styles.stepIcon}>📊</div>
+                  <h3>4. Progress Tracking</h3>
+                  <span className={styles.stepCount}>{progress.length} records</span>
+                </div>
+                <div className={styles.stepContent}>
+                  <p>Monitor client progress and adjust programs accordingly</p>
+                  <div className={styles.stepActions}>
+                    <Button 
+                      appName="web" 
+                      onClick={() => setCurrentView('progress')} 
+                      className={styles.workflowButton}
+                    >
+                      Track Progress
+                    </Button>
+                    <div className={styles.stepStats}>
+                      <span>{progress.filter(p => new Date(p.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length} this week</span>
+                      <span>{progress.filter(p => new Date(p.date) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length} this month</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
+            {/* Quick Actions */}
+            <div className={styles.quickActions}>
+              <h3>Quick Actions</h3>
+              <div className={styles.actionGrid}>
+                <div className={styles.actionCard}>
+                  <div className={styles.actionIcon}>➕</div>
+                  <h4>Add New Client</h4>
+                  <p>Start the client lifecycle</p>
+                  <Button 
+                    appName="web" 
+                    onClick={() => setCurrentView('clients')} 
+                    className={styles.actionButton}
+                  >
+                    Get Started
+                  </Button>
+                </div>
+                
+                <div className={styles.actionCard}>
+                  <div className={styles.actionIcon}>🤖</div>
+                  <h4>AI Program Generation</h4>
+                  <p>Create training programs instantly</p>
+                  <Button 
+                    appName="web" 
+                    onClick={() => setCurrentView('programs')} 
+                    className={styles.actionButton}
+                  >
+                    Generate Program
+                  </Button>
+                </div>
+                
+                <div className={styles.actionCard}>
+                  <div className={styles.actionIcon}>📈</div>
+                  <h4>View Analytics</h4>
+                  <p>Track performance metrics</p>
+                  <Button 
+                    appName="web" 
+                    onClick={() => setCurrentView('progress')} 
+                    className={styles.actionButton}
+                  >
+                    View Reports
+                  </Button>
+                </div>
+                
+                <div className={styles.actionCard}>
+                  <div className={styles.actionIcon}>📄</div>
+                  <h4>Export Reports</h4>
+                  <p>Generate client reports</p>
+                  <Button 
+                    appName="web" 
+                    onClick={() => setCurrentView('clients')} 
+                    className={styles.actionButton}
+                  >
+                    Export Data
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Activity */}
             <div className={styles.recentActivity}>
               <h3>Recent Activity</h3>
               <div className={styles.activityList}>
