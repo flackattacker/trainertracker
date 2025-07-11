@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
-const JWT_SECRET = 'dev_secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret';
 
 export async function POST(req: NextRequest) {
   try {

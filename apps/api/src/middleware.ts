@@ -3,7 +3,7 @@ export const runtime = 'nodejs';
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = 'dev_secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret';
 
 export function middleware(request: NextRequest) {
   // Handle CORS preflight requests
@@ -31,7 +31,7 @@ export function middleware(request: NextRequest) {
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   // Allow public endpoints without authentication
-  const publicEndpoints = ['/api/auth/register', '/api/auth/login'];
+  const publicEndpoints = ['/api/auth/register', '/api/auth/login', '/api/auth/client-login'];
   if (publicEndpoints.includes(request.nextUrl.pathname)) {
     return response;
   }
@@ -49,11 +49,8 @@ export function middleware(request: NextRequest) {
   }
 
   const token = authHeader.replace('Bearer ', '');
-  console.log('Middleware: JWT_SECRET =', JWT_SECRET);
-  console.log('Middleware: Token =', token);
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    console.log('Middleware: Token verified successfully:', decoded);
     // Set the user ID in headers so routes can access it
     response.headers.set('x-user-id', decoded.id);
     return response;

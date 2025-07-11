@@ -19,9 +19,10 @@ async function main() {
   console.log('✅ Created CPT:', cpt.email);
 
   // Create a client
+  const clientPassword = await bcrypt.hash('password123', 10);
   const client = await prisma.client.upsert({
     where: { codeName: 'CLIENT-001' },
-    update: {},
+    update: { passwordHash: clientPassword },
     create: {
       cptId: cpt.id,
       codeName: 'CLIENT-001',
@@ -33,6 +34,7 @@ async function main() {
       phone: '+1-555-0123',
       notes: 'New client, interested in weight loss and general fitness. Has some experience with basic exercises.',
       status: 'active',
+      passwordHash: clientPassword,
     },
   });
   console.log('✅ Created client:', client.codeName);
@@ -247,12 +249,68 @@ async function main() {
   }
   console.log('✅ Created 4 progress entries');
 
+  // Create sample sessions
+  const sessions = [
+    {
+      startTime: new Date('2025-07-15T09:00:00Z'),
+      endTime: new Date('2025-07-15T10:00:00Z'),
+      status: 'SCHEDULED' as const,
+      type: 'IN_PERSON' as const,
+      location: 'Gym - Main Floor',
+      notes: 'Initial consultation and fitness assessment'
+    },
+    {
+      startTime: new Date('2025-07-17T14:00:00Z'),
+      endTime: new Date('2025-07-17T15:00:00Z'),
+      status: 'SCHEDULED' as const,
+      type: 'IN_PERSON' as const,
+      location: 'Gym - Weight Room',
+      notes: 'Strength training session - Upper body focus'
+    },
+    {
+      startTime: new Date('2025-07-20T10:00:00Z'),
+      endTime: new Date('2025-07-20T11:00:00Z'),
+      status: 'SCHEDULED' as const,
+      type: 'VIRTUAL' as const,
+      location: 'Zoom Meeting',
+      notes: 'Cardio and HIIT workout'
+    },
+    {
+      startTime: new Date('2025-07-22T16:00:00Z'),
+      endTime: new Date('2025-07-22T17:00:00Z'),
+      status: 'SCHEDULED' as const,
+      type: 'IN_PERSON' as const,
+      location: 'Gym - Functional Training Area',
+      notes: 'Lower body and core training'
+    },
+    {
+      startTime: new Date('2025-07-25T11:00:00Z'),
+      endTime: new Date('2025-07-25T12:00:00Z'),
+      status: 'SCHEDULED' as const,
+      type: 'IN_PERSON' as const,
+      location: 'Gym - Cardio Zone',
+      notes: 'Endurance training and progress check'
+    }
+  ];
+
+  for (const sessionData of sessions) {
+    await prisma.session.create({
+      data: {
+        cptId: cpt.id,
+        clientId: client.id,
+        ...sessionData
+      }
+    });
+  }
+  console.log('✅ Created sample sessions');
+
   console.log('🎉 Database seeding completed successfully!');
   console.log('\n📊 Seed Data Summary:');
   console.log(`- CPT: ${cpt.email}`);
   console.log(`- Client: ${client.codeName} (${client.firstName} ${client.lastName})`);
   console.log(`- Assessments: 3 (PARQ, Fitness, Body Composition)`);
   console.log(`- Progress Entries: 4 (4 weeks of tracking)`);
+  console.log(`- Sessions: 5 (sample appointments)`);
   console.log('\n🔑 Login Credentials:');
   console.log(`- Email: ${cpt.email}`);
   console.log(`- Password: password123`);

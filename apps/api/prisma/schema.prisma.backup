@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model CPT {
+  id          String      @id @default(uuid())
+  email       String      @unique
+  passwordHash String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  clients     Client[]
+  programs    Program[]
+  assessments Assessment[]
+  progresses  Progress[]
+}
+
+model Client {
+  id        String      @id @default(uuid())
+  cptId     String
+  codeName  String      @unique // HIPAA abstraction, e.g., "Client-001"
+  firstName String
+  lastName  String
+  dateOfBirth DateTime
+  gender    Gender
+  email     String?     @unique
+  phone     String?
+  notes     String?
+  status    ClientStatus
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  cpt       CPT         @relation(fields: [cptId], references: [id])
+  assessments Assessment[]
+  programs     Program[]
+  progresses   Progress[]
+}
+
+enum ClientStatus {
+  prospect
+  active
+  inactive
+}
+
+model Assessment {
+  id            String      @id @default(uuid())
+  cptId         String
+  clientId      String
+  type          AssessmentType
+  assessmentDate DateTime
+  assessor      String      // Name of person conducting assessment
+  notes         String?
+  data          Json        // Structured assessment data (PARQ, measurements, etc.)
+  status        AssessmentStatus @default(COMPLETED)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  cpt           CPT         @relation(fields: [cptId], references: [id])
+  client        Client      @relation(fields: [clientId], references: [id])
+}
+
+enum AssessmentStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum AssessmentType {
+  PARQ
+  FITNESS_ASSESSMENT
+  BODY_COMPOSITION
+  FLEXIBILITY
+  STRENGTH
+  CARDIOVASCULAR
+  OTHER
+}
+
+model Program {
+  id          String      @id @default(uuid())
+  cptId       String
+  clientId    String
+  programName String
+  startDate   DateTime
+  endDate     DateTime?
+  optPhase    OPTPhase    @default(STABILIZATION_ENDURANCE)
+  primaryGoal String      // Specific goal within the OPT phase
+  secondaryGoals String?  // Additional goals
+  notes       String?
+  data        Json        // Structured OPT program data with phases, workouts, etc.
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  cpt         CPT         @relation(fields: [cptId], references: [id])
+  client      Client      @relation(fields: [clientId], references: [id])
+  progresses  Progress[]
+}
+
+model Progress {
+  id        String    @id @default(uuid())
+  cptId     String
+  clientId  String
+  programId String?   // Optional reference to specific program
+  date      DateTime
+  weight    Float?
+  bodyFat   Float?
+  notes     String?
+  data      Json      // Additional progress metrics
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  cpt       CPT       @relation(fields: [cptId], references: [id])
+  client    Client    @relation(fields: [clientId], references: [id])
+  program   Program?  @relation(fields: [programId], references: [id])
+}
+
+enum Gender {
+  male
+  female
+  other
+  undisclosed
+}
+
+enum OPTPhase {
+  STABILIZATION_ENDURANCE
+  STRENGTH_ENDURANCE
+  MUSCULAR_DEVELOPMENT
+  MAXIMAL_STRENGTH
+  POWER
+}

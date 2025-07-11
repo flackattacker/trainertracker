@@ -37,10 +37,14 @@ import {
   progressTrackingTemplates
 } from '../src/lib/progressData';
 import { AssessmentForm } from '../src/components/AssessmentForm';
+import OnboardingFlow from '../src/components/OnboardingFlow';
+import { clearAuth } from '../src/utils/clearAuth';
+import TrainerSessions from '../src/components/TrainerSessions';
 
 interface User {
   id: string;
   email: string;
+  role?: string;
 }
 
 interface Client {
@@ -323,6 +327,8 @@ export default function Home() {
   const [progressUpdateType, setProgressUpdateType] = useState<'general' | 'workout' | 'assessment'>('general');
   const [selectedWorkout, setSelectedWorkout] = useState<any>(null);
   const [workoutProgress, setWorkoutProgress] = useState<any>({});
+  const [onboardingCompleted, setOnboardingCompleted] = useState<boolean | null>(null);
+  const [onboardingLoading, setOnboardingLoading] = useState(true);
 
   // Data state
   const [clients, setClients] = useState<Client[]>([]);
@@ -375,15 +381,22 @@ export default function Home() {
     }
   }, []);
 
-  // Fetch data when user is authenticated
+  // Check onboarding status when user is authenticated
   useEffect(() => {
     if (token && user) {
+      checkOnboardingStatus();
+    }
+  }, [token, user]);
+
+  // Fetch data when user is authenticated
+  useEffect(() => {
+    if (token && user && onboardingCompleted) {
       fetchClients();
       fetchAssessments();
       fetchPrograms();
       fetchProgress();
     }
-  }, [token, user]);
+  }, [token, user, onboardingCompleted]);
 
   // Form states
   const [newClient, setNewClient] = useState({ 
@@ -455,6 +468,22 @@ export default function Home() {
       throw error;
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkOnboardingStatus = async () => {
+    try {
+      console.log('Checking onboarding status...');
+      const response = await apiCall('/api/auth/onboarding');
+      console.log('Onboarding response:', response);
+      
+      setOnboardingCompleted(response.onboardingCompleted);
+      setOnboardingLoading(false);
+      console.log('Onboarding completed set to:', response.onboardingCompleted);
+    } catch (error) {
+      console.error('Error checking onboarding status:', error);
+      setOnboardingCompleted(false);
+      setOnboardingLoading(false);
     }
   };
 
@@ -769,6 +798,28 @@ export default function Home() {
     }
   }, [user, token]);
 
+  // Show loading while checking onboarding status
+  if (user && token && onboardingLoading) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontSize: 24, fontWeight: 300 }}>
+        Checking onboarding status...
+      </div>
+    );
+  }
+
+  // Show onboarding if not completed and not loading
+  if (user && token && !onboardingLoading && onboardingCompleted === false) {
+    return (
+      <OnboardingFlow
+        onComplete={() => {
+          setOnboardingCompleted(true);
+          setOnboardingLoading(false);
+        }}
+        user={user}
+      />
+    );
+  }
+
   // Loading screen while checking authentication
   if (authLoading) {
     return (
@@ -837,6 +888,9 @@ export default function Home() {
           <h1>Trainer Tracker</h1>
           <div className={styles.userInfo}>
             <span>{user.email}</span>
+            <Button appName="web" onClick={clearAuth} className={styles.logoutButton}>
+              Clear Auth
+            </Button>
             <Button appName="web" onClick={handleLogout} className={styles.logoutButton}>
               Logout
             </Button>

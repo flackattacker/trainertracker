@@ -14,14 +14,27 @@ model CPT {
   id          String      @id @default(uuid())
   email       String      @unique
   passwordHash String
+  firstName   String?
+  lastName    String?
+  phone       String?
+  dateOfBirth DateTime?
+  gender      Gender?
+  bio         String?
+  onboardingCompleted Boolean @default(false)
+  onboardingCompletedAt DateTime?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   clients     Client[]
   programs    Program[]
   assessments Assessment[]
   progresses  Progress[]
+  trainerProfile TrainerProfile?
+  certifications Certification[]
+  sessions    Session[] // <-- Added for scheduling
+  notifications Notification[] // <-- Added for notifications
+  availabilities Availability[] // <-- Added for availability management
+  availabilityExceptions AvailabilityException[] // <-- Added for availability exceptions
 }
-
 model Client {
   id        String      @id @default(uuid())
   cptId     String
@@ -36,10 +49,13 @@ model Client {
   status    ClientStatus
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+  passwordHash String? // <-- Added for client authentication
   cpt       CPT         @relation(fields: [cptId], references: [id])
   assessments Assessment[]
   programs     Program[]
   progresses   Progress[]
+  sessions     Session[] // <-- Added for scheduling
+  notifications Notification[] // <-- Added for notifications
 }
 
 enum ClientStatus {
@@ -62,6 +78,7 @@ model Assessment {
   updatedAt     DateTime    @updatedAt
   cpt           CPT         @relation(fields: [cptId], references: [id])
   client        Client      @relation(fields: [clientId], references: [id])
+  notifications Notification[]
 }
 
 enum AssessmentStatus {
@@ -98,6 +115,7 @@ model Program {
   cpt         CPT         @relation(fields: [cptId], references: [id])
   client      Client      @relation(fields: [clientId], references: [id])
   progresses  Progress[]
+  notifications Notification[]
 }
 
 model Progress {
@@ -115,6 +133,7 @@ model Progress {
   cpt       CPT       @relation(fields: [cptId], references: [id])
   client    Client    @relation(fields: [clientId], references: [id])
   program   Program?  @relation(fields: [programId], references: [id])
+  notifications Notification[]
 }
 
 enum Gender {
@@ -130,4 +149,199 @@ enum OPTPhase {
   MUSCULAR_DEVELOPMENT
   MAXIMAL_STRENGTH
   POWER
+}
+
+// --- Scheduling ---
+model Session {
+  id          String   @id @default(uuid())
+  cptId       String
+  clientId    String
+  startTime   DateTime
+  endTime     DateTime?
+  status      SessionStatus @default(SCHEDULED)
+  type        SessionType   @default(IN_PERSON)
+  location    String?
+  notes       String?
+  
+  // Recurring session support
+  isRecurring Boolean  @default(false)
+  recurringPattern Json? // { frequency: 'weekly', interval: 1, daysOfWeek: [1,3,5], endDate: '2025-12-31' }
+  parentSessionId String? // For recurring session instances
+  recurringSessionId String? // ID of the recurring session template
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cpt         CPT      @relation(fields: [cptId], references: [id])
+  client      Client   @relation(fields: [clientId], references: [id])
+  notifications Notification[]
+}
+
+enum SessionStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  MISSED
+}
+
+enum SessionType {
+  IN_PERSON
+  VIRTUAL
+}
+
+model TrainerProfile {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  businessName          String?
+  businessType          String?
+  website               String?
+  address               String?
+  city                  String?
+  state                 String?
+  zipCode               String?
+  country               String?
+  timezone              String?
+  businessHours         Json?
+  defaultSessionDuration Int     @default(60)
+  reminderPreferences   Json?
+  privacySettings       Json?
+  aiFeatures            Json?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  user                  CPT      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// --- Availability Management ---
+model Availability {
+  id          String   @id @default(uuid())
+  trainerId   String
+  dayOfWeek   Int      // 0-6 (Sunday-Saturday)
+  startTime   String   // HH:MM format
+  endTime     String   // HH:MM format
+  isAvailable Boolean  @default(true)
+  sessionTypes Json?   // { inPerson: true, virtual: true }
+  maxSessionsPerDay Int @default(8)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  trainer     CPT      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+}
+
+// --- Availability Exceptions ---
+model AvailabilityException {
+  id          String   @id @default(uuid())
+  trainerId   String
+  date        DateTime // Specific date
+  startTime   String?  // HH:MM format, null for all day
+  endTime     String?  // HH:MM format, null for all day
+  isAvailable Boolean  @default(false)
+  reason      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  trainer     CPT      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+}
+
+model Certification {
+  id                    String   @id @default(uuid())
+  userId                String
+  name                  String
+  issuingOrganization   String
+  issueDate             DateTime?
+  expiryDate            DateTime?
+  certificationNumber   String?
+  verified              Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  user                  CPT      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// --- Notification System ---
+model Notification {
+  id          String   @id @default(uuid())
+  userId      String   // CPT or Client ID
+  userType    UserType // CPT or CLIENT
+  type        NotificationType
+  title       String
+  message     String
+  data        Json?    // Additional context data
+  status      NotificationStatus @default(PENDING)
+  priority    NotificationPriority @default(NORMAL)
+  channel     NotificationChannel
+  scheduledFor DateTime?
+  sentAt      DateTime?
+  readAt      DateTime?
+  errorMessage String?
+  retryCount  Int      @default(0)
+  maxRetries  Int      @default(3)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Optional references to related entities
+  sessionId   String?
+  session     Session? @relation(fields: [sessionId], references: [id])
+  assessmentId String?
+  assessment  Assessment? @relation(fields: [assessmentId], references: [id])
+  programId   String?
+  program     Program? @relation(fields: [programId], references: [id])
+  progressId  String?
+  progress    Progress? @relation(fields: [progressId], references: [id])
+  
+  // User relationships
+  cpt         CPT?     @relation(fields: [userId], references: [id])
+  client      Client?  @relation(fields: [userId], references: [id])
+}
+
+model NotificationTemplate {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  type        NotificationType
+  title       String
+  message     String
+  variables   Json     // Template variables like {{clientName}}, {{sessionTime}}, etc.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum UserType {
+  CPT
+  CLIENT
+}
+
+enum NotificationType {
+  SESSION_REMINDER
+  SESSION_CANCELLED
+  SESSION_RESCHEDULED
+  SESSION_COMPLETED
+  ASSESSMENT_DUE
+  ASSESSMENT_COMPLETED
+  PROGRESS_MILESTONE
+  PROGRESS_UPDATE
+  PROGRAM_ASSIGNED
+  PROGRAM_COMPLETED
+  WELCOME_MESSAGE
+  PASSWORD_RESET
+  ACCOUNT_UPDATE
+  SYSTEM_ALERT
+  CUSTOM
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum NotificationChannel {
+  EMAIL
+  SMS
+  PUSH
+  IN_APP
 }
