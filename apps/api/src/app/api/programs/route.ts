@@ -28,7 +28,77 @@ export async function POST(req: NextRequest) {
   console.log('Programs POST: cptId =', cptId);
   console.log('Programs POST: request body =', requestBody);
   
-  const { clientId, programName, startDate, endDate, optPhase, primaryGoal, secondaryGoals, notes, data } = requestBody;
+  // Handle both old format (for backward compatibility) and new format
+  const { 
+    clientId, 
+    programName, 
+    startDate, 
+    endDate, 
+    optPhase, 
+    primaryGoal, 
+    secondaryGoals, 
+    notes, 
+    data,
+    // New format fields
+    name,
+    description,
+    goal,
+    experienceLevel,
+    duration,
+    workouts
+  } = requestBody;
+
+  // Check if this is the new format (ProgramBuilder)
+  if (name && goal && experienceLevel && duration && workouts) {
+    try {
+      // Helper function to safely parse dates
+      const parseDate = (dateString: string | null | undefined): Date => {
+        if (!dateString) return new Date();
+        try {
+          // Handle different date formats
+          const date = new Date(dateString);
+          if (isNaN(date.getTime())) {
+            console.warn('Invalid date string:', dateString, 'using current date');
+            return new Date();
+          }
+          return date;
+        } catch (error) {
+          console.warn('Error parsing date:', dateString, 'using current date');
+          return new Date();
+        }
+      };
+
+      const programData = {
+        cptId,
+        clientId: clientId || null, // Optional for templates
+        programName: name,
+        startDate: parseDate(startDate),
+        endDate: endDate ? parseDate(endDate) : null,
+        optPhase: 'STABILIZATION_ENDURANCE' as const, // Default for new format
+        primaryGoal: goal,
+        secondaryGoals: description,
+        notes,
+        data: {
+          experienceLevel,
+          duration,
+          workouts,
+          ...data
+        },
+      };
+      console.log('Programs POST: Creating new format program with data =', programData);
+      
+      const program = await prisma.program.create({
+        data: programData,
+      });
+      console.log('Programs POST: Program created successfully =', program);
+      return NextResponse.json(program);
+    } catch (err) {
+      console.error('Programs POST: Error creating new format program =', err);
+      return NextResponse.json({ error: err instanceof Error ? err.message : 'Unknown error' }, { status: 500 });
+    }
+  }
+  
+  // Old format handling
   if (!clientId || !programName || !startDate || !optPhase || !primaryGoal) {
     console.log('Programs POST: Missing required fields', { clientId, programName, startDate, optPhase, primaryGoal });
     return NextResponse.json({ error: 'clientId, programName, startDate, optPhase, and primaryGoal are required.' }, { status: 400 });
@@ -47,7 +117,7 @@ export async function POST(req: NextRequest) {
       notes,
       data: data || {},
     };
-    console.log('Programs POST: Creating program with data =', programData);
+    console.log('Programs POST: Creating old format program with data =', programData);
     
     const program = await prisma.program.create({
       data: programData,
@@ -55,7 +125,7 @@ export async function POST(req: NextRequest) {
     console.log('Programs POST: Program created successfully =', program);
     return NextResponse.json(program);
   } catch (err) {
-    console.error('Programs POST: Error creating program =', err);
+    console.error('Programs POST: Error creating old format program =', err);
     return NextResponse.json({ error: err instanceof Error ? err.message : 'Unknown error' }, { status: 500 });
   }
 }

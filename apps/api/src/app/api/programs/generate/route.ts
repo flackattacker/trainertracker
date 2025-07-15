@@ -20,8 +20,8 @@ function getCptIdFromRequest(req: NextRequest): string | null {
   return req.headers.get('x-user-id');
 }
 
-function buildPrompt(client: any, assessments: any[], progress: any[]) {
-  return `You are a certified personal trainer using the NASM OPT (Optimum Performance Training) model. Based on the following client data, generate a comprehensive OPT training program that can be used as the foundation for progress tracking.
+function buildPrompt(client: any, assessments: any[], progress: any[], formData: any) {
+  return `You are a certified personal trainer using the NASM OPT (Optimum Performance Training) model. Based on the following client data and trainer specifications, generate a comprehensive OPT training program.
 
 The OPT model consists of 5 phases:
 1. STABILIZATION_ENDURANCE - Focus on stability, core strength, and muscular endurance
@@ -36,25 +36,29 @@ Client Information:
 - Gender: ${client.gender}
 - Age: ${Math.floor((new Date().getTime() - new Date(client.dateOfBirth).getTime()) / (365.25 * 24 * 60 * 60 * 1000))} years old
 
+Trainer Specifications:
+- OPT Phase: ${formData.optPhase}
+- Primary Goal: ${formData.primaryGoal}
+- Secondary Goals: ${formData.secondaryGoals || 'Not specified'}
+- Experience Level: ${formData.experienceLevel}
+- Duration: ${formData.duration} weeks
+
 Assessment History:
 ${assessments.map(a => `- ${a.type} (${a.assessmentDate}): ${JSON.stringify(a.data)}`).join('\n')}
 
 Progress History:
 ${progress.map(p => `- ${p.date}: ${JSON.stringify(p.data)}`).join('\n')}
 
-Available Exercises Database:
-${exerciseDatabase.map(ex => `- ${ex.name} (${ex.category}): ${ex.muscleGroups.join(', ')} - ${ex.difficulty}`).join('\n')}
-
 Generate a comprehensive OPT training program with the following structure:
 
-1. **Phase Selection**: Choose the most appropriate OPT phase based on client assessment and progress
-2. **Training Objectives**: Specific, measurable goals for this phase
-3. **Weekly Workout Structure**: Detailed 4-week program with:
-   - Specific exercises from the database with proper acute variables
+1. **Phase Selection**: Use the specified OPT phase (${formData.optPhase})
+2. **Training Objectives**: Specific, measurable goals based on the primary goal: ${formData.primaryGoal}
+3. **Weekly Workout Structure**: Detailed ${formData.duration}-week program with:
+   - Appropriate exercises for the ${formData.experienceLevel} level
    - Exercise progressions and regressions
    - Proper exercise order and supersets
    - Warm-up and cool-down protocols
-4. **Progress Tracking Metrics**: Specific measurements to track progress
+4. **Progress Tracking Metrics**: Specific measurements to track progress toward the primary goal
 5. **Assessment Criteria**: Clear benchmarks for phase completion
 6. **Nutrition Guidelines**: Basic nutrition recommendations
 7. **Recovery Guidelines**: Recovery and rest recommendations
@@ -63,35 +67,34 @@ Return only valid JSON with this exact structure:
 {
   "name": "OPT Training Program",
   "description": "Systematic training program following the Optimum Performance Training model",
-  "optPhase": "STABILIZATION_ENDURANCE",
-  "primaryGoal": "Improve overall fitness and movement quality",
-  "secondaryGoals": ["Enhance joint stability", "Improve muscular endurance"],
-  "duration": 12,
-  "difficulty": "BEGINNER",
+  "optPhase": "${formData.optPhase}",
+  "primaryGoal": "${formData.primaryGoal}",
+  "secondaryGoals": ${formData.secondaryGoals ? `["${formData.secondaryGoals.split(',').map((s: string) => s.trim()).join('", "')}"]` : '[]'},
+  "duration": ${formData.duration},
+  "difficulty": "${formData.experienceLevel}",
   "phases": [{
-    "name": "STABILIZATION_ENDURANCE",
-    "duration": 4,
-    "focus": "Improve muscular endurance, joint stability, and neuromuscular efficiency",
+    "name": "${formData.optPhase}",
+    "duration": ${formData.duration},
+    "focus": "Focus description based on the primary goal",
     "trainingObjectives": [
-      "Enhance joint stability and postural control",
-      "Improve muscular endurance",
-      "Develop neuromuscular efficiency",
-      "Establish proper movement patterns"
+      "Objective 1 based on primary goal",
+      "Objective 2 based on primary goal",
+      "Objective 3 based on primary goal"
     ],
     "weeklyPlans": [{
       "week": 1,
       "workouts": [{
         "day": "Monday",
-        "focus": "Upper Body Stability",
+        "focus": "Workout focus",
         "exercises": [{
-          "exerciseId": "plank",
-          "name": "Plank",
+          "exerciseId": "exercise_id",
+          "name": "Exercise Name",
           "sets": 3,
-          "reps": "30 seconds",
+          "reps": "10 reps",
           "rest": "60 seconds",
-          "tempo": "4-2-2",
-          "rpe": 5,
-          "notes": "Maintain neutral spine"
+          "tempo": "2-0-2",
+          "rpe": 6,
+          "notes": "Exercise notes"
         }]
       }]
     }],
@@ -101,48 +104,33 @@ Return only valid JSON with this exact structure:
       "intensityIncrease": 5
     },
     "assessmentCriteria": [
-      "Static postural assessment",
-      "Dynamic movement assessment",
-      "Core stability tests",
-      "Muscular endurance tests"
+      "Assessment 1",
+      "Assessment 2",
+      "Assessment 3"
     ]
   }],
   "nutritionGuidelines": "Focus on whole foods, adequate protein, and proper hydration",
   "recoveryGuidelines": "Ensure adequate sleep, active recovery, and stress management",
   "progressTracking": {
-    "metrics": ["Body composition", "Strength", "Endurance", "Movement quality"],
+    "metrics": ["Metric 1", "Metric 2", "Metric 3"],
     "frequency": "WEEKLY",
-    "assessments": ["Weekly body weight", "Monthly body composition", "Bi-weekly strength tests"]
+    "assessments": ["Assessment 1", "Assessment 2"]
   },
   "notes": ""
 }
 
-IMPORTANT: Use only exercises from the provided database. For each exercise, include the exerciseId, name, sets, reps (or duration), rest time, tempo, RPE, and any specific notes.`;
+IMPORTANT: 
+- Use the specified OPT phase: ${formData.optPhase}
+- Focus on the primary goal: ${formData.primaryGoal}
+- Design for ${formData.experienceLevel} experience level
+- Create a ${formData.duration}-week program
+- Include appropriate exercises and acute variables for the experience level
+- Ensure the program aligns with the client's assessment data and progress history`;
 }
 
-function determineClientLevel(client: any, assessments: any[], progress: any[]): 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' {
-  // Analyze client data to determine fitness level
-  const age = Math.floor((new Date().getTime() - new Date(client.dateOfBirth).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-  
-  // Check for strength assessments
-  const strengthAssessment = assessments.find(a => a.type === 'STRENGTH');
-  const fitnessAssessment = assessments.find(a => a.type === 'FITNESS_ASSESSMENT');
-  
-  if (strengthAssessment) {
-    const data = strengthAssessment.data as any;
-    if (data.benchPress && data.benchPress > 100) return 'ADVANCED';
-    if (data.benchPress && data.benchPress > 60) return 'INTERMEDIATE';
-  }
-  
-  if (fitnessAssessment) {
-    const data = fitnessAssessment.data as any;
-    if (data.fitness?.pushUps && data.fitness.pushUps > 20) return 'ADVANCED';
-    if (data.fitness?.pushUps && data.fitness.pushUps > 10) return 'INTERMEDIATE';
-  }
-  
-  // Default based on age and status
-  if (age < 30 && client.status === 'active') return 'INTERMEDIATE';
-  return 'BEGINNER';
+function determineClientLevel(client: any, assessments: any[], progress: any[], formData: any): 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' {
+  // Use the experience level from the form data
+  return formData.experienceLevel;
 }
 
 interface WorkoutExercise {
@@ -167,7 +155,7 @@ interface WeeklyPlan {
   workouts: Workout[];
 }
 
-function generateWorkoutPlan(phase: string, clientLevel: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'): WeeklyPlan[] {
+function generateWorkoutPlan(phase: string, clientLevel: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED', duration: number = 4): WeeklyPlan[] {
   const exercises = getExercisesByPhase(phase);
   const levelExercises = exercises.filter((ex: Exercise) => ex.difficulty === clientLevel || 
     (clientLevel === 'BEGINNER' && ex.difficulty === 'BEGINNER') ||
@@ -177,7 +165,7 @@ function generateWorkoutPlan(phase: string, clientLevel: 'BEGINNER' | 'INTERMEDI
 
   const weeklyPlans: WeeklyPlan[] = [];
   
-  for (let week = 1; week <= 4; week++) {
+  for (let week = 1; week <= duration; week++) {
     const workouts: Workout[] = [];
     
     // Generate 3-4 workouts per week
@@ -241,9 +229,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { clientId } = await req.json();
+    const { clientId, primaryGoal, secondaryGoals, optPhase, experienceLevel, duration } = await req.json();
     if (!clientId) {
       return NextResponse.json({ error: 'Client ID is required' }, { status: 400 });
+    }
+
+    if (!primaryGoal) {
+      return NextResponse.json({ error: 'Primary goal is required' }, { status: 400 });
     }
 
     // Get client data
@@ -265,11 +257,19 @@ export async function POST(req: NextRequest) {
       orderBy: { date: 'desc' },
     });
 
-    // Determine client level
-    const clientLevel = determineClientLevel(client, assessments, progress);
+    // Use form data for client level and other specifications
+    const formData = {
+      primaryGoal,
+      secondaryGoals,
+      optPhase: optPhase || 'STABILIZATION_ENDURANCE',
+      experienceLevel: experienceLevel || 'BEGINNER',
+      duration: duration || 12
+    };
 
-    // Build AI prompt
-    const prompt = buildPrompt(client, assessments, progress);
+    const clientLevel = determineClientLevel(client, assessments, progress, formData);
+
+    // Build AI prompt with form data
+    const prompt = buildPrompt(client, assessments, progress, formData);
 
     console.log('AI Generation: Sending request to OpenAI...');
     
@@ -279,7 +279,7 @@ export async function POST(req: NextRequest) {
       messages: [
         {
           role: 'system',
-          content: 'You are a certified personal trainer with expertise in the NASM OPT model. Generate comprehensive, scientifically-based training programs.'
+          content: 'You are a certified personal trainer with expertise in the NASM OPT model. Generate comprehensive, scientifically-based training programs based on trainer specifications and client data.'
         },
         {
           role: 'user',
@@ -312,20 +312,61 @@ export async function POST(req: NextRequest) {
       throw new Error('Failed to parse AI response');
     }
 
-    // Enhance the AI-generated program with exercise database integration
-    const enhancedProgramData = {
-      ...programData,
-      phases: programData.phases.map((phase: any) => ({
-        ...phase,
-        weeklyPlans: generateWorkoutPlan(phase.name, clientLevel)
-      }))
+    // Transform AI response to match frontend Program interface
+    const transformedProgram = {
+      id: `ai-generated-${Date.now()}`,
+      name: programData.name || `${primaryGoal} Program`,
+      description: programData.description || `AI-generated program for ${primaryGoal}`,
+      goal: primaryGoal,
+      experienceLevel: formData.experienceLevel,
+      duration: formData.duration,
+      optPhase: formData.optPhase,
+      primaryGoal: formData.primaryGoal,
+      secondaryGoals: formData.secondaryGoals,
+      aiGenerated: true,
+      workouts: [] as any[]
     };
 
-    console.log('AI Generation: Enhanced program data generated');
+    // Generate workout plan and transform to frontend format
+    const weeklyPlans = generateWorkoutPlan(formData.optPhase, clientLevel, formData.duration);
+    
+    // Flatten weekly plans into individual workout days
+    weeklyPlans.forEach((weekPlan, weekIndex) => {
+      weekPlan.workouts.forEach((workout, dayIndex) => {
+        const workoutDay = {
+          id: `week-${weekIndex + 1}-day-${dayIndex + 1}`,
+          name: `Week ${weekIndex + 1} - ${workout.day} (${workout.focus})`,
+          exercises: workout.exercises.map((exercise, exerciseIndex) => ({
+            id: `exercise-${weekIndex}-${dayIndex}-${exerciseIndex}`,
+            exerciseId: exercise.exerciseId,
+            exercise: {
+              id: exercise.exerciseId,
+              name: exercise.name,
+              description: exercise.notes || '',
+              category: { id: '1', name: 'Strength Training' },
+              muscleGroups: [],
+              equipment: [],
+              difficulty: formData.experienceLevel,
+              instructions: exercise.notes || ''
+            },
+            sets: exercise.sets,
+            reps: parseInt(exercise.reps) || undefined,
+            restTime: parseInt(exercise.rest) || undefined,
+            tempo: exercise.tempo,
+            rpe: exercise.rpe,
+            notes: exercise.notes,
+            order: exerciseIndex
+          }))
+        };
+        transformedProgram.workouts.push(workoutDay);
+      });
+    });
+
+    console.log('AI Generation: Transformed program data for frontend');
 
     return NextResponse.json({
       success: true,
-      program: enhancedProgramData,
+      program: transformedProgram,
       message: 'AI program generation completed successfully'
     });
 

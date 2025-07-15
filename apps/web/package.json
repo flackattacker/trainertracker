@@ -12,17 +12,25 @@
   },
   "dependencies": {
     "@repo/ui": "*",
+    "lucide-react": "^0.525.0",
     "next": "^15.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.54.1",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
+    "autoprefixer": "^10.4.21",
+    "client-only": "^0.0.1",
+    "electron-to-chromium": "^1.5.183",
     "eslint": "^9.30.0",
+    "picocolors": "^1.1.1",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.4.17",
     "typescript": "5.8.2"
   }
 }

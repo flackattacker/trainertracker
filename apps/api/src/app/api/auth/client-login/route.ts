@@ -23,7 +23,42 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid credentials.' }, { status: 401 });
     }
     const token = jwt.sign({ clientId: client.id, email: client.email }, JWT_SECRET, { expiresIn: '7d' });
-    return NextResponse.json({ token, user: { id: client.id, email: client.email, firstName: client.firstName, lastName: client.lastName } });
+    
+    // Fetch client's programs, progress, and sessions
+    const [programs, progress, sessions] = await Promise.all([
+      prisma.program.findMany({
+        where: { clientId: client.id },
+        orderBy: { createdAt: 'desc' }
+      }),
+      prisma.progress.findMany({
+        where: { clientId: client.id },
+        orderBy: { date: 'desc' },
+        take: 10
+      }),
+      prisma.session.findMany({
+        where: { clientId: client.id },
+        orderBy: { startTime: 'desc' },
+        take: 10
+      })
+    ]);
+
+    const clientData = {
+      id: client.id,
+      email: client.email,
+      firstName: client.firstName,
+      lastName: client.lastName,
+      dateOfBirth: client.dateOfBirth,
+      gender: client.gender,
+      phone: client.phone,
+      notes: client.notes,
+      status: client.status,
+      experienceLevel: client.experienceLevel,
+      programs,
+      progress,
+      sessions
+    };
+
+    return NextResponse.json({ token, client: clientData });
   } catch (error) {
     return NextResponse.json({ message: 'Login failed.' }, { status: 500 });
   }

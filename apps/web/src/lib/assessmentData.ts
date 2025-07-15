@@ -2,14 +2,14 @@
 
 export interface PARQData {
   // Physical Activity Readiness Questionnaire (PAR-Q+)
-  questions: {
-    q1: boolean; // Heart condition
-    q2: boolean; // Chest pain during physical activity
-    q3: boolean; // Chest pain when not doing physical activity
-    q4: boolean; // Loss of balance due to dizziness
-    q5: boolean; // Bone or joint problem
-    q6: boolean; // Blood pressure medication
-    q7: boolean; // Other reason not to do physical activity
+  questions?: {
+    q1?: boolean; // Heart condition
+    q2?: boolean; // Chest pain during physical activity
+    q3?: boolean; // Chest pain when not doing physical activity
+    q4?: boolean; // Loss of balance due to dizziness
+    q5?: boolean; // Bone or joint problem
+    q6?: boolean; // Blood pressure medication
+    q7?: boolean; // Other reason not to do physical activity
   };
   followUpQuestions?: {
     q1a?: string; // Heart condition details
@@ -20,21 +20,21 @@ export interface PARQData {
     q6a?: string; // Medication details
     q7a?: string; // Other reasons details
   };
-  riskLevel: 'LOW' | 'MODERATE' | 'HIGH';
-  clearedForExercise: boolean;
-  requiresMedicalClearance: boolean;
+  riskLevel?: 'LOW' | 'MODERATE' | 'HIGH';
+  clearedForExercise?: boolean;
+  requiresMedicalClearance?: boolean;
   notes?: string;
 }
 
 export interface FitnessAssessmentData {
   // Basic measurements
-  height: number; // cm
-  weight: number; // kg
+  height?: number; // cm
+  weight?: number; // kg
   bodyFatPercentage?: number;
-  bmi: number;
+  bmi?: number;
   
   // Cardiovascular fitness
-  restingHeartRate: number;
+  restingHeartRate?: number;
   bloodPressure?: {
     systolic: number;
     diastolic: number;
@@ -152,7 +152,7 @@ export interface StrengthAssessmentData {
 
 export interface CardiovascularAssessmentData {
   // Resting measurements
-  restingHeartRate: number;
+  restingHeartRate?: number;
   bloodPressure?: {
     systolic: number;
     diastolic: number;

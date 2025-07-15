@@ -63,13 +63,18 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q1"
-                  checked={currentData.PARQ?.questions.q1 === true}
-                  onChange={(e) => updateData({
-                    PARQ: {
-                      ...currentData.PARQ,
-                      questions: { ...currentData.PARQ?.questions, q1: e.target.checked }
-                    }
-                  })}
+                  checked={currentData.PARQ?.questions?.q1 === true}
+                  onChange={(e) => {
+                    const currentQuestions = currentData.PARQ?.questions || {
+                      q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false
+                    };
+                    updateData({
+                      PARQ: {
+                        ...currentData.PARQ,
+                        questions: { ...currentQuestions, q1: e.target.checked }
+                      }
+                    });
+                  }}
                   className="mr-2"
                 />
                 Yes
@@ -78,7 +83,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q1"
-                  checked={currentData.PARQ?.questions.q1 === false}
+                  checked={currentData.PARQ?.questions?.q1 === false}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -99,7 +104,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q2"
-                  checked={currentData.PARQ?.questions.q2 === true}
+                  checked={currentData.PARQ?.questions?.q2 === true}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -114,7 +119,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q2"
-                  checked={currentData.PARQ?.questions.q2 === false}
+                  checked={currentData.PARQ?.questions?.q2 === false}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -137,7 +142,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q4"
-                  checked={currentData.PARQ?.questions.q4 === true}
+                  checked={currentData.PARQ?.questions?.q4 === true}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -152,7 +157,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q4"
-                  checked={currentData.PARQ?.questions.q4 === false}
+                  checked={currentData.PARQ?.questions?.q4 === false}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -173,7 +178,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q5"
-                  checked={currentData.PARQ?.questions.q5 === true}
+                  checked={currentData.PARQ?.questions?.q5 === true}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -188,7 +193,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q5"
-                  checked={currentData.PARQ?.questions.q5 === false}
+                  checked={currentData.PARQ?.questions?.q5 === false}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -211,7 +216,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q6"
-                  checked={currentData.PARQ?.questions.q6 === true}
+                  checked={currentData.PARQ?.questions?.q6 === true}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -226,7 +231,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q6"
-                  checked={currentData.PARQ?.questions.q6 === false}
+                  checked={currentData.PARQ?.questions?.q6 === false}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -247,7 +252,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q7"
-                  checked={currentData.PARQ?.questions.q7 === true}
+                  checked={currentData.PARQ?.questions?.q7 === true}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -262,7 +267,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <input
                   type="radio"
                   name="q7"
-                  checked={currentData.PARQ?.questions.q7 === false}
+                  checked={currentData.PARQ?.questions?.q7 === false}
                   onChange={(e) => updateData({
                     PARQ: {
                       ...currentData.PARQ,
@@ -448,8 +453,8 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
               fitness: {
                 ...currentData.fitness,
                 bloodPressure: {
-                  ...currentData.fitness?.bloodPressure,
-                  systolic: parseFloat(e.target.value) || 0
+                  systolic: parseFloat(e.target.value) || 0,
+                  diastolic: currentData.fitness?.bloodPressure?.diastolic || 0
                 }
               }
             })}
@@ -467,7 +472,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
               fitness: {
                 ...currentData.fitness,
                 bloodPressure: {
-                  ...currentData.fitness?.bloodPressure,
+                  systolic: currentData.fitness?.bloodPressure?.systolic || 0,
                   diastolic: parseFloat(e.target.value) || 0
                 }
               }

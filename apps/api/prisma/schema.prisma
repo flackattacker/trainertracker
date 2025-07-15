@@ -34,7 +34,12 @@ model CPT {
   notifications Notification[] // <-- Added for notifications
   availabilities Availability[] // <-- Added for availability management
   availabilityExceptions AvailabilityException[] // <-- Added for availability exceptions
+  // Periodization models
+  programTemplates ProgramTemplate[]
+  macrocycles Macrocycle[]
+  exercises Exercise[]
 }
+
 model Client {
   id        String      @id @default(uuid())
   cptId     String
@@ -47,6 +52,7 @@ model Client {
   phone     String?
   notes     String?
   status    ClientStatus
+  experienceLevel ExperienceLevel @default(BEGINNER)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   passwordHash String? // <-- Added for client authentication
@@ -56,12 +62,211 @@ model Client {
   progresses   Progress[]
   sessions     Session[] // <-- Added for scheduling
   notifications Notification[] // <-- Added for notifications
+  macrocycles Macrocycle[] // <-- Added for periodization
 }
 
 enum ClientStatus {
   prospect
   active
   inactive
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+// --- Exercise Library ---
+model Exercise {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  categoryId  String
+  muscleGroups Json     // JSON array of muscle groups
+  equipment   Json      // JSON array of required equipment
+  difficulty  Difficulty
+  instructions String?
+  videoUrl    String?
+  imageUrl    String?
+  cptId       String?   // If custom exercise created by trainer
+  isPublic    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  category    ExerciseCategory @relation(fields: [categoryId], references: [id])
+  cpt         CPT?      @relation(fields: [cptId], references: [id])
+  exerciseVariations ExerciseVariation[]
+  workoutExercises WorkoutExercise[]
+}
+
+model ExerciseCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  exercises   Exercise[]
+}
+
+model ExerciseVariation {
+  id          String   @id @default(uuid())
+  exerciseId  String
+  name        String
+  description String?
+  difficulty  Difficulty
+  equipment   Json     // JSON array
+  instructions String?
+  videoUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  exercise    Exercise @relation(fields: [exerciseId], references: [id])
+  
+  @@unique([exerciseId, name])
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+// --- Periodization Models ---
+model ProgramTemplate {
+  id          String   @id @default(uuid())
+  cptId       String
+  name        String
+  description String?
+  goal        String
+  experienceLevel ExperienceLevel
+  duration    Int      // weeks
+  periodizationType PeriodizationType
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  cpt         CPT      @relation(fields: [cptId], references: [id])
+  macrocycles Macrocycle[]
+}
+
+model Macrocycle {
+  id          String   @id @default(uuid())
+  cptId       String
+  clientId    String?
+  templateId  String?
+  name        String
+  description String?
+  goal        String
+  duration    Int      // weeks
+  periodizationType PeriodizationType
+  experienceLevel ExperienceLevel
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  cpt         CPT      @relation(fields: [cptId], references: [id])
+  client      Client?  @relation(fields: [clientId], references: [id])
+  template    ProgramTemplate? @relation(fields: [templateId], references: [id])
+  mesocycles  Mesocycle[]
+}
+
+model Mesocycle {
+  id          String   @id @default(uuid())
+  macrocycleId String
+  name        String
+  description String?
+  focus       String
+  duration    Int      // weeks
+  periodizationMethod String
+  intensityRange Json  // { min: number, max: number }
+  volumeRange Json     // { min: number, max: number }
+  weekNumber  Int      // Week number within macrocycle
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  macrocycle  Macrocycle @relation(fields: [macrocycleId], references: [id])
+  microcycles Microcycle[]
+  progressionRules ProgressionRule[]
+}
+
+model Microcycle {
+  id          String   @id @default(uuid())
+  mesocycleId String
+  weekNumber  Int      // Week number within mesocycle
+  periodizationType PeriodizationType
+  intensityTarget Float
+  volumeTarget Float
+  deload      Boolean  @default(false)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  mesocycle   Mesocycle @relation(fields: [mesocycleId], references: [id])
+  workoutDays WorkoutDay[]
+}
+
+model WorkoutDay {
+  id          String   @id @default(uuid())
+  microcycleId String
+  dayNumber   Int      // Day of the week (1-7)
+  name        String   // e.g., "Upper Body", "Lower Body"
+  focus       String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  microcycle  Microcycle @relation(fields: [microcycleId], references: [id])
+  exercises   WorkoutExercise[]
+}
+
+model WorkoutExercise {
+  id          String   @id @default(uuid())
+  workoutDayId String
+  exerciseId  String
+  order       Int      // Exercise order in workout
+  sets        Int
+  reps        String   // e.g., "8-10", "3x5", "AMRAP"
+  weight      String?  // e.g., "80%", "RPE 8", "Bodyweight"
+  rest        String?  // e.g., "2 min", "90 sec"
+  tempo       String?  // e.g., "2-0-2", "Explosive"
+  rpe         Int?     // Rate of Perceived Exertion (1-10)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  workoutDay  WorkoutDay @relation(fields: [workoutDayId], references: [id])
+  exercise    Exercise @relation(fields: [exerciseId], references: [id])
+}
+
+model ProgressionRule {
+  id          String   @id @default(uuid())
+  mesocycleId String
+  exerciseType String  // e.g., "compound", "isolation", "cardio"
+  progressionType ProgressionType
+  increment   Json     // { weight: 5, reps: 2, etc. }
+  frequency   String   // e.g., "weekly", "bi-weekly"
+  conditions  Json?    // Conditions for progression
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  mesocycle   Mesocycle @relation(fields: [mesocycleId], references: [id])
+}
+
+enum PeriodizationType {
+  LINEAR
+  UNDULATING
+  WAVE
+  BLOCK
+  CONJUGATE
+  REVERSE
+}
+
+enum ProgressionType {
+  LINEAR
+  PERCENTAGE
+  RPE
+  VOLUME
+  INTENSITY
 }
 
 model Assessment {

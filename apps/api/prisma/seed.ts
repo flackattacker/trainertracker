@@ -19,7 +19,7 @@ async function main() {
   console.log('✅ Created CPT:', cpt.email);
 
   // Create a client
-  const clientPassword = await bcrypt.hash('password123', 10);
+  const clientPassword = await bcrypt.hash('wellness2024', 10);
   const client = await prisma.client.upsert({
     where: { codeName: 'CLIENT-001' },
     update: { passwordHash: clientPassword },

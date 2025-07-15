@@ -31,7 +31,14 @@ export function middleware(request: NextRequest) {
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   // Allow public endpoints without authentication
-  const publicEndpoints = ['/api/auth/register', '/api/auth/login', '/api/auth/client-login'];
+  const publicEndpoints = [
+    '/api/auth/register', 
+    '/api/auth/login', 
+    '/api/auth/client-login',
+    '/api/exercises',
+    '/api/exercise-categories',
+    '/api/prisma-test'
+  ];
   if (publicEndpoints.includes(request.nextUrl.pathname)) {
     return response;
   }
