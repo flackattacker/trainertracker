@@ -3,6 +3,8 @@ export const clearAuth = () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('trainer-tracker-token');
     localStorage.removeItem('trainer-tracker-user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     console.log('Authentication data cleared');
   }
 };

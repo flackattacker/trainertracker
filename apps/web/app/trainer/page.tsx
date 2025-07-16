@@ -83,7 +83,7 @@ type Progress = {
   updatedAt: string;
 };
 
-type View = 'dashboard' | 'clients' | 'assessments' | 'progress' | 'scheduling' | 'program-builder' | 'onboarding' | 'client-creation';
+type View = 'dashboard' | 'clients' | 'assessments' | 'progress' | 'scheduling' | 'program-builder' | 'onboarding' | 'client-creation' | 'client-detail';
 
 export default function TrainerPortal() {
   const [user, setUser] = useState<User | null>(null);
@@ -101,6 +101,9 @@ export default function TrainerPortal() {
   const [workoutProgress, setWorkoutProgress] = useState<any>({});
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean | null>(null);
   const [onboardingLoading, setOnboardingLoading] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editClient, setEditClient] = useState<Client | null>(null);
 
   // Data state
   const [clients, setClients] = useState<Client[]>([]);
@@ -187,6 +190,7 @@ export default function TrainerPortal() {
       setToken(response.token);
       setUser(response.user);
       localStorage.setItem('token', response.token);
+      localStorage.setItem('trainer-tracker-token', response.token); // <-- Add this line
       localStorage.setItem('user', JSON.stringify(response.user));
       
       showMessage('Login successful!');
@@ -309,28 +313,63 @@ export default function TrainerPortal() {
   // Progress management
   const createProgress = async () => {
     try {
-      const progressData = {
-        ...newProgress,
-        weight: newProgress.weight ? parseFloat(newProgress.weight) : null,
-        bodyFat: newProgress.bodyFat ? parseFloat(newProgress.bodyFat) : null,
-      };
-      
+      setLoading(true);
       await apiCall('/api/progress', {
         method: 'POST',
-        body: JSON.stringify(progressData),
+        body: JSON.stringify(newProgress),
       });
-      setNewProgress({ 
-        clientId: '', 
-        programId: '', 
-        date: '', 
-        weight: '', 
-        bodyFat: '', 
-        notes: '' 
-      });
-      await fetchProgress();
+      
       showMessage('Progress recorded successfully!');
+      setNewProgress({ clientId: '', programId: '', date: '', weight: '', bodyFat: '', notes: '' });
+      await fetchProgress();
     } catch (error) {
       showMessage(error instanceof Error ? error.message : 'Failed to record progress');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleViewClientDetails = (clientId: string) => {
+    const client = clients.find(c => c.id === clientId);
+    if (client) {
+      setCurrentView('client-detail');
+      setSelectedClient(client);
+    }
+  };
+
+  const handleEditClient = () => {
+    setEditClient(selectedClient);
+    setEditMode(true);
+  };
+
+  const handleEditChange = (field: keyof Client, value: any) => {
+    if (!editClient) return;
+    setEditClient({ ...editClient, [field]: value });
+  };
+
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setEditClient(null);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editClient) return;
+    try {
+      setLoading(true);
+      await apiCall(`/api/clients/${editClient.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(editClient),
+      });
+      // Update local state
+      setClients(clients.map(c => c.id === editClient.id ? editClient : c));
+      setSelectedClient(editClient);
+      setEditMode(false);
+      setEditClient(null);
+      showMessage('Client updated successfully!');
+    } catch (error) {
+      showMessage(error instanceof Error ? error.message : 'Failed to update client');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -635,7 +674,7 @@ export default function TrainerPortal() {
                       Added: {new Date(client.createdAt).toLocaleDateString()}
                     </div>
                     <div className={styles.clientActions}>
-                      <Button appName="web" className={styles.viewButton}>
+                      <Button appName="web" onClick={() => handleViewClientDetails(client.id)} className={styles.viewButton}>
                         View Details
                       </Button>
                     </div>
@@ -870,6 +909,109 @@ export default function TrainerPortal() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Client Detail View */}
+        {currentView === 'client-detail' && selectedClient && (
+          <div className={styles.clientDetailView}>
+            <div className={styles.clientDetailCard}>
+              <div className={styles.clientDetailHeader}>
+                <Button appName="web" onClick={() => setCurrentView('clients')} className={styles.backButton}>
+                  ← Back to Clients
+                </Button>
+                <h2><span className={styles.detailIcon}>👤</span> {selectedClient.firstName} {selectedClient.lastName}</h2>
+                <span className={`${styles.status} ${styles[selectedClient.status]}`}>{selectedClient.status}</span>
+                <Button appName="web" onClick={handleEditClient} className={styles.quickActionButton} style={{marginLeft: '1rem'}}>
+                  ✏️ Edit
+                </Button>
+              </div>
+              {editMode && editClient ? (
+                <form className={styles.clientEditForm} onSubmit={e => { e.preventDefault(); handleSaveEdit(); }}>
+                  <div className={styles.clientDetailSections}>
+                    <div className={styles.clientDetailSection}>
+                      <h3 className={styles.sectionTitle}><span className={styles.detailIcon}>📝</span> Basic Information</h3>
+                      <div className={styles.detailGrid}>
+                        <div className={styles.detailItem}><label>Code Name:</label><input className={styles.input} value={editClient.codeName} onChange={e => handleEditChange('codeName', e.target.value)} /></div>
+                        <div className={styles.detailItem}><label>First Name:</label><input className={styles.input} value={editClient.firstName} onChange={e => handleEditChange('firstName', e.target.value)} /></div>
+                        <div className={styles.detailItem}><label>Last Name:</label><input className={styles.input} value={editClient.lastName} onChange={e => handleEditChange('lastName', e.target.value)} /></div>
+                        <div className={styles.detailItem}><label>Date of Birth:</label><input className={styles.input} type="date" value={editClient.dateOfBirth.slice(0,10)} onChange={e => handleEditChange('dateOfBirth', e.target.value)} /></div>
+                        <div className={styles.detailItem}><label>Gender:</label><select className={styles.select} value={editClient.gender} onChange={e => handleEditChange('gender', e.target.value)}><option value="male">Male</option><option value="female">Female</option><option value="undisclosed">Undisclosed</option></select></div>
+                      </div>
+                    </div>
+                    <div className={styles.sectionDivider}></div>
+                    <div className={styles.clientDetailSection}>
+                      <h3 className={styles.sectionTitle}><span className={styles.detailIcon}>📞</span> Contact</h3>
+                      <div className={styles.detailGrid}>
+                        <div className={styles.detailItem}><label>Email:</label><input className={styles.input} value={editClient.email} onChange={e => handleEditChange('email', e.target.value)} /></div>
+                        <div className={styles.detailItem}><label>Phone:</label><input className={styles.input} value={editClient.phone} onChange={e => handleEditChange('phone', e.target.value)} /></div>
+                      </div>
+                    </div>
+                    <div className={styles.sectionDivider}></div>
+                    <div className={styles.clientDetailSection}>
+                      <h3 className={styles.sectionTitle}><span className={styles.detailIcon}>📚</span> Additional</h3>
+                      <div className={styles.detailGrid}>
+                        <div className={styles.detailItem}><label>Experience Level:</label><input className={styles.input} value={editClient.experienceLevel} onChange={e => handleEditChange('experienceLevel', e.target.value)} /></div>
+                        <div className={styles.detailItem}><label>Notes:</label><input className={styles.input} value={editClient.notes} onChange={e => handleEditChange('notes', e.target.value)} /></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{display: 'flex', gap: '1rem', marginTop: '1.5rem'}}>
+                    <Button appName="web" type="submit" className={styles.quickActionButton}>💾 Save</Button>
+                    <Button appName="web" type="button" onClick={handleCancelEdit} className={styles.quickActionButton}>Cancel</Button>
+                  </div>
+                </form>
+              ) : (
+                <div className={styles.clientDetailSections}>
+                  <div className={styles.clientDetailSection}>
+                    <h3 className={styles.sectionTitle}><span className={styles.detailIcon}>📝</span> Basic Information</h3>
+                    <div className={styles.detailGrid}>
+                      <div className={styles.detailItem}><label>Code Name:</label><span>{selectedClient.codeName}</span></div>
+                      <div className={styles.detailItem}><label>First Name:</label><span>{selectedClient.firstName}</span></div>
+                      <div className={styles.detailItem}><label>Last Name:</label><span>{selectedClient.lastName}</span></div>
+                      <div className={styles.detailItem}><label>Date of Birth:</label><span>{new Date(selectedClient.dateOfBirth).toLocaleDateString()}</span></div>
+                      <div className={styles.detailItem}><label>Gender:</label><span>{selectedClient.gender}</span></div>
+                    </div>
+                  </div>
+                  <div className={styles.sectionDivider}></div>
+                  <div className={styles.clientDetailSection}>
+                    <h3 className={styles.sectionTitle}><span className={styles.detailIcon}>📞</span> Contact</h3>
+                    <div className={styles.detailGrid}>
+                      <div className={styles.detailItem}><label>Email:</label><span>{selectedClient.email || 'Not provided'}</span></div>
+                      <div className={styles.detailItem}><label>Phone:</label><span>{selectedClient.phone || 'Not provided'}</span></div>
+                    </div>
+                  </div>
+                  <div className={styles.sectionDivider}></div>
+                  <div className={styles.clientDetailSection}>
+                    <h3 className={styles.sectionTitle}><span className={styles.detailIcon}>📚</span> Additional</h3>
+                    <div className={styles.detailGrid}>
+                      <div className={styles.detailItem}><label>Experience Level:</label><span>{selectedClient.experienceLevel || 'Not specified'}</span></div>
+                      <div className={styles.detailItem}><label>Notes:</label><span>{selectedClient.notes || 'No notes'}</span></div>
+                      <div className={styles.detailItem}><label>Member Since:</label><span>{new Date(selectedClient.createdAt).toLocaleDateString()}</span></div>
+                      <div className={styles.detailItem}><label>Last Updated:</label><span>{new Date(selectedClient.updatedAt).toLocaleDateString()}</span></div>
+                    </div>
+                  </div>
+                  <div className={styles.sectionDivider}></div>
+                  <div className={styles.clientDetailSection}>
+                    <h3 className={styles.sectionTitle}><span className={styles.detailIcon}>⚡</span> Quick Actions</h3>
+                    <div className={styles.quickActionGrid}>
+                      <Button appName="web" onClick={() => setCurrentView('assessments')} className={styles.quickActionButton}>
+                        📝 Create Assessment
+                      </Button>
+                      <Button appName="web" onClick={() => setCurrentView('program-builder')} className={styles.quickActionButton}>
+                        🏋️ Build Program
+                      </Button>
+                      <Button appName="web" onClick={() => setCurrentView('progress')} className={styles.quickActionButton}>
+                        📈 Record Progress
+                      </Button>
+                      <Button appName="web" onClick={() => setCurrentView('scheduling')} className={styles.quickActionButton}>
+                        📅 Schedule Session
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}

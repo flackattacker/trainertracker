@@ -137,7 +137,7 @@ The system follows the NASM Optimum Performance Training model:
 
 1. **Stabilization Endurance** - Foundation and movement quality
 2. **Strength Endurance** - Muscular endurance and strength
-3. **Muscular Development** - Hypertrophy and muscle building
+3. **Muscular Development** - Muscle growth and development
 4. **Maximal Strength** - Peak strength development
 5. **Power** - Explosive strength and performance
 

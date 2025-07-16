@@ -193,7 +193,7 @@ export const optPhaseTemplates: Record<OPTPhaseName, OPTPhase> = {
   MUSCULAR_DEVELOPMENT: {
     name: 'MUSCULAR_DEVELOPMENT',
     duration: 4,
-    focus: 'Maximize muscle growth and hypertrophy',
+    focus: 'Maximize muscle growth and development',
     trainingObjectives: [
       'Increase muscle size and mass',
       'Improve body composition',

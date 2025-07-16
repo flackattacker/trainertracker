@@ -126,6 +126,7 @@ const ProgramBuilder: React.FC = () => {
   const [programForm, setProgramForm] = useState({
     clientId: '',
     programName: '',
+    clientAge: '',
     startDate: '',
     endDate: '',
     optPhase: 'STABILIZATION_ENDURANCE' as const,
@@ -145,6 +146,11 @@ const ProgramBuilder: React.FC = () => {
   const fetchClients = async () => {
     try {
       const token = localStorage.getItem('trainer-tracker-token');
+      if (!token) {
+        console.error('No auth token found');
+        setClients([]);
+        return;
+      }
       const response = await fetch(`${API_BASE}/api/clients`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -153,9 +159,14 @@ const ProgramBuilder: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         setClients(data);
+      } else {
+        const errorText = await response.text();
+        console.error('Error fetching clients:', response.status, errorText);
+        setClients([]);
       }
     } catch (error) {
       console.error('Error fetching clients:', error);
+      setClients([]);
     }
   };
 
@@ -202,26 +213,33 @@ const ProgramBuilder: React.FC = () => {
 
     try {
       const token = localStorage.getItem('trainer-tracker-token');
+      
+      // Debug: Log what we're sending to the backend
+      const requestBody = {
+        clientId: programForm.clientId,
+        programName: programForm.programName,
+        clientAge: parseInt(programForm.clientAge),
+        primaryGoal: programForm.primaryGoal,
+        secondaryGoals: programForm.secondaryGoals,
+        optPhase: programForm.optPhase,
+        experienceLevel: programForm.experienceLevel,
+        duration: programForm.duration,
+        notes: programForm.notes
+      };
+      console.log('Frontend: Sending request to backend:', requestBody);
+      
       const response = await fetch(`${API_BASE}/api/programs/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          clientId: programForm.clientId,
-          primaryGoal: programForm.primaryGoal,
-          secondaryGoals: programForm.secondaryGoals,
-          optPhase: programForm.optPhase,
-          experienceLevel: programForm.experienceLevel,
-          duration: programForm.duration,
-          notes: programForm.notes
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (response.ok) {
         const generatedProgram = await response.json();
-        setProgram(generatedProgram);
+        setProgram(generatedProgram.program); // Fix: use the .program property
         setCurrentStep(2);
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
@@ -253,7 +271,7 @@ const ProgramBuilder: React.FC = () => {
         },
         body: JSON.stringify({
           programId: program.id,
-          adjustmentPrompt: aiAdjustmentPrompt,
+          adjustment: aiAdjustmentPrompt,
         }),
       });
 
@@ -289,6 +307,7 @@ const ProgramBuilder: React.FC = () => {
         },
         body: JSON.stringify({
           ...program,
+          name: programForm.programName,
           clientId: programForm.clientId,
           startDate: programForm.startDate,
           endDate: programForm.endDate,
@@ -493,6 +512,18 @@ const ProgramBuilder: React.FC = () => {
               <CardContent className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                    Program Name *
+                  </label>
+                  <Input
+                    value={programForm.programName}
+                    onChange={(e) => setProgramForm(prev => ({ ...prev, programName: e.target.value }))}
+                    placeholder="e.g., 12-Week Strength Program"
+                    style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
                     Select Client *
                   </label>
                   <Select value={programForm.clientId} onValueChange={(value) => setProgramForm(prev => ({ ...prev, clientId: value }))}>
@@ -500,13 +531,35 @@ const ProgramBuilder: React.FC = () => {
                       <SelectValue placeholder="Choose a client" />
                     </SelectTrigger>
                     <SelectContent style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                      {clients.map(client => (
-                        <SelectItem key={client.id} value={client.id} style={{ color: 'var(--text-color)' }}>
-                          {client.firstName} {client.lastName} ({client.codeName})
+                      {clients.length === 0 ? (
+                        <SelectItem value="no-clients" disabled style={{ color: 'var(--text-light)' }}>
+                          No clients found
                         </SelectItem>
-                      ))}
+                      ) : (
+                        clients.map(client => (
+                          <SelectItem key={client.id} value={client.id} style={{ color: 'var(--text-color)' }}>
+                            {client.firstName} {client.lastName} ({client.codeName})
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
+
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                    Client Age *
+                  </label>
+                  <Input
+                    type="number"
+                    value={programForm.clientAge}
+                    onChange={(e) => setProgramForm(prev => ({ ...prev, clientAge: e.target.value }))}
+                    placeholder="e.g., 25"
+                    min="13"
+                    max="100"
+                    style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
+                  />
                 </div>
 
                 <div>
@@ -545,7 +598,7 @@ const ProgramBuilder: React.FC = () => {
                       <SelectContent style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
                         <SelectItem value="STABILIZATION_ENDURANCE" style={{ color: 'var(--text-color)' }}>Stabilization Endurance</SelectItem>
                         <SelectItem value="STRENGTH_ENDURANCE" style={{ color: 'var(--text-color)' }}>Strength Endurance</SelectItem>
-                        <SelectItem value="HYPERTROPHY" style={{ color: 'var(--text-color)' }}>Hypertrophy</SelectItem>
+                        <SelectItem value="MUSCULAR_DEVELOPMENT" style={{ color: 'var(--text-color)' }}>Muscular Development</SelectItem>
                         <SelectItem value="MAXIMAL_STRENGTH" style={{ color: 'var(--text-color)' }}>Maximal Strength</SelectItem>
                         <SelectItem value="POWER" style={{ color: 'var(--text-color)' }}>Power</SelectItem>
                       </SelectContent>
@@ -599,7 +652,7 @@ const ProgramBuilder: React.FC = () => {
 
                 <Button
                   onClick={() => setCurrentStep(1)}
-                  disabled={!programForm.clientId || !programForm.primaryGoal}
+                  disabled={!programForm.clientId || !programForm.primaryGoal || !programForm.programName || !programForm.clientAge}
                   className="w-full flex items-center justify-center gap-2"
                   style={{ background: 'var(--primary-color)', color: 'var(--bg-primary)' }}
                 >
@@ -811,7 +864,7 @@ const ProgramBuilder: React.FC = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {program.workouts.map(workout => {
+                      {(program.workouts ?? []).map(workout => {
                         // Ensure workout has required properties
                         if (!workout || !workout.id || !workout.name) {
                           return null;

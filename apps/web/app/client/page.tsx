@@ -29,6 +29,8 @@ export default function ClientPortal() {
   const [selectedProgress, setSelectedProgress] = useState<any>(null);
   const [selectedSession, setSelectedSession] = useState<any>(null);
 
+  console.log('ClientPortal render - currentView:', currentView, 'isLoggedIn:', isLoggedIn);
+  
   const handleLogin = async () => {
     try {
       setLoading(true);
@@ -154,7 +156,10 @@ export default function ClientPortal() {
   };
 
   const handleViewProgressDetails = (progressId: string) => {
-    const progress = client?.progress?.find((p: any) => p.id === progressId);
+    console.log('Clicked progressId:', progressId);
+    console.log('All progress IDs:', client?.progress?.map((p: any) => p.id));
+    const progress = client?.progress?.find((p: any) => String(p.id) === String(progressId));
+    console.log('Found progress:', progress);
     if (progress) {
       navigateToProgress(progress);
     }
@@ -375,95 +380,19 @@ export default function ClientPortal() {
             </div>
           </div>
         </header>
-
         <main className={styles.clientMain}>
-          {message && <div className={styles.clientMessage}>{message}</div>}
-
           <div className={styles.clientDashboard}>
             <div className={styles.clientDashboardHeader}>
-              <h2>Progress Update - {new Date(selectedProgress.date).toLocaleDateString()}</h2>
-              <p>Detailed progress metrics and notes</p>
+              <h2>Progress Update</h2>
+              <span className={styles.clientProgressDate}>
+                {new Date(selectedProgress.date).toLocaleDateString()}
+              </span>
             </div>
-
-            <div className={styles.clientSection}>
-              <div className={styles.clientSectionHeader}>
-                <h3>Progress Metrics</h3>
-              </div>
-              <div className={styles.clientProgramGrid}>
-                <div className={styles.clientProgramCard}>
-                  <div className={styles.clientProgramHeader}>
-                    <h4>Physical Metrics</h4>
-                  </div>
-                  <div className={styles.clientProgramDetails}>
-                    {selectedProgress.weight && <p><strong>Weight:</strong> {selectedProgress.weight} lbs</p>}
-                    {selectedProgress.bodyFat && <p><strong>Body Fat:</strong> {selectedProgress.bodyFat}%</p>}
-                    {selectedProgress.notes && <p><strong>Notes:</strong> {selectedProgress.notes}</p>}
-                  </div>
-                </div>
-
-                {selectedProgress.data && (
-                  <div className={styles.clientProgramCard}>
-                    <div className={styles.clientProgramHeader}>
-                      <h4>Wellness Metrics</h4>
-                    </div>
-                    <div className={styles.clientProgramDetails}>
-                      {selectedProgress.data.metrics && (
-                        <>
-                          <p><strong>Energy Level:</strong> {selectedProgress.data.metrics.energyLevel}/10</p>
-                          <p><strong>Sleep Quality:</strong> {selectedProgress.data.metrics.sleepQuality}/10</p>
-                          <p><strong>Stress Level:</strong> {selectedProgress.data.metrics.stressLevel}/10</p>
-                          <p><strong>Motivation:</strong> {selectedProgress.data.metrics.motivation}/10</p>
-                        </>
-                      )}
-                      {selectedProgress.data.mood && <p><strong>Mood:</strong> {selectedProgress.data.mood}</p>}
-                      {selectedProgress.data.workoutCompleted && <p><strong>Workout Completed:</strong> Yes</p>}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.clientSection}>
-              <div className={styles.clientSectionHeader}>
-                <h3>Actions</h3>
-              </div>
-              <div className={styles.clientActionGrid}>
-                <div className={styles.clientActionCard}>
-                  <div className={styles.clientActionIcon}>📝</div>
-                  <h4>Log New Progress</h4>
-                  <p>Record your latest progress update</p>
-                  <Button appName="web" onClick={handleLogWorkout} className={styles.clientActionButton}>
-                    Log Progress
-                  </Button>
-                </div>
-
-                <div className={styles.clientActionCard}>
-                  <div className={styles.clientActionIcon}>📊</div>
-                  <h4>View Progress Charts</h4>
-                  <p>See your progress over time</p>
-                  <Button appName="web" onClick={handleViewCharts} className={styles.clientActionButton}>
-                    View Charts
-                  </Button>
-                </div>
-
-                <div className={styles.clientActionCard}>
-                  <div className={styles.clientActionIcon}>💬</div>
-                  <h4>Message Trainer</h4>
-                  <p>Discuss your progress with your trainer</p>
-                  <Button appName="web" onClick={handleMessageTrainer} className={styles.clientActionButton}>
-                    Send Message
-                  </Button>
-                </div>
-
-                <div className={styles.clientActionCard}>
-                  <div className={styles.clientActionIcon}>🏠</div>
-                  <h4>Back to Dashboard</h4>
-                  <p>Return to your main dashboard</p>
-                  <Button appName="web" onClick={navigateToDashboard} className={styles.clientActionButton}>
-                    Go to Dashboard
-                  </Button>
-                </div>
-              </div>
+            <div className={styles.clientProgressDetails}>
+              {selectedProgress.weight && <p><strong>Weight:</strong> {selectedProgress.weight} lbs</p>}
+              {selectedProgress.bodyFat && <p><strong>Body Fat:</strong> {selectedProgress.bodyFat}%</p>}
+              {selectedProgress.notes && <p><strong>Notes:</strong> {selectedProgress.notes}</p>}
+              {/* Add more fields as needed */}
             </div>
           </div>
         </main>
@@ -622,7 +551,7 @@ export default function ClientPortal() {
                 <div className={styles.clientProgramCard}>
                   <div className={styles.clientProgramHeader}>
                     <h4>Under Development</h4>
-                    <span className={styles.clientStatus}>Coming Soon</span>
+                    <span className={`${styles.clientStatus} ${styles['coming-soon']}`}>Coming Soon</span>
                   </div>
                   <div className={styles.clientProgramDetails}>
                     <p>This feature is currently under development and will be available soon!</p>
