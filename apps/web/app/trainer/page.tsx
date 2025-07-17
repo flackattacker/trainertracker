@@ -472,10 +472,10 @@ export default function TrainerPortal() {
           Assessments
         </button>
         <button
-          className={`${styles.navButton} ${currentView === 'progress' ? styles.active : ''}`}
-          onClick={() => setCurrentView('progress')}
+          className={`${styles.navButton} ${currentView === 'program-builder' ? styles.active : ''}`}
+          onClick={() => setCurrentView('program-builder')}
         >
-          Progress
+          Program Builder
         </button>
         <button
           className={`${styles.navButton} ${currentView === 'scheduling' ? styles.active : ''}`}
@@ -484,10 +484,10 @@ export default function TrainerPortal() {
           Scheduling
         </button>
         <button
-          className={`${styles.navButton} ${currentView === 'program-builder' ? styles.active : ''}`}
-          onClick={() => setCurrentView('program-builder')}
+          className={`${styles.navButton} ${currentView === 'progress' ? styles.active : ''}`}
+          onClick={() => setCurrentView('progress')}
         >
-          Program Builder
+          Progress
         </button>
       </nav>
 

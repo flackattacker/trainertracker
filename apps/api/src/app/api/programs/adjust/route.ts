@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     // Build prompt for AI adjustment
     const prompt = `
-You are a certified personal trainer with expertise in program design. You need to adjust an existing training program based on the trainer's request.
+You are a certified personal trainer with expertise in program design. You need to adjust an existing training program based on the trainer's specific request.
 
 CURRENT PROGRAM:
 ${JSON.stringify(existingProgram, null, 2)}
@@ -44,25 +44,48 @@ ${JSON.stringify(existingProgram, null, 2)}
 TRAINER'S ADJUSTMENT REQUEST:
 ${adjustment}
 
-Please provide an adjusted version of this program that incorporates the trainer's request. Return the response as a valid JSON object with the same structure as the original program, but with the requested adjustments applied.
+CRITICAL INSTRUCTION: You MUST make the requested changes. Do NOT return the original program unchanged. The trainer is asking for specific modifications, and you need to implement them.
 
-CRITICAL REQUIREMENTS:
-1. Maintain the same overall structure and format
-2. Apply the specific adjustments requested
-3. Keep ALL existing workout days and exercises unless explicitly asked to remove them
-4. Ensure the adjustments are practical and safe
-5. Maintain proper exercise progression and variety
-6. PRESERVE THE ORIGINAL PROGRAM NAME - do not change or remove the programName field
+ANALYZE THE REQUEST:
+- If the trainer asks to "add exercise volume for full 6 weeks" and only 1 week is populated, you MUST add the missing 5 weeks with appropriate exercises
+- If the trainer asks to "increase reps", you MUST modify the reps values
+- If the trainer asks to "add more exercises", you MUST add new exercises
+- If the trainer asks to "change intensity", you MUST adjust sets, reps, or exercise difficulty
+
+IMPLEMENTATION REQUIREMENTS:
+1. APPLY THE SPECIFIC ADJUSTMENTS REQUESTED - This is the MOST IMPORTANT requirement
+2. If adding weeks/exercises, ensure they follow proper progression and variety
+3. Maintain the same overall structure and format
+4. Keep existing workout days and exercises unless explicitly asked to remove them
+5. Ensure all adjustments are practical and safe
+6. PRESERVE THE ORIGINAL PROGRAM NAME - do not change the programName field
 7. PRESERVE THE ORIGINAL PROGRAM DURATION - maintain the same number of weeks/workouts
 8. Keep all other metadata fields (optPhase, primaryGoal, secondaryGoals, etc.) intact
 9. Ensure the response is a complete, valid JSON object
-10. Do not truncate or omit any workout days or exercises
 
-The adjusted program should be a complete replacement that maintains the original structure while incorporating the requested changes.
+SPECIFIC EXAMPLES FOR YOUR REQUEST:
+- If asked to "add exercise volume for full 6 weeks" and only week 1 exists:
+  * Add weeks 2-6 with appropriate exercises
+  * Each week should have the same number of workout days as week 1
+  * Vary exercises slightly between weeks for progression
+  * Maintain the same exercise categories (upper body, lower body, full body)
+  * Adjust sets/reps progressively across weeks
+
+- If asked to "increase reps": Modify the "reps" field for all exercises
+- If asked to "add more exercises": Add new exercises to existing workout days
+- If asked to "change to higher intensity": Increase sets, reps, or add more challenging exercises
+
+The adjusted program should be a complete replacement that incorporates ALL requested changes while maintaining the original structure.
 
 Return only the JSON object, no additional text or explanations.
 `;
 
+    console.log('AI Adjustment: Trainer adjustment request:', adjustment);
+    console.log('AI Adjustment: Current program structure:', {
+      totalWeeks: (existingProgram.data as any)?.duration || 'unknown',
+      currentWorkouts: (existingProgram.data as any)?.workouts?.length || 0,
+      workoutNames: (existingProgram.data as any)?.workouts?.map((w: any) => w.name) || []
+    });
     console.log('AI Adjustment: Sending request to OpenAI...');
     
     // Generate adjusted program with AI
@@ -78,7 +101,7 @@ Return only the JSON object, no additional text or explanations.
           content: prompt
         }
       ],
-      temperature: 0.7,
+      temperature: 0.8,
       max_tokens: 4000,
     });
 
@@ -105,7 +128,7 @@ Return only the JSON object, no additional text or explanations.
     }
 
     console.log('AI Adjustment: Successfully adjusted program');
-    console.log('AI Adjustment: Adjusted program data:', JSON.stringify(adjustedProgramData, null, 2));
+    console.log('AI Adjustment: Raw AI response before fixes:', JSON.stringify(adjustedProgramData, null, 2));
     console.log('AI Adjustment: Original program name:', existingProgram.programName);
     console.log('AI Adjustment: Original program duration (weeks):', (existingProgram.data as any)?.duration || 'unknown');
     console.log('AI Adjustment: Original workout count:', (existingProgram.data as any)?.workouts?.length || 0);

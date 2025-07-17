@@ -425,10 +425,30 @@ const ProgramBuilder: React.FC = () => {
           programName: mappedProgram.programName,
           name: mappedProgram.name,
           duration: mappedProgram.duration,
-          workoutCount: mappedProgram.workouts?.length || mappedProgram.data?.workouts?.length
+          dataDuration: mappedProgram.data?.duration,
+          workoutCount: mappedProgram.workouts?.length || mappedProgram.data?.workouts?.length,
+          hasWorkouts: !!mappedProgram.workouts,
+          hasDataWorkouts: !!mappedProgram.data?.workouts,
+          allKeys: Object.keys(mappedProgram)
         });
         
-        setProgram(mappedProgram);
+        // Ensure the program has the correct structure
+        const finalProgram = {
+          ...mappedProgram,
+          programName: mappedProgram.programName || mappedProgram.name || 'Untitled Program',
+          name: mappedProgram.name || mappedProgram.programName || 'Untitled Program',
+          duration: mappedProgram.duration || mappedProgram.data?.duration || 6,
+          workouts: mappedProgram.workouts || mappedProgram.data?.workouts || []
+        };
+        
+        console.log('Frontend: Setting final program:', {
+          programName: finalProgram.programName,
+          name: finalProgram.name,
+          duration: finalProgram.duration,
+          workoutCount: finalProgram.workouts?.length
+        });
+        
+        setProgram(finalProgram);
         setShowAiAdjustment(false);
         setAiAdjustmentPrompt('');
         setShowSuccess(true);
@@ -465,6 +485,7 @@ const ProgramBuilder: React.FC = () => {
       
       const saveData = {
         ...program,
+        programName: program.programName || program.name || programForm.programName || 'Untitled Program',
         name: program.name || program.programName || programForm.programName || 'Untitled Program',
         clientId: programForm.clientId,
         startDate: programForm.startDate,
@@ -685,17 +706,6 @@ const ProgramBuilder: React.FC = () => {
               <CardContent className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Program Name *
-                  </label>
-                  <Input
-                    value={programForm.programName}
-                    onChange={(e) => setProgramForm(prev => ({ ...prev, programName: e.target.value }))}
-                    placeholder="e.g., 12-Week Strength Program"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
                     Select Client *
                   </label>
                   <Select value={programForm.clientId} onValueChange={(value) => setProgramForm(prev => ({ ...prev, clientId: value }))}>
@@ -759,6 +769,17 @@ const ProgramBuilder: React.FC = () => {
                     </p>
                   </div>
                 )}
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Program Name *
+                  </label>
+                  <Input
+                    value={programForm.programName}
+                    onChange={(e) => setProgramForm(prev => ({ ...prev, programName: e.target.value }))}
+                    placeholder="e.g., 12-Week Strength Program"
+                  />
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
@@ -1076,7 +1097,7 @@ const ProgramBuilder: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 rounded-lg bg-card border border-border">
                     <h4 className="font-semibold mb-2">Program Name</h4>
-                    <p className="text-muted-foreground">{program.name}</p>
+                    <p className="text-muted-foreground">{program.programName || program.name || 'Untitled Program'}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-card border border-border">
                     <h4 className="font-semibold mb-2">Primary Goal</h4>
@@ -1086,7 +1107,7 @@ const ProgramBuilder: React.FC = () => {
                   </div>
                   <div className="p-4 rounded-lg bg-card border border-border">
                     <h4 className="font-semibold mb-2">Duration</h4>
-                    <p className="text-muted-foreground">{program.duration} weeks</p>
+                    <p className="text-muted-foreground">{program.duration || program.data?.duration || 'Unknown'} weeks</p>
                   </div>
                 </div>
               </CardContent>
