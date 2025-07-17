@@ -178,7 +178,6 @@ export async function POST(req: NextRequest) {
         assessor,
         notes,
         data: data || {},
-        isBaseline: isBaseline || false,
         nextAssessmentDate: nextAssessmentDate ? new Date(nextAssessmentDate) : null,
         version: '1.0', // Current version
         template: type, // Use type as template identifier
@@ -250,7 +249,6 @@ export async function PUT(req: NextRequest) {
         ...(notes !== undefined && { notes }),
         ...(data && { data }),
         ...(status && { status }),
-        ...(isBaseline !== undefined && { isBaseline }),
         ...(nextAssessmentDate && { nextAssessmentDate: new Date(nextAssessmentDate) }),
         ...standardizedFields
       },

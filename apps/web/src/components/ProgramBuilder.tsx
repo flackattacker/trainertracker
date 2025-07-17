@@ -27,7 +27,8 @@ import {
   User,
   Sparkles,
   Edit3,
-  FileText
+  FileText,
+  X
 } from 'lucide-react';
 
 interface Client {
@@ -121,6 +122,9 @@ const ProgramBuilder: React.FC = () => {
   const [draggedExercise, setDraggedExercise] = useState<Exercise | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedWorkoutDay, setSelectedWorkoutDay] = useState<string | null>(null);
+  const [existingPrograms, setExistingPrograms] = useState<any[]>([]);
+  const [showLoadProgramModal, setShowLoadProgramModal] = useState(false);
+  const [loadingExistingPrograms, setLoadingExistingPrograms] = useState(false);
 
   // Program form state
   const [programForm, setProgramForm] = useState({
@@ -142,6 +146,15 @@ const ProgramBuilder: React.FC = () => {
     fetchExercises();
     fetchCategories();
   }, []);
+
+  // Fetch existing programs when client is selected
+  useEffect(() => {
+    if (programForm.clientId) {
+      fetchExistingPrograms(programForm.clientId);
+    } else {
+      setExistingPrograms([]);
+    }
+  }, [programForm.clientId]);
 
   const fetchClients = async () => {
     try {
@@ -199,6 +212,72 @@ const ProgramBuilder: React.FC = () => {
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchExistingPrograms = async (clientId: string) => {
+    setLoadingExistingPrograms(true);
+    try {
+      const token = localStorage.getItem('trainer-tracker-token');
+      const response = await fetch(`${API_BASE}/api/programs?clientId=${clientId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setExistingPrograms(data);
+      } else {
+        console.error('Error fetching existing programs:', response.status);
+        setExistingPrograms([]);
+      }
+    } catch (error) {
+      console.error('Error fetching existing programs:', error);
+      setExistingPrograms([]);
+    } finally {
+      setLoadingExistingPrograms(false);
+    }
+  };
+
+  const loadExistingProgram = async (programId: string) => {
+    try {
+      const token = localStorage.getItem('trainer-tracker-token');
+      const response = await fetch(`${API_BASE}/api/programs/${programId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const existingProgram = await response.json();
+        
+        // Transform the existing program to match our Program interface
+        const transformedProgram: Program = {
+          id: existingProgram.id,
+          name: existingProgram.programName,
+          description: existingProgram.secondaryGoals,
+          goal: existingProgram.primaryGoal,
+          experienceLevel: existingProgram.data?.experienceLevel || 'BEGINNER',
+          duration: existingProgram.data?.duration || 12,
+          optPhase: existingProgram.optPhase,
+          primaryGoal: existingProgram.primaryGoal,
+          secondaryGoals: existingProgram.secondaryGoals,
+          notes: existingProgram.notes,
+          clientId: existingProgram.clientId,
+          startDate: existingProgram.startDate,
+          endDate: existingProgram.endDate,
+          workouts: existingProgram.data?.workouts || []
+        };
+        
+        setProgram(transformedProgram);
+        setCurrentStep(2);
+        setShowLoadProgramModal(false);
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
+      } else {
+        console.error('Error loading existing program:', response.status);
+      }
+    } catch (error) {
+      console.error('Error loading existing program:', error);
     }
   };
 
@@ -554,8 +633,49 @@ const ProgramBuilder: React.FC = () => {
                       )}
                     </SelectContent>
                   </Select>
-
                 </div>
+
+                {/* Load Existing Program Section */}
+                {programForm.clientId && existingPrograms.length > 0 && (
+                  <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-medium text-blue-900">
+                        Existing Programs for {clients.find(c => c.id === programForm.clientId)?.firstName} {clients.find(c => c.id === programForm.clientId)?.lastName}
+                      </h3>
+                      <Button
+                        onClick={() => setShowLoadProgramModal(true)}
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center gap-2"
+                        style={{
+                          backgroundColor: 'transparent',
+                          color: '#1e40af',
+                          border: '1px solid #1e40af',
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: '0.375rem',
+                          fontWeight: '500',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#1e40af';
+                          e.currentTarget.style.color = 'white';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.color = '#1e40af';
+                        }}
+                      >
+                        <FileText className="h-3 w-3" />
+                        Load Existing Program
+                      </Button>
+                    </div>
+                    <p className="text-xs text-blue-700 mb-2">
+                      This client has {existingPrograms.length} existing program{existingPrograms.length !== 1 ? 's' : ''}. 
+                      You can load and edit an existing program instead of creating a new one.
+                    </p>
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
@@ -1044,6 +1164,129 @@ const ProgramBuilder: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Load Existing Program Modal */}
+      {showLoadProgramModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="rounded-lg p-6 w-full max-w-2xl bg-card border border-border shadow-lg">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Load Existing Program</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowLoadProgramModal(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            {loadingExistingPrograms ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 mx-auto mb-4" style={{ borderColor: '#5a7c65' }}></div>
+                <p>Loading existing programs...</p>
+              </div>
+            ) : existingPrograms.length === 0 ? (
+              <div className="text-center py-8">
+                <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground">No existing programs found for this client.</p>
+              </div>
+            ) : (
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {existingPrograms.map((existingProgram) => (
+                  <div
+                    key={existingProgram.id}
+                    className="p-4 border rounded-lg hover:bg-accent transition-all duration-200 cursor-pointer bg-card border-border"
+                    onClick={() => loadExistingProgram(existingProgram.id)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-sm">{existingProgram.programName}</h4>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {existingProgram.primaryGoal}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge variant="outline" className="text-xs">
+                            {existingProgram.optPhase}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {existingProgram.data?.duration || 'Unknown'} weeks
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {existingProgram.data?.workouts?.length || 0} workouts
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(existingProgram.createdAt).toLocaleDateString()}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            loadExistingProgram(existingProgram.id);
+                          }}
+                          className="flex items-center gap-2"
+                          style={{
+                            backgroundColor: 'transparent',
+                            color: '#5a7c65',
+                            border: '1px solid #5a7c65',
+                            padding: '0.25rem 0.75rem',
+                            borderRadius: '0.375rem',
+                            fontWeight: '500',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#5a7c65';
+                            e.currentTarget.style.color = 'white';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                            e.currentTarget.style.color = '#5a7c65';
+                          }}
+                        >
+                          <Edit3 className="h-3 w-3" />
+                          Load & Edit
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <div className="flex justify-end mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowLoadProgramModal(false)}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: '#6b7280',
+                  border: '1px solid #d1d5db',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.5rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#5a7c65';
+                  e.currentTarget.style.color = '#5a7c65';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#d1d5db';
+                  e.currentTarget.style.color = '#6b7280';
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* AI Adjustment Modal */}
       {showAiAdjustment && (

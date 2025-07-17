@@ -124,390 +124,334 @@ export const optPhaseGuidelines = {
   }
 };
 
-// Comprehensive Exercise Database
+// --- BEGIN MASSIVE EXERCISE DATABASE ---
 export const exerciseDatabase: Exercise[] = [
-  // STABILIZATION TRAINING EXERCISES
+  // STABILIZATION TRAINING
   {
-    id: 'plank',
-    name: 'Plank',
+    id: 'side-plank',
+    name: 'Side Plank',
     category: 'STABILITY_TRAINING',
     muscleGroups: ['CORE', 'SHOULDERS'],
     equipment: ['BODYWEIGHT'],
     difficulty: 'BEGINNER',
-    instructions: 'Hold body in straight line from head to heels, engage core muscles',
-    acuteVariables: {
-      sets: 3,
-      duration: 30,
-      restTime: 60,
-      rpe: 5
-    },
-    progressions: ['Side Plank', 'Plank with Leg Lift', 'Plank with Arm Reach'],
-    regressions: ['Knee Plank', 'Wall Plank'],
-    contraindications: ['Shoulder pain', 'lower back pain']
+    instructions: 'Lie on your side, prop up on elbow, hold hips off ground.',
+    acuteVariables: { sets: 3, duration: 30, restTime: 60, rpe: 5 },
+    progressions: ['Side Plank with Leg Lift'],
+    regressions: ['Knee Side Plank'],
+    contraindications: ['Shoulder pain']
   },
   {
-    id: 'bird-dog',
-    name: 'Bird Dog',
+    id: 'stability-ball-crunch',
+    name: 'Stability Ball Crunch',
     category: 'STABILITY_TRAINING',
-    muscleGroups: ['CORE', 'BACK'],
-    equipment: ['BODYWEIGHT'],
+    muscleGroups: ['CORE'],
+    equipment: ['STABILITY_BALL'],
     difficulty: 'BEGINNER',
-    instructions: 'Extend opposite arm and leg while maintaining balance and neutral spine',
-    acuteVariables: {
-      sets: 3,
-      reps: 12,
-      restTime: 45,
-      rpe: 4
-    },
-    progressions: ['Bird Dog with Resistance Band', 'Bird Dog on Stability Ball'],
-    regressions: ['Kneeling Bird Dog', 'Seated Bird Dog'],
-    contraindications: ['Lower back pain', 'balance issues']
+    instructions: 'Lie on ball, feet flat, crunch up keeping core engaged.',
+    acuteVariables: { sets: 3, reps: 15, restTime: 60, rpe: 5 },
+    progressions: ['Weighted Ball Crunch'],
+    regressions: ['Floor Crunch'],
+    contraindications: ['Lower back pain']
   },
   {
-    id: 'single-leg-stance',
-    name: 'Single Leg Stance',
+    id: 'bosu-plank',
+    name: 'BOSU Plank',
     category: 'STABILITY_TRAINING',
-    muscleGroups: ['CORE', 'QUADS', 'GLUTES'],
-    equipment: ['BODYWEIGHT'],
-    difficulty: 'BEGINNER',
-    instructions: 'Stand on one leg while maintaining balance and proper posture',
-    acuteVariables: {
-      sets: 3,
-      duration: 30,
-      restTime: 60,
-      rpe: 4
-    },
-    progressions: ['Single Leg Stance with Eyes Closed', 'Single Leg Stance on BOSU'],
-    regressions: ['Single Leg Stance with Support', 'Double Leg Stance'],
-    contraindications: ['Balance issues', 'ankle instability']
+    muscleGroups: ['CORE', 'SHOULDERS'],
+    equipment: ['BOSU_BALL'],
+    difficulty: 'INTERMEDIATE',
+    instructions: 'Hold plank position with forearms on BOSU ball.',
+    acuteVariables: { sets: 3, duration: 30, restTime: 60, rpe: 6 },
+    progressions: ['BOSU Plank with Leg Lift'],
+    regressions: ['Floor Plank'],
+    contraindications: ['Shoulder pain']
   },
+  // STRENGTH TRAINING
   {
-    id: 'wall-slide',
-    name: 'Wall Slide',
-    category: 'STABILITY_TRAINING',
-    muscleGroups: ['SHOULDERS', 'UPPER_BACK'],
-    equipment: ['BODYWEIGHT'],
-    difficulty: 'BEGINNER',
-    instructions: 'Slide arms up and down wall while maintaining contact and proper posture',
-    acuteVariables: {
-      sets: 3,
-      reps: 15,
-      restTime: 60,
-      rpe: 4
-    },
-    progressions: ['Wall Slide with Resistance Band', 'Wall Slide with Weight'],
-    regressions: ['Seated Wall Slide', 'Partial Range Wall Slide'],
-    contraindications: ['Shoulder pain', 'upper back pain']
-  },
-
-  // STRENGTH TRAINING EXERCISES
-  {
-    id: 'push-up',
-    name: 'Push-Up',
+    id: 'goblet-squat',
+    name: 'Goblet Squat',
     category: 'STRENGTH_TRAINING',
-    muscleGroups: ['CHEST', 'TRICEPS', 'SHOULDERS'],
-    equipment: ['BODYWEIGHT'],
+    muscleGroups: ['QUADS', 'GLUTES', 'CORE'],
+    equipment: ['DUMBBELLS'],
     difficulty: 'BEGINNER',
-    instructions: 'Start in plank position, lower body until chest nearly touches ground, push back up',
-    acuteVariables: {
-      sets: 3,
-      reps: 10,
-      restTime: 90,
-      rpe: 7
-    },
-    progressions: ['Diamond Push-Up', 'One-Arm Push-Up', 'Plyometric Push-Up'],
-    regressions: ['Knee Push-Up', 'Wall Push-Up', 'Incline Push-Up'],
-    contraindications: ['Shoulder pain', 'wrist pain']
+    instructions: 'Hold dumbbell at chest, squat down, keep chest up.',
+    acuteVariables: { sets: 3, reps: 12, restTime: 90, rpe: 6 },
+    progressions: ['Front Squat'],
+    regressions: ['Bodyweight Squat'],
+    contraindications: ['Knee pain']
   },
   {
-    id: 'bench-press',
-    name: 'Barbell Bench Press',
+    id: 'romanian-deadlift',
+    name: 'Romanian Deadlift',
     category: 'STRENGTH_TRAINING',
-    muscleGroups: ['CHEST', 'TRICEPS', 'SHOULDERS'],
+    muscleGroups: ['HAMSTRINGS', 'GLUTES', 'BACK'],
     equipment: ['BARBELL'],
     difficulty: 'INTERMEDIATE',
-    instructions: 'Lie on bench, lower bar to chest, press back up with controlled movement',
-    acuteVariables: {
-      sets: 4,
-      reps: 8,
-      intensity: 75,
-      restTime: 120,
-      rpe: 8
-    },
-    progressions: ['Incline Bench Press', 'Decline Bench Press', 'Close-Grip Bench Press'],
-    regressions: ['Dumbbell Bench Press', 'Smith Machine Bench Press'],
-    contraindications: ['Shoulder pain', 'chest pain']
+    instructions: 'Hinge at hips, lower bar down legs, keep back flat.',
+    acuteVariables: { sets: 3, reps: 10, restTime: 120, rpe: 7 },
+    progressions: ['Single Leg RDL'],
+    regressions: ['Dumbbell RDL'],
+    contraindications: ['Lower back pain']
   },
   {
-    id: 'squat',
-    name: 'Barbell Squat',
+    id: 'lat-pulldown',
+    name: 'Lat Pulldown',
     category: 'STRENGTH_TRAINING',
-    muscleGroups: ['QUADS', 'GLUTES', 'HAMSTRINGS'],
+    muscleGroups: ['BACK', 'BICEPS'],
+    equipment: ['CABLE_MACHINE'],
+    difficulty: 'BEGINNER',
+    instructions: 'Pull bar to chest, squeeze shoulder blades, control up.',
+    acuteVariables: { sets: 3, reps: 12, restTime: 90, rpe: 6 },
+    progressions: ['Pull-up'],
+    regressions: ['Assisted Pulldown'],
+    contraindications: ['Shoulder pain']
+  },
+  {
+    id: 'seated-row',
+    name: 'Seated Row',
+    category: 'STRENGTH_TRAINING',
+    muscleGroups: ['BACK', 'BICEPS'],
+    equipment: ['CABLE_MACHINE'],
+    difficulty: 'BEGINNER',
+    instructions: 'Pull handles to torso, squeeze shoulder blades, control back.',
+    acuteVariables: { sets: 3, reps: 12, restTime: 90, rpe: 6 },
+    progressions: ['Single Arm Row'],
+    regressions: ['Resistance Band Row'],
+    contraindications: ['Shoulder pain']
+  },
+  // POWER TRAINING
+  {
+    id: 'push-press',
+    name: 'Push Press',
+    category: 'POWER_TRAINING',
+    muscleGroups: ['SHOULDERS', 'TRICEPS', 'CORE'],
     equipment: ['BARBELL'],
     difficulty: 'INTERMEDIATE',
-    instructions: 'Bar on upper back, squat down to parallel, stand back up with proper form',
-    acuteVariables: {
-      sets: 4,
-      reps: 8,
-      intensity: 75,
-      restTime: 120,
-      rpe: 8
-    },
-    progressions: ['Front Squat', 'Overhead Squat', 'Pistol Squat'],
-    regressions: ['Bodyweight Squat', 'Goblet Squat', 'Wall Squat'],
-    contraindications: ['Knee pain', 'lower back pain']
+    instructions: 'Dip knees, drive bar overhead explosively, lock out arms.',
+    acuteVariables: { sets: 3, reps: 5, restTime: 120, rpe: 8 },
+    progressions: ['Split Jerk'],
+    regressions: ['Dumbbell Push Press'],
+    contraindications: ['Shoulder pain']
   },
   {
-    id: 'deadlift',
-    name: 'Deadlift',
-    category: 'STRENGTH_TRAINING',
-    muscleGroups: ['BACK', 'GLUTES', 'HAMSTRINGS'],
-    equipment: ['BARBELL'],
-    difficulty: 'ADVANCED',
-    instructions: 'Stand with bar at shins, hinge at hips, lift bar while keeping back straight',
-    acuteVariables: {
-      sets: 4,
-      reps: 6,
-      intensity: 80,
-      restTime: 180,
-      rpe: 8
-    },
-    progressions: ['Romanian Deadlift', 'Sumo Deadlift', 'Single-Leg Deadlift'],
-    regressions: ['Dumbbell Deadlift', 'Kettlebell Deadlift', 'Rack Pull'],
-    contraindications: ['Lower back pain', 'hip pain']
+    id: 'medicine-ball-slam',
+    name: 'Medicine Ball Slam',
+    category: 'POWER_TRAINING',
+    muscleGroups: ['CORE', 'SHOULDERS', 'FULL_BODY'],
+    equipment: ['MEDICINE_BALL'],
+    difficulty: 'INTERMEDIATE',
+    instructions: 'Lift ball overhead, slam to ground with force, repeat.',
+    acuteVariables: { sets: 3, reps: 8, restTime: 90, rpe: 7 },
+    progressions: ['Rotational Slam'],
+    regressions: ['Lighter Ball'],
+    contraindications: ['Back pain']
   },
-
-  // POWER TRAINING EXERCISES
   {
     id: 'box-jump',
     name: 'Box Jump',
-    category: 'POWER_TRAINING',
+    category: 'PLYOMETRIC_TRAINING',
     muscleGroups: ['QUADS', 'GLUTES', 'CALVES'],
     equipment: ['BODYWEIGHT'],
     difficulty: 'INTERMEDIATE',
-    instructions: 'Jump explosively onto box, land softly with proper form',
-    acuteVariables: {
-      sets: 3,
-      reps: 5,
-      restTime: 180,
-      rpe: 8
-    },
-    progressions: ['Single-Leg Box Jump', 'Box Jump with Weight', 'Depth Jump'],
-    regressions: ['Step-Up', 'Box Jump to Lower Height'],
-    contraindications: ['Knee pain', 'ankle instability']
+    instructions: 'Jump onto box, land softly, step down and repeat.',
+    acuteVariables: { sets: 3, reps: 8, restTime: 90, rpe: 7 },
+    progressions: ['Higher Box'],
+    regressions: ['Step Up'],
+    contraindications: ['Knee pain']
   },
   {
-    id: 'medicine-ball-throw',
-    name: 'Medicine Ball Chest Throw',
-    category: 'POWER_TRAINING',
-    muscleGroups: ['CHEST', 'TRICEPS', 'SHOULDERS'],
-    equipment: ['MEDICINE_BALL'],
-    difficulty: 'INTERMEDIATE',
-    instructions: 'Throw medicine ball explosively against wall or to partner',
-    acuteVariables: {
-      sets: 3,
-      reps: 8,
-      restTime: 120,
-      rpe: 7
-    },
-    progressions: ['Medicine Ball Slam', 'Medicine Ball Overhead Throw'],
-    regressions: ['Medicine Ball Chest Pass', 'Medicine Ball Toss'],
-    contraindications: ['Shoulder pain', 'chest pain']
-  },
-  {
-    id: 'clean',
-    name: 'Power Clean',
-    category: 'POWER_TRAINING',
-    muscleGroups: ['FULL_BODY'],
-    equipment: ['BARBELL'],
+    id: 'depth-jump',
+    name: 'Depth Jump',
+    category: 'PLYOMETRIC_TRAINING',
+    muscleGroups: ['QUADS', 'GLUTES', 'CALVES'],
+    equipment: ['BODYWEIGHT'],
     difficulty: 'ADVANCED',
-    instructions: 'Explosive lift from ground to rack position with proper technique',
-    acuteVariables: {
-      sets: 3,
-      reps: 3,
-      intensity: 70,
-      restTime: 180,
-      rpe: 8
-    },
-    progressions: ['Hang Clean', 'Split Clean', 'Clean and Jerk'],
-    regressions: ['Dumbbell Clean', 'Kettlebell Clean'],
-    contraindications: ['Lower back pain', 'shoulder pain', 'wrist pain']
+    instructions: 'Step off box, land, immediately jump as high as possible.',
+    acuteVariables: { sets: 3, reps: 6, restTime: 120, rpe: 8 },
+    progressions: ['Weighted Depth Jump'],
+    regressions: ['Box Jump'],
+    contraindications: ['Knee pain']
   },
-
   // CARDIOVASCULAR TRAINING
   {
-    id: 'treadmill-run',
-    name: 'Treadmill Running',
-    category: 'CARDIOVASCULAR_TRAINING',
-    muscleGroups: ['QUADS', 'GLUTES', 'CALVES'],
-    equipment: ['TREADMILL'],
-    difficulty: 'BEGINNER',
-    instructions: 'Run at moderate pace for specified duration with proper form',
-    acuteVariables: {
-      sets: 1,
-      duration: 1200, // 20 minutes
-      speed: 8, // km/h
-      restTime: 0,
-      rpe: 6
-    },
-    progressions: ['Interval Running', 'Hill Running', 'Long Distance Running'],
-    regressions: ['Walking', 'Jogging', 'Elliptical'],
-    contraindications: ['Knee pain', 'hip pain', 'cardiovascular issues']
-  },
-  {
-    id: 'rowing',
-    name: 'Rowing Machine',
+    id: 'elliptical',
+    name: 'Elliptical Trainer',
     category: 'CARDIOVASCULAR_TRAINING',
     muscleGroups: ['FULL_BODY'],
-    equipment: ['ROWING_MACHINE'],
+    equipment: ['ELLIPTICAL'],
     difficulty: 'BEGINNER',
-    instructions: 'Row with proper form for specified duration',
-    acuteVariables: {
-      sets: 1,
-      duration: 900, // 15 minutes
-      resistance: 5,
-      restTime: 0,
-      rpe: 6
-    },
-    progressions: ['Interval Rowing', 'High-Intensity Rowing'],
-    regressions: ['Low Resistance Rowing', 'Shorter Duration'],
-    contraindications: ['Lower back pain', 'shoulder pain']
-  },
-
-  // FLEXIBILITY TRAINING
-  {
-    id: 'hamstring-stretch',
-    name: 'Hamstring Stretch',
-    category: 'FLEXIBILITY_TRAINING',
-    muscleGroups: ['HAMSTRINGS'],
-    equipment: ['BODYWEIGHT'],
-    difficulty: 'BEGINNER',
-    instructions: 'Sit with legs extended, reach toward toes while keeping back straight',
-    acuteVariables: {
-      sets: 3,
-      duration: 30,
-      restTime: 30,
-      rpe: 3
-    },
-    progressions: ['Standing Hamstring Stretch', 'Partner Hamstring Stretch'],
-    regressions: ['Seated Hamstring Stretch with Support'],
-    contraindications: ['Lower back pain', 'hamstring injury']
+    instructions: 'Maintain steady pace, use arms and legs, keep posture upright.',
+    acuteVariables: { sets: 1, duration: 1800, restTime: 0, rpe: 5 },
+    progressions: ['Interval Elliptical'],
+    regressions: ['Shorter Duration'],
+    contraindications: ['Knee pain']
   },
   {
-    id: 'hip-flexor-stretch',
-    name: 'Hip Flexor Stretch',
-    category: 'FLEXIBILITY_TRAINING',
-    muscleGroups: ['HIP_FLEXORS'],
-    equipment: ['BODYWEIGHT'],
-    difficulty: 'BEGINNER',
-    instructions: 'Kneel with one foot forward, lean forward to stretch hip flexor',
-    acuteVariables: {
-      sets: 3,
-      duration: 30,
-      restTime: 30,
-      rpe: 3
-    },
-    progressions: ['Lunge Stretch', 'Pigeon Pose'],
-    regressions: ['Seated Hip Flexor Stretch'],
-    contraindications: ['Hip pain', 'knee pain']
-  },
-
-  // BALANCE TRAINING
-  {
-    id: 'single-leg-deadlift',
-    name: 'Single-Leg Deadlift',
-    category: 'BALANCE_TRAINING',
-    muscleGroups: ['GLUTES', 'HAMSTRINGS', 'CORE'],
+    id: 'stair-climber',
+    name: 'Stair Climber',
+    category: 'CARDIOVASCULAR_TRAINING',
+    muscleGroups: ['QUADS', 'GLUTES', 'CALVES'],
     equipment: ['BODYWEIGHT'],
     difficulty: 'INTERMEDIATE',
-    instructions: 'Stand on one leg, hinge at hips while reaching opposite hand toward ground',
-    acuteVariables: {
-      sets: 3,
-      reps: 10,
-      restTime: 90,
-      rpe: 6
-    },
-    progressions: ['Single-Leg Deadlift with Weight', 'Single-Leg Deadlift on BOSU'],
-    regressions: ['Double-Leg Deadlift', 'Single-Leg Deadlift with Support'],
-    contraindications: ['Balance issues', 'lower back pain']
+    instructions: 'Climb stairs at steady pace, keep core engaged.',
+    acuteVariables: { sets: 1, duration: 1200, restTime: 0, rpe: 6 },
+    progressions: ['Weighted Climb'],
+    regressions: ['Slower Pace'],
+    contraindications: ['Knee pain']
+  },
+  // FLEXIBILITY TRAINING
+  {
+    id: 'childs-pose',
+    name: "Child's Pose",
+    category: 'FLEXIBILITY_TRAINING',
+    muscleGroups: ['LOWER_BODY', 'BACK'],
+    equipment: ['YOGAMAT'],
+    difficulty: 'BEGINNER',
+    instructions: 'Kneel, sit back on heels, stretch arms forward, relax.',
+    acuteVariables: { sets: 3, duration: 30, restTime: 30, rpe: 2 },
+    progressions: ['Extended Child Pose'],
+    regressions: ['Supported Child Pose'],
+    contraindications: ['Knee pain']
   },
   {
-    id: 'bosu-squat',
-    name: 'BOSU Ball Squat',
+    id: 'cat-cow',
+    name: 'Cat-Cow Stretch',
+    category: 'FLEXIBILITY_TRAINING',
+    muscleGroups: ['BACK', 'CORE'],
+    equipment: ['YOGAMAT'],
+    difficulty: 'BEGINNER',
+    instructions: 'On all fours, alternate arching and rounding back.',
+    acuteVariables: { sets: 3, reps: 10, restTime: 30, rpe: 2 },
+    progressions: ['Add Deep Breathing'],
+    regressions: ['Partial Range'],
+    contraindications: ['Wrist pain']
+  },
+  // BALANCE TRAINING
+  {
+    id: 'single-leg-balance-reach',
+    name: 'Single Leg Balance Reach',
+    category: 'BALANCE_TRAINING',
+    muscleGroups: ['CORE', 'QUADS', 'GLUTES'],
+    equipment: ['BODYWEIGHT'],
+    difficulty: 'INTERMEDIATE',
+    instructions: 'Stand on one leg, reach forward, side, and back with other leg.',
+    acuteVariables: { sets: 3, reps: 8, restTime: 60, rpe: 5 },
+    progressions: ['Eyes Closed'],
+    regressions: ['Support with Hand'],
+    contraindications: ['Balance issues']
+  },
+  {
+    id: 'bosu-lunge',
+    name: 'BOSU Lunge',
     category: 'BALANCE_TRAINING',
     muscleGroups: ['QUADS', 'GLUTES', 'CORE'],
     equipment: ['BOSU_BALL'],
     difficulty: 'INTERMEDIATE',
-    instructions: 'Stand on BOSU ball, perform squat while maintaining balance',
-    acuteVariables: {
-      sets: 3,
-      reps: 12,
-      restTime: 90,
-      rpe: 6
-    },
-    progressions: ['BOSU Squat with Weight', 'BOSU Single-Leg Squat'],
-    regressions: ['Regular Squat', 'BOSU Squat with Support'],
-    contraindications: ['Balance issues', 'knee pain']
-  }
+    instructions: 'Lunge forward onto BOSU ball, keep balance, return to start.',
+    acuteVariables: { sets: 3, reps: 10, restTime: 90, rpe: 6 },
+    progressions: ['Weighted BOSU Lunge'],
+    regressions: ['Floor Lunge'],
+    contraindications: ['Knee pain']
+  },
+  // FUNCTIONAL TRAINING
+  {
+    id: 'farmer-carry',
+    name: 'Farmer Carry',
+    category: 'FUNCTIONAL_TRAINING',
+    muscleGroups: ['FULL_BODY', 'CORE'],
+    equipment: ['DUMBBELLS'],
+    difficulty: 'INTERMEDIATE',
+    instructions: 'Walk holding heavy dumbbells at sides, keep core tight.',
+    acuteVariables: { sets: 3, duration: 60, restTime: 90, rpe: 7 },
+    progressions: ['Heavier Weight'],
+    regressions: ['Lighter Weight'],
+    contraindications: ['Grip issues']
+  },
+  {
+    id: 'sled-push',
+    name: 'Sled Push',
+    category: 'FUNCTIONAL_TRAINING',
+    muscleGroups: ['FULL_BODY', 'QUADS', 'GLUTES'],
+    equipment: ['BODYWEIGHT'],
+    difficulty: 'ADVANCED',
+    instructions: 'Push weighted sled across floor, keep back flat.',
+    acuteVariables: { sets: 3, duration: 30, restTime: 120, rpe: 8 },
+    progressions: ['Heavier Sled'],
+    regressions: ['Unweighted Sled'],
+    contraindications: ['Back pain']
+  },
 ];
+// --- END MASSIVE EXERCISE DATABASE ---
 
-// Exercise selection functions
+// Helper functions
 export function getExercisesByPhase(phase: string): Exercise[] {
-  const phaseMap: Record<string, ExerciseCategory[]> = {
-    'STABILIZATION_ENDURANCE': ['STABILITY_TRAINING', 'BALANCE_TRAINING'],
-    'STRENGTH_ENDURANCE': ['STRENGTH_TRAINING', 'STABILITY_TRAINING'],
-    'MUSCULAR_DEVELOPMENT': ['STRENGTH_TRAINING'],
-    'MAXIMAL_STRENGTH': ['STRENGTH_TRAINING'],
-    'POWER': ['POWER_TRAINING', 'PLYOMETRIC_TRAINING']
-  };
-
-  const categories = phaseMap[phase] || ['STRENGTH_TRAINING'];
-  return exerciseDatabase.filter(exercise => categories.includes(exercise.category));
+  switch (phase) {
+    case 'STABILIZATION_ENDURANCE':
+      return exerciseDatabase.filter(ex => ex.category === 'STABILITY_TRAINING');
+    case 'STRENGTH_ENDURANCE':
+      return exerciseDatabase.filter(ex => 
+        ex.category === 'STRENGTH_TRAINING' && ex.difficulty === 'BEGINNER'
+      );
+    case 'MUSCULAR_DEVELOPMENT':
+      return exerciseDatabase.filter(ex => 
+        ex.category === 'STRENGTH_TRAINING' && ex.difficulty === 'INTERMEDIATE'
+      );
+    case 'MAXIMAL_STRENGTH':
+      return exerciseDatabase.filter(ex => 
+        ex.category === 'STRENGTH_TRAINING' && ex.difficulty === 'ADVANCED'
+      );
+    case 'POWER':
+      return exerciseDatabase.filter(ex => 
+        ex.category === 'POWER_TRAINING' || ex.category === 'PLYOMETRIC_TRAINING'
+      );
+    default:
+      return exerciseDatabase;
+  }
 }
 
 export function getExercisesByMuscleGroup(muscleGroups: MuscleGroup[]): Exercise[] {
-  return exerciseDatabase.filter(exercise => 
-    exercise.muscleGroups.some(group => muscleGroups.includes(group))
+  return exerciseDatabase.filter(ex => 
+    ex.muscleGroups.some(mg => muscleGroups.includes(mg))
   );
 }
 
 export function getExercisesByDifficulty(difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'): Exercise[] {
-  return exerciseDatabase.filter(exercise => exercise.difficulty === difficulty);
+  return exerciseDatabase.filter(ex => ex.difficulty === difficulty);
 }
 
 export function getExercisesByEquipment(equipment: Equipment[]): Exercise[] {
-  return exerciseDatabase.filter(exercise => 
-    exercise.equipment.some(eq => equipment.includes(eq))
+  return exerciseDatabase.filter(ex => 
+    ex.equipment.some(eq => equipment.includes(eq))
   );
 }
 
 export function generateAcuteVariables(exercise: Exercise, phase: string, clientLevel: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'): AcuteVariables {
   const guidelines = optPhaseGuidelines[phase as keyof typeof optPhaseGuidelines];
+  
   if (!guidelines) {
     return exercise.acuteVariables;
   }
 
   // Adjust based on client level
-  const levelMultiplier = {
-    'BEGINNER': 0.8,
-    'INTERMEDIATE': 1.0,
-    'ADVANCED': 1.2
-  };
-
-  const multiplier = levelMultiplier[clientLevel];
+  let intensityMultiplier = 1;
+  switch (clientLevel) {
+    case 'BEGINNER':
+      intensityMultiplier = 0.8;
+      break;
+    case 'INTERMEDIATE':
+      intensityMultiplier = 1.0;
+      break;
+    case 'ADVANCED':
+      intensityMultiplier = 1.2;
+      break;
+  }
 
   return {
-    sets: Math.round(guidelines.sets.min * multiplier),
-    reps: guidelines.reps ? Math.round(guidelines.reps.min * multiplier) : undefined,
-    duration: exercise.acuteVariables.duration,
-    weight: exercise.acuteVariables.weight,
-    intensity: guidelines.intensity ? Math.round(guidelines.intensity.min * multiplier) : undefined,
+    sets: Math.floor(Math.random() * (guidelines.sets.max - guidelines.sets.min + 1)) + guidelines.sets.min,
+    reps: Math.floor(Math.random() * (guidelines.reps.max - guidelines.reps.min + 1)) + guidelines.reps.min,
+    intensity: Math.floor(guidelines.intensity.min + (guidelines.intensity.max - guidelines.intensity.min) * intensityMultiplier),
     tempo: guidelines.tempo,
-    restTime: Math.round(guidelines.restTime.min * multiplier),
-    rpe: guidelines.rpe ? Math.round(guidelines.rpe.min * multiplier) : undefined,
-    distance: exercise.acuteVariables.distance,
-    speed: exercise.acuteVariables.speed,
-    incline: exercise.acuteVariables.incline,
-    resistance: exercise.acuteVariables.resistance
+    restTime: Math.floor(Math.random() * (guidelines.restTime.max - guidelines.restTime.min + 1)) + guidelines.restTime.min,
+    rpe: Math.floor(Math.random() * (guidelines.rpe.max - guidelines.rpe.min + 1)) + guidelines.rpe.min
   };
 } 

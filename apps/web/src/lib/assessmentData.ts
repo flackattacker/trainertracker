@@ -1,5 +1,75 @@
 // Industry-standard assessment data structures
 
+// Assessment Standards and Templates
+export interface AssessmentTemplate {
+  id: string;
+  name: string;
+  type: AssessmentType;
+  version: string;
+  description: string;
+  requiredFields: string[];
+  optionalFields: string[];
+  validationRules: ValidationRule[];
+  scoringMethod?: ScoringMethod;
+}
+
+export interface ValidationRule {
+  field: string;
+  type: 'range' | 'required' | 'format' | 'custom';
+  min?: number;
+  max?: number;
+  required?: boolean;
+  format?: string;
+  customValidator?: (value: any) => boolean;
+  errorMessage: string;
+}
+
+export interface ScoringMethod {
+  type: 'numeric' | 'categorical' | 'composite';
+  ranges?: Array<{
+    min: number;
+    max: number;
+    score: string;
+    description: string;
+  }>;
+  categories?: Array<{
+    value: string;
+    score: string;
+    description: string;
+  }>;
+  formula?: string;
+}
+
+export type AssessmentType = 
+  | 'PARQ' 
+  | 'FITNESS_ASSESSMENT' 
+  | 'BODY_COMPOSITION' 
+  | 'FLEXIBILITY' 
+  | 'STRENGTH' 
+  | 'CARDIOVASCULAR'
+  | 'FMS'
+  | 'POSTURAL'
+  | 'BALANCE'
+  | 'MOBILITY'
+  | 'OTHER';
+
+// Standard measurement ranges for validation
+export const MEASUREMENT_STANDARDS = {
+  weight: { min: 20, max: 300, unit: 'kg' },
+  height: { min: 100, max: 250, unit: 'cm' },
+  bmi: { min: 10, max: 60, unit: 'kg/m²' },
+  bodyFatPercentage: { min: 2, max: 50, unit: '%' },
+  restingHeartRate: { min: 40, max: 120, unit: 'bpm' },
+  bloodPressureSystolic: { min: 70, max: 200, unit: 'mmHg' },
+  bloodPressureDiastolic: { min: 40, max: 130, unit: 'mmHg' },
+  pushUps: { min: 0, max: 100, unit: 'reps' },
+  sitUps: { min: 0, max: 100, unit: 'reps' },
+  plankTime: { min: 0, max: 600, unit: 'seconds' },
+  sitAndReach: { min: -20, max: 50, unit: 'cm' },
+  mileRun: { min: 3, max: 30, unit: 'minutes' },
+  vo2Max: { min: 20, max: 80, unit: 'ml/kg/min' }
+};
+
 export interface PARQData {
   // Physical Activity Readiness Questionnaire (PAR-Q+)
   questions?: {
@@ -183,6 +253,27 @@ export interface CardiovascularAssessmentData {
   notes?: string;
 }
 
+export interface FMSData {
+  // Functional Movement Screen (7 tests)
+  deepSquat?: 0 | 1 | 2 | 3;
+  hurdleStep?: 0 | 1 | 2 | 3;
+  inlineLunge?: 0 | 1 | 2 | 3;
+  shoulderMobility?: 0 | 1 | 2 | 3;
+  activeStraightLegRaise?: 0 | 1 | 2 | 3;
+  trunkStabilityPushup?: 0 | 1 | 2 | 3;
+  rotaryStability?: 0 | 1 | 2 | 3;
+  
+  // FMS scoring
+  totalScore?: number; // 0-21
+  asymmetry?: string[]; // Tests with left/right asymmetry
+  clearingTests?: {
+    shoulderClearing?: boolean;
+    spineClearing?: boolean;
+  };
+  
+  notes?: string;
+}
+
 export interface AssessmentData {
   PARQ?: PARQData;
   fitness?: FitnessAssessmentData;
@@ -190,8 +281,96 @@ export interface AssessmentData {
   flexibility?: FlexibilityAssessmentData;
   strength?: StrengthAssessmentData;
   cardiovascular?: CardiovascularAssessmentData;
+  fms?: FMSData;
   [key: string]: any; // Allow for custom assessment types
 }
+
+// Assessment Templates
+export const ASSESSMENT_TEMPLATES: Record<string, AssessmentTemplate> = {
+  PARQ: {
+    id: 'parq-v1',
+    name: 'Physical Activity Readiness Questionnaire (PAR-Q+)',
+    type: 'PARQ',
+    version: '1.0',
+    description: 'Standard health screening questionnaire for exercise readiness',
+    requiredFields: ['questions.q1', 'questions.q2', 'questions.q3', 'questions.q4', 'questions.q5', 'questions.q6', 'questions.q7'],
+    optionalFields: ['followUpQuestions', 'notes'],
+    validationRules: [
+      {
+        field: 'riskLevel',
+        type: 'required',
+        required: true,
+        errorMessage: 'Risk level must be determined'
+      }
+    ],
+    scoringMethod: {
+      type: 'categorical',
+      categories: [
+        { value: 'LOW', score: 'CLEARED', description: 'Cleared for exercise' },
+        { value: 'MODERATE', score: 'CONSULT', description: 'Consult healthcare provider' },
+        { value: 'HIGH', score: 'MEDICAL_CLEARANCE', description: 'Medical clearance required' }
+      ]
+    }
+  },
+  FITNESS_ASSESSMENT: {
+    id: 'fitness-v1',
+    name: 'Comprehensive Fitness Assessment',
+    type: 'FITNESS_ASSESSMENT',
+    version: '1.0',
+    description: 'Multi-component fitness assessment including strength, cardio, and flexibility',
+    requiredFields: ['height', 'weight', 'restingHeartRate'],
+    optionalFields: ['bodyFatPercentage', 'bloodPressure', 'pushUps', 'sitUps', 'plankTime', 'sitAndReach', 'shoulderFlexibility', 'balanceTest'],
+    validationRules: [
+      {
+        field: 'height',
+        type: 'range',
+        min: MEASUREMENT_STANDARDS.height.min,
+        max: MEASUREMENT_STANDARDS.height.max,
+        errorMessage: `Height must be between ${MEASUREMENT_STANDARDS.height.min}-${MEASUREMENT_STANDARDS.height.max} ${MEASUREMENT_STANDARDS.height.unit}`
+      },
+      {
+        field: 'weight',
+        type: 'range',
+        min: MEASUREMENT_STANDARDS.weight.min,
+        max: MEASUREMENT_STANDARDS.weight.max,
+        errorMessage: `Weight must be between ${MEASUREMENT_STANDARDS.weight.min}-${MEASUREMENT_STANDARDS.weight.max} ${MEASUREMENT_STANDARDS.weight.unit}`
+      },
+      {
+        field: 'restingHeartRate',
+        type: 'range',
+        min: MEASUREMENT_STANDARDS.restingHeartRate.min,
+        max: MEASUREMENT_STANDARDS.restingHeartRate.max,
+        errorMessage: `Resting heart rate must be between ${MEASUREMENT_STANDARDS.restingHeartRate.min}-${MEASUREMENT_STANDARDS.restingHeartRate.max} ${MEASUREMENT_STANDARDS.restingHeartRate.unit}`
+      }
+    ]
+  },
+  FMS: {
+    id: 'fms-v1',
+    name: 'Functional Movement Screen',
+    type: 'FMS',
+    version: '1.0',
+    description: '7-part movement screen to identify movement limitations and asymmetries',
+    requiredFields: ['deepSquat', 'hurdleStep', 'inlineLunge', 'shoulderMobility', 'activeStraightLegRaise', 'trunkStabilityPushup', 'rotaryStability'],
+    optionalFields: ['clearingTests', 'notes'],
+    validationRules: [
+      {
+        field: 'deepSquat',
+        type: 'range',
+        min: 0,
+        max: 3,
+        errorMessage: 'Deep squat score must be 0-3'
+      }
+    ],
+    scoringMethod: {
+      type: 'numeric',
+      ranges: [
+        { min: 0, max: 13, score: 'POOR', description: 'High injury risk, corrective exercise needed' },
+        { min: 14, max: 16, score: 'FAIR', description: 'Moderate injury risk, some corrective exercise needed' },
+        { min: 17, max: 21, score: 'GOOD', description: 'Low injury risk, ready for training' }
+      ]
+    }
+  }
+};
 
 // Default assessment templates
 export const defaultPARQData: PARQData = {
@@ -226,6 +405,22 @@ export const defaultCardiovascularAssessmentData: CardiovascularAssessmentData =
   restingHeartRate: 0,
 };
 
+export const defaultFMSData: FMSData = {
+  deepSquat: 0,
+  hurdleStep: 0,
+  inlineLunge: 0,
+  shoulderMobility: 0,
+  activeStraightLegRaise: 0,
+  trunkStabilityPushup: 0,
+  rotaryStability: 0,
+  totalScore: 0,
+  asymmetry: [],
+  clearingTests: {
+    shoulderClearing: false,
+    spineClearing: false,
+  }
+};
+
 // Assessment type to default data mapping
 export const assessmentDefaults: Record<string, any> = {
   PARQ: defaultPARQData,
@@ -234,4 +429,70 @@ export const assessmentDefaults: Record<string, any> = {
   FLEXIBILITY: defaultFlexibilityAssessmentData,
   STRENGTH: defaultStrengthAssessmentData,
   CARDIOVASCULAR: defaultCardiovascularAssessmentData,
+  FMS: defaultFMSData,
+};
+
+// Validation functions
+export const validateAssessmentData = (type: AssessmentType, data: any): { isValid: boolean; errors: string[] } => {
+  const template = ASSESSMENT_TEMPLATES[type];
+  if (!template) {
+    return { isValid: true, errors: [] }; // No template, skip validation
+  }
+
+  const errors: string[] = [];
+
+  // Check required fields
+  template.requiredFields.forEach(field => {
+    const value = getNestedValue(data, field);
+    if (value === undefined || value === null || value === '') {
+      errors.push(`${field} is required`);
+    }
+  });
+
+  // Check validation rules
+  template.validationRules.forEach(rule => {
+    const value = getNestedValue(data, rule.field);
+    
+    if (rule.type === 'range' && typeof value === 'number') {
+      if (rule.min !== undefined && value < rule.min) {
+        errors.push(rule.errorMessage);
+      }
+      if (rule.max !== undefined && value > rule.max) {
+        errors.push(rule.errorMessage);
+      }
+    }
+    
+    if (rule.type === 'required' && rule.required) {
+      if (value === undefined || value === null || value === '') {
+        errors.push(rule.errorMessage);
+      }
+    }
+  });
+
+  return { isValid: errors.length === 0, errors };
+};
+
+// Helper function to get nested object values
+const getNestedValue = (obj: any, path: string): any => {
+  return path.split('.').reduce((current, key) => current?.[key], obj);
+};
+
+// Calculate BMI
+export const calculateBMI = (weight: number, height: number): number => {
+  if (height <= 0) return 0;
+  return weight / Math.pow(height / 100, 2);
+};
+
+// Calculate FMS total score
+export const calculateFMSScore = (fmsData: FMSData): number => {
+  const scores = [
+    fmsData.deepSquat || 0,
+    fmsData.hurdleStep || 0,
+    fmsData.inlineLunge || 0,
+    fmsData.shoulderMobility || 0,
+    fmsData.activeStraightLegRaise || 0,
+    fmsData.trunkStabilityPushup || 0,
+    fmsData.rotaryStability || 0
+  ];
+  return scores.reduce((sum, score) => sum + score, 0);
 }; 

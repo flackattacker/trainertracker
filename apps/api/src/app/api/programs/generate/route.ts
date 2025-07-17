@@ -285,7 +285,7 @@ export async function POST(req: NextRequest) {
         }
       ],
       temperature: 0.7,
-      max_tokens: 1000,
+      max_tokens: 4000,
     });
 
     const aiResponse = completion.choices[0]?.message?.content;

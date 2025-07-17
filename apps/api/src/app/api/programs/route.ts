@@ -13,8 +13,17 @@ function getCptIdFromRequest(req: NextRequest): string | null {
 export async function GET(req: NextRequest) {
   const cptId = getCptIdFromRequest(req);
   if (!cptId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  
+  const { searchParams } = new URL(req.url);
+  const clientId = searchParams.get('clientId');
+  
+  const whereClause: any = { cptId };
+  if (clientId) {
+    whereClause.clientId = clientId;
+  }
+  
   const programs = await prisma.program.findMany({
-    where: { cptId },
+    where: whereClause,
     orderBy: { createdAt: 'desc' },
   });
   return NextResponse.json(programs);

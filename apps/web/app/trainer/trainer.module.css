@@ -1041,3 +1041,88 @@
     flex-direction: column;
   }
 } 
+
+.quickActionsRow {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0 1.5rem 0;
+  padding: 0.5rem 1rem;
+  background: #f5f7fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(90, 124, 101, 0.05);
+}
+
+.quickActionButtonCompact {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #5a7c65 !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 0.3rem 0.7rem !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  min-width: 0;
+  min-height: 0;
+  box-shadow: 0 1px 4px rgba(90, 124, 101, 0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.quickActionButtonCompact:hover {
+  background: #4a6b55 !important;
+  box-shadow: 0 2px 8px rgba(90, 124, 101, 0.15);
+}
+
+.quickActionIconSmall {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  margin-right: 0.2rem;
+}
+
+.quickActionLabel {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+} 
+
+.createButton {
+  background: #5a7c65 !important;
+  color: white !important;
+  padding: 1rem 2rem !important;
+  border-radius: 10px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  min-width: 200px !important;
+  box-shadow: 0 4px 12px rgba(90, 124, 101, 0.2) !important;
+  margin: 0 auto !important;
+}
+
+.createButton:hover {
+  background: #4a6b55 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(90, 124, 101, 0.3) !important;
+}
+
+.createButton:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(90, 124, 101, 0.2) !important;
+} 
+
+.formActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
+} 

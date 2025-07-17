@@ -491,6 +491,9 @@ export default function TrainerPortal() {
         </button>
       </nav>
 
+      {/* Quick Actions - moved and streamlined */}
+      {/* REMOVED: Quick Actions row */}
+
       {/* Main Content */}
       <main className={styles.main}>
         {message && <div className={styles.message}>{message}</div>}
@@ -568,80 +571,7 @@ export default function TrainerPortal() {
             </div>
 
             {/* Quick Actions */}
-            <div className={styles.quickActions}>
-              <h3>Quick Actions</h3>
-              <div className={styles.actionGrid}>
-                <div className={styles.actionCard}>
-                  <div className={styles.actionIcon}>➕</div>
-                  <h4>Add New Client</h4>
-                  <p>Create a new client profile and begin their wellness journey</p>
-                  <Button appName="web" onClick={() => setCurrentView('client-creation')} className={styles.actionButton}>
-                    Add Client
-                  </Button>
-                </div>
-
-                <div className={styles.actionCard}>
-                  <div className={styles.actionIcon}>📋</div>
-                  <h4>Create Assessment</h4>
-                  <p>Conduct a new assessment to evaluate client progress</p>
-                  <Button appName="web" onClick={() => setCurrentView('assessments')} className={styles.actionButton}>
-                    New Assessment
-                  </Button>
-                </div>
-
-                <div className={styles.actionCard}>
-                  <div className={styles.actionIcon}>🏋️</div>
-                  <h4>Build Program</h4>
-                  <p>Create a personalized training program for your clients</p>
-                  <Button appName="web" onClick={() => setCurrentView('program-builder')} className={styles.actionButton}>
-                    Program Builder
-                  </Button>
-                </div>
-
-                <div className={styles.actionCard}>
-                  <div className={styles.actionIcon}>📊</div>
-                  <h4>Track Progress</h4>
-                  <p>Record and monitor client progress over time</p>
-                  <Button appName="web" onClick={() => setCurrentView('progress')} className={styles.actionButton}>
-                    Record Progress
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className={styles.recentActivity}>
-              <h3>Recent Activity</h3>
-              <div className={styles.activityList}>
-                {clients.slice(0, 3).map((client) => (
-                  <div key={client.id} className={styles.activityItem}>
-                    <span className={styles.activityIcon}>👤</span>
-                    <span>Client {client.firstName} {client.lastName} added</span>
-                    <span className={styles.activityDate}>
-                      {new Date(client.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                ))}
-                {assessments.slice(0, 2).map((assessment) => (
-                  <div key={assessment.id} className={styles.activityItem}>
-                    <span className={styles.activityIcon}>📋</span>
-                    <span>{assessment.type} assessment completed</span>
-                    <span className={styles.activityDate}>
-                      {new Date(assessment.assessmentDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                ))}
-                {progress.slice(0, 2).map((prog) => (
-                  <div key={prog.id} className={styles.activityItem}>
-                    <span className={styles.activityIcon}>📈</span>
-                    <span>Progress recorded for client</span>
-                    <span className={styles.activityDate}>
-                      {new Date(prog.date).toLocaleDateString()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* REMOVED: <div className={styles.quickActions}>...</div> */}
           </div>
         )}
 
