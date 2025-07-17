@@ -188,11 +188,24 @@ export default function TrainerPortal() {
         body: JSON.stringify({ email, password }),
       });
       
+      console.log('Debug - Login response:', response);
+      console.log('Debug - Token from response:', response.token);
+      console.log('Debug - Token type:', typeof response.token);
+      console.log('Debug - Token length:', response.token ? response.token.length : 0);
+      console.log('Debug - Token starts with:', response.token ? response.token.substring(0, 20) + '...' : 'N/A');
+      console.log('Debug - Token ends with:', response.token ? '...' + response.token.substring(response.token.length - 20) : 'N/A');
+      
       setToken(response.token);
       setUser(response.user);
       localStorage.setItem('token', response.token);
       localStorage.setItem('trainer-tracker-token', response.token); // <-- Add this line
       localStorage.setItem('user', JSON.stringify(response.user));
+      
+      // Verify what was stored
+      console.log('Debug - Stored token (token):', localStorage.getItem('token'));
+      console.log('Debug - Stored token (trainer-tracker-token):', localStorage.getItem('trainer-tracker-token'));
+      console.log('Debug - Stored token length (token):', localStorage.getItem('token')?.length || 0);
+      console.log('Debug - Stored token length (trainer-tracker-token):', localStorage.getItem('trainer-tracker-token')?.length || 0);
       
       showMessage('Login successful!');
     } catch (error) {

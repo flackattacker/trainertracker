@@ -56,6 +56,12 @@ export function middleware(request: NextRequest) {
   }
 
   const token = authHeader.replace('Bearer ', '');
+  console.log('Middleware: Received token:', token);
+  console.log('Middleware: Token length:', token.length);
+  console.log('Middleware: Token starts with:', token.substring(0, 20) + '...');
+  console.log('Middleware: Token ends with:', '...' + token.substring(token.length - 20));
+  console.log('Middleware: JWT_SECRET:', JWT_SECRET);
+  
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
     // Set the user ID in headers so routes can access it

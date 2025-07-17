@@ -372,6 +372,12 @@ const ProgramBuilder: React.FC = () => {
       console.log('Debug - Token (token):', localStorage.getItem('token') ? 'Present' : 'Missing');
       console.log('Debug - User:', user ? 'Present' : 'Missing');
       
+      // Add detailed token debugging
+      console.log('Debug - Actual token value:', token);
+      console.log('Debug - Token length:', token ? token.length : 0);
+      console.log('Debug - Token starts with:', token ? token.substring(0, 20) + '...' : 'N/A');
+      console.log('Debug - Token ends with:', token ? '...' + token.substring(token.length - 20) : 'N/A');
+      
       if (!token) {
         setAiError('Authentication token not found. Please log in through the trainer portal first.');
         return;
