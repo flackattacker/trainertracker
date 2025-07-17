@@ -46,16 +46,21 @@ ${adjustment}
 
 Please provide an adjusted version of this program that incorporates the trainer's request. Return the response as a valid JSON object with the same structure as the original program, but with the requested adjustments applied.
 
-IMPORTANT REQUIREMENTS:
+CRITICAL REQUIREMENTS:
 1. Maintain the same overall structure and format
 2. Apply the specific adjustments requested
-3. Keep all existing workout days and exercises unless explicitly asked to remove them
+3. Keep ALL existing workout days and exercises unless explicitly asked to remove them
 4. Ensure the adjustments are practical and safe
 5. Maintain proper exercise progression and variety
 6. PRESERVE THE ORIGINAL PROGRAM NAME - do not change or remove the programName field
-7. Keep all other metadata fields (optPhase, primaryGoal, secondaryGoals, etc.) intact
+7. PRESERVE THE ORIGINAL PROGRAM DURATION - maintain the same number of weeks/workouts
+8. Keep all other metadata fields (optPhase, primaryGoal, secondaryGoals, etc.) intact
+9. Ensure the response is a complete, valid JSON object
+10. Do not truncate or omit any workout days or exercises
 
-Return only the JSON object, no additional text.
+The adjusted program should be a complete replacement that maintains the original structure while incorporating the requested changes.
+
+Return only the JSON object, no additional text or explanations.
 `;
 
     console.log('AI Adjustment: Sending request to OpenAI...');
@@ -102,6 +107,9 @@ Return only the JSON object, no additional text.
     console.log('AI Adjustment: Successfully adjusted program');
     console.log('AI Adjustment: Adjusted program data:', JSON.stringify(adjustedProgramData, null, 2));
     console.log('AI Adjustment: Original program name:', existingProgram.programName);
+    console.log('AI Adjustment: Original program duration (weeks):', (existingProgram.data as any)?.duration || 'unknown');
+    console.log('AI Adjustment: Original workout count:', (existingProgram.data as any)?.workouts?.length || 0);
+    console.log('AI Adjustment: Adjusted workout count:', (adjustedProgramData?.data as any)?.workouts?.length || 0);
 
     // Ensure the adjusted program preserves the original program name
     if (adjustedProgramData && !adjustedProgramData.programName) {
@@ -109,7 +117,16 @@ Return only the JSON object, no additional text.
       adjustedProgramData.programName = existingProgram.programName;
     }
 
+    // Ensure the adjusted program preserves the original duration
+    if (adjustedProgramData?.data && (existingProgram.data as any)?.duration) {
+      if (!(adjustedProgramData.data as any).duration || (adjustedProgramData.data as any).duration !== (existingProgram.data as any).duration) {
+        console.log('AI Adjustment: Duration mismatch, restoring from original');
+        (adjustedProgramData.data as any).duration = (existingProgram.data as any).duration;
+      }
+    }
+
     console.log('AI Adjustment: Final adjusted program name:', adjustedProgramData?.programName);
+    console.log('AI Adjustment: Final adjusted program duration:', (adjustedProgramData?.data as any)?.duration);
 
     return NextResponse.json({
       success: true,
