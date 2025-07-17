@@ -10,7 +10,7 @@ const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 // Since middleware already verifies the token, we can get the user ID from headers
 function getCptIdFromRequest(req: NextRequest): string | null {
-  return req.headers.get('x-cpt-id');
+  return req.headers.get('x-user-id');
 }
 
 export async function POST(req: NextRequest) {

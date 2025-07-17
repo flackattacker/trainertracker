@@ -365,41 +365,15 @@ const ProgramBuilder: React.FC = () => {
         token = localStorage.getItem('token');
       }
       
-      const user = localStorage.getItem('user');
-      
-      console.log('Debug - All localStorage keys:', Object.keys(localStorage));
-      console.log('Debug - Token (trainer-tracker-token):', localStorage.getItem('trainer-tracker-token') ? 'Present' : 'Missing');
-      console.log('Debug - Token (token):', localStorage.getItem('token') ? 'Present' : 'Missing');
-      console.log('Debug - User:', user ? 'Present' : 'Missing');
-      
-      // Add detailed token debugging
-      console.log('Debug - Actual token value:', token);
-      console.log('Debug - Token length:', token ? token.length : 0);
-      console.log('Debug - Token starts with:', token ? token.substring(0, 20) + '...' : 'N/A');
-      console.log('Debug - Token ends with:', token ? '...' + token.substring(token.length - 20) : 'N/A');
-      
       if (!token) {
         setAiError('Authentication token not found. Please log in through the trainer portal first.');
         return;
       }
       
-      if (!user) {
-        setAiError('User information not found. Please log in through the trainer portal first.');
-        return;
-      }
-      
-      const userData = JSON.parse(user);
-      const cptId = userData.id;
-      
-      console.log('Debug - CPT ID:', cptId);
-      console.log('Adjusting program with ID:', program.id);
-      console.log('Adjustment prompt:', aiAdjustmentPrompt);
-      
       console.log('Debug - Making request to:', `${API_BASE}/api/programs/adjust`);
       console.log('Debug - Request headers:', {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token ? 'Present' : 'Missing'}`,
-        'x-cpt-id': cptId,
       });
       console.log('Debug - Request body:', {
         programId: program.id,
@@ -411,7 +385,6 @@ const ProgramBuilder: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
-          'x-cpt-id': cptId,
         },
         body: JSON.stringify({
           programId: program.id,
