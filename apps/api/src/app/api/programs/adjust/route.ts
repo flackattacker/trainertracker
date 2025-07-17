@@ -46,12 +46,14 @@ ${adjustment}
 
 Please provide an adjusted version of this program that incorporates the trainer's request. Return the response as a valid JSON object with the same structure as the original program, but with the requested adjustments applied.
 
-The adjusted program should:
+IMPORTANT REQUIREMENTS:
 1. Maintain the same overall structure and format
 2. Apply the specific adjustments requested
 3. Keep all existing workout days and exercises unless explicitly asked to remove them
 4. Ensure the adjustments are practical and safe
 5. Maintain proper exercise progression and variety
+6. PRESERVE THE ORIGINAL PROGRAM NAME - do not change or remove the programName field
+7. Keep all other metadata fields (optPhase, primaryGoal, secondaryGoals, etc.) intact
 
 Return only the JSON object, no additional text.
 `;
@@ -98,6 +100,11 @@ Return only the JSON object, no additional text.
     }
 
     console.log('AI Adjustment: Successfully adjusted program');
+
+    // Ensure the adjusted program preserves the original program name
+    if (adjustedProgramData && !adjustedProgramData.programName) {
+      adjustedProgramData.programName = existingProgram.programName;
+    }
 
     return NextResponse.json({
       success: true,

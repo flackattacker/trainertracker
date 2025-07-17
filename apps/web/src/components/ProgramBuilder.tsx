@@ -432,7 +432,7 @@ const ProgramBuilder: React.FC = () => {
         },
         body: JSON.stringify({
           ...program,
-          name: programForm.programName,
+          name: program.name || programForm.programName || 'Untitled Program',
           clientId: programForm.clientId,
           startDate: programForm.startDate,
           endDate: programForm.endDate,
