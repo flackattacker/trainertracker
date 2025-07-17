@@ -158,7 +158,10 @@ const ProgramBuilder: React.FC = () => {
 
   const fetchClients = async () => {
     try {
-      const token = localStorage.getItem('trainer-tracker-token');
+      let token = localStorage.getItem('trainer-tracker-token');
+      if (!token) {
+        token = localStorage.getItem('token');
+      }
       if (!token) {
         console.error('No auth token found');
         setClients([]);
@@ -218,7 +221,10 @@ const ProgramBuilder: React.FC = () => {
   const fetchExistingPrograms = async (clientId: string) => {
     setLoadingExistingPrograms(true);
     try {
-      const token = localStorage.getItem('trainer-tracker-token');
+      let token = localStorage.getItem('trainer-tracker-token');
+      if (!token) {
+        token = localStorage.getItem('token');
+      }
       const response = await fetch(`${API_BASE}/api/programs?clientId=${clientId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -241,7 +247,10 @@ const ProgramBuilder: React.FC = () => {
 
   const loadExistingProgram = async (programId: string) => {
     try {
-      const token = localStorage.getItem('trainer-tracker-token');
+      let token = localStorage.getItem('trainer-tracker-token');
+      if (!token) {
+        token = localStorage.getItem('token');
+      }
       const response = await fetch(`${API_BASE}/api/programs/${programId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -291,7 +300,10 @@ const ProgramBuilder: React.FC = () => {
     setAiError(null);
 
     try {
-      const token = localStorage.getItem('trainer-tracker-token');
+      let token = localStorage.getItem('trainer-tracker-token');
+      if (!token) {
+        token = localStorage.getItem('token');
+      }
       
       // Debug: Log what we're sending to the backend
       const requestBody = {
@@ -347,19 +359,26 @@ const ProgramBuilder: React.FC = () => {
     setAiError(null);
 
     try {
-      const token = localStorage.getItem('trainer-tracker-token');
+      // Try multiple token keys
+      let token = localStorage.getItem('trainer-tracker-token');
+      if (!token) {
+        token = localStorage.getItem('token');
+      }
+      
       const user = localStorage.getItem('user');
       
-      console.log('Debug - Token:', token ? 'Present' : 'Missing');
+      console.log('Debug - All localStorage keys:', Object.keys(localStorage));
+      console.log('Debug - Token (trainer-tracker-token):', localStorage.getItem('trainer-tracker-token') ? 'Present' : 'Missing');
+      console.log('Debug - Token (token):', localStorage.getItem('token') ? 'Present' : 'Missing');
       console.log('Debug - User:', user ? 'Present' : 'Missing');
       
       if (!token) {
-        setAiError('Authentication token not found. Please log in again.');
+        setAiError('Authentication token not found. Please log in through the trainer portal first.');
         return;
       }
       
       if (!user) {
-        setAiError('User information not found. Please log in again.');
+        setAiError('User information not found. Please log in through the trainer portal first.');
         return;
       }
       
@@ -422,7 +441,10 @@ const ProgramBuilder: React.FC = () => {
     if (!program) return;
 
     try {
-      const token = localStorage.getItem('trainer-tracker-token');
+      let token = localStorage.getItem('trainer-tracker-token');
+      if (!token) {
+        token = localStorage.getItem('token');
+      }
       const response = await fetch(`${API_BASE}/api/programs`, {
         method: 'POST',
         headers: {
