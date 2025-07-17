@@ -337,6 +337,12 @@ const ProgramBuilder: React.FC = () => {
   const adjustProgramWithAi = async () => {
     if (!program || !aiAdjustmentPrompt.trim()) return;
 
+    // Check if program has an ID
+    if (!program.id) {
+      setAiError('Program must be saved before it can be adjusted with AI. Please save the program first.');
+      return;
+    }
+
     setAiGenerating(true);
     setAiError(null);
 
@@ -351,6 +357,9 @@ const ProgramBuilder: React.FC = () => {
       
       const userData = JSON.parse(user);
       const cptId = userData.id;
+      
+      console.log('Adjusting program with ID:', program.id);
+      console.log('Adjustment prompt:', aiAdjustmentPrompt);
       
       const response = await fetch(`${API_BASE}/api/programs/adjust`, {
         method: 'POST',
@@ -367,13 +376,15 @@ const ProgramBuilder: React.FC = () => {
 
       if (response.ok) {
         const adjustedProgram = await response.json();
-        setProgram(adjustedProgram);
+        console.log('Received adjusted program:', adjustedProgram);
+        setProgram(adjustedProgram.program || adjustedProgram);
         setShowAiAdjustment(false);
         setAiAdjustmentPrompt('');
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
       } else {
         const errorData = await response.json();
+        console.error('Adjust API error:', errorData);
         setAiError(errorData.error || 'Failed to adjust program');
       }
     } catch (error) {

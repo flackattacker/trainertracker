@@ -10,7 +10,7 @@ function getCptIdFromRequest(req: NextRequest): string | null {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const cptId = getCptIdFromRequest(req);
@@ -18,7 +18,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: 'Program ID is required' }, { status: 400 });
     }
