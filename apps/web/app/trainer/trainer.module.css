@@ -1,0 +1,1043 @@
+/* Trainer Portal Styles */
+.trainerPortal {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #212529;
+}
+
+/* Login Screen */
+.trainerLoginContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #5a9bb8 0%, #5a7c65 100%);
+  padding: 2rem;
+}
+
+.trainerLoginCard {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 3rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.trainerLoginHeader {
+  margin-bottom: 2rem;
+}
+
+.trainerLoginHeader span {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.trainerLoginHeader h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.trainerLoginHeader p {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.trainerLoginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.trainerInputGroup {
+  text-align: left;
+}
+
+.trainerInputGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #212529;
+  font-size: 0.9rem;
+}
+
+.trainerInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.trainerInput:focus {
+  outline: none;
+  border-color: #5a7c65;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(90, 124, 101, 0.1);
+}
+
+.trainerLoginButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.trainerPrimaryButton {
+  background: #5a7c65 !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  text-align: center !important;
+}
+
+.trainerPrimaryButton:hover {
+  background: #4a6b55 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(90, 124, 101, 0.3) !important;
+}
+
+.trainerSecondaryButton {
+  background: transparent !important;
+  color: #5a7c65 !important;
+  padding: 0.75rem 1.5rem !important;
+  border: 2px solid #5a7c65 !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  display: inline-block !important;
+  text-align: center !important;
+}
+
+.trainerSecondaryButton:hover {
+  background: #5a7c65 !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+}
+
+.trainerDemoInfo {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #5a7c65;
+}
+
+.trainerDemoInfo p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.trainerDemoInfo strong {
+  color: #212529;
+}
+
+/* Header */
+.header {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerContent h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #5a7c65;
+  margin: 0;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userInfo span {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.logoutButton {
+  background: #dc3545 !important;
+  color: white !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  font-size: 0.9rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.logoutButton:hover {
+  background: #c82333 !important;
+}
+
+/* Navigation */
+.navigation {
+  background: white;
+  border-bottom: 1px solid #e9ecef;
+  padding: 0 2rem;
+}
+
+.navigation {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  overflow-x: auto;
+  padding: 1rem 2rem;
+}
+
+.navButton {
+  background: transparent;
+  color: #6c757d;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.navButton:hover {
+  background: #f8f9fa;
+  color: #5a7c65;
+}
+
+.navButton.active {
+  background: #5a7c65;
+  color: white;
+}
+
+/* Main Content */
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.message {
+  background: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid #c3e6cb;
+}
+
+/* Dashboard */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.dashboardHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboardHeader h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.dashboardHeader p {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.metricCard {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.metricCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.metricIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.metricContent h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #5a7c65;
+  margin-bottom: 0.5rem;
+}
+
+.metricContent p {
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.metricBreakdown {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.metricBreakdown span {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.activeMetric {
+  background: #d4edda;
+  color: #155724;
+}
+
+.prospectMetric {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.completedMetric {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.recentMetric {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Quick Actions */
+.quickActions {
+  margin-top: 2rem;
+}
+
+.quickActions h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 1.5rem;
+}
+
+.actionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.actionCard {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.actionCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.actionIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.actionCard h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.actionCard p {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.actionButton {
+  background: #5a7c65 !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+}
+
+.actionButton:hover {
+  background: #4a6b55 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(90, 124, 101, 0.3) !important;
+}
+
+/* Content Sections */
+.contentSection {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  margin-bottom: 2rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f8f9fa;
+}
+
+.sectionHeader h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+}
+
+.sectionHeader p {
+  color: #6c757d;
+  margin: 0;
+}
+
+.addButton {
+  background: #5a7c65 !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+}
+
+.addButton:hover {
+  background: #4a6b55 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(90, 124, 101, 0.3) !important;
+}
+
+/* Forms */
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-weight: 500;
+  color: #212529;
+  font-size: 0.9rem;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #5a7c65;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(90, 124, 101, 0.1);
+}
+
+.formButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.cancelButton {
+  background: #6c757d !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.cancelButton:hover {
+  background: #5a6268 !important;
+}
+
+.saveButton {
+  background: #5a7c65 !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.saveButton:hover {
+  background: #4a6b55 !important;
+}
+
+/* Tables */
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.dataTable th,
+.dataTable td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.dataTable th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #212529;
+}
+
+.dataTable tr:hover {
+  background: #f8f9fa;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.statusActive {
+  background: #d4edda;
+  color: #155724;
+}
+
+.statusProspect {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.statusInactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton,
+.viewButton,
+.deleteButton {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.editButton {
+  background: #ffc107;
+  color: #212529;
+}
+
+.editButton:hover {
+  background: #e0a800;
+}
+
+.viewButton {
+  background: #17a2b8;
+  color: white;
+}
+
+.viewButton:hover {
+  background: #138496;
+}
+
+.deleteButton {
+  background: #dc3545;
+  color: white;
+}
+
+.deleteButton:hover {
+  background: #c82333;
+}
+
+/* --- CLIENTS VIEW --- */
+.clientsView {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(90, 124, 101, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.clientGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.clientCard {
+  background: #f8f9fa;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(90, 124, 101, 0.07);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid #e9ecef;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.clientCard:hover {
+  box-shadow: 0 8px 32px rgba(90, 124, 101, 0.13);
+  transform: translateY(-2px) scale(1.01);
+}
+.clientHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.clientHeader h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+}
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.status.prospect {
+  background: #fff3cd;
+  color: #856404;
+}
+.status.active {
+  background: #d4edda;
+  color: #155724;
+}
+.status.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+.clientCode, .clientEmail, .clientPhone, .clientDate {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 0.2rem;
+}
+.clientActions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* --- PROGRESS VIEW --- */
+.progressView {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(90, 124, 101, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+.progressGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+.progressCard {
+  background: #f8f9fa;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(90, 124, 101, 0.07);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid #e9ecef;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.progressCard:hover {
+  box-shadow: 0 8px 32px rgba(90, 124, 101, 0.13);
+  transform: translateY(-2px) scale(1.01);
+}
+.progressHeader h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 0.5rem 0;
+}
+.progressClient, .progressProgram, .progressDate, .progressWeight, .progressBodyFat, .progressNotes {
+  font-size: 0.97rem;
+  color: #495057;
+}
+.progressActions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* --- PROGRAM BUILDER VIEW --- */
+.programBuilderView {
+  background: linear-gradient(135deg, #f8f9fa 60%, #e9ecef 100%);
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(90, 124, 101, 0.10);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  border: 1.5px solid #d1ecf1;
+}
+.programBuilderView > * {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(90, 124, 101, 0.07);
+  padding: 2rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- VIEW HEADERS --- */
+.viewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.headerActions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* --- CLIENT DETAIL --- */
+.clientDetailView {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(90, 124, 101, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+.clientDetailCard {
+  background: #f8f9fa;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(90, 124, 101, 0.07);
+  padding: 2rem 1.5rem;
+  border: 1px solid #e9ecef;
+}
+.clientDetailHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.detailIcon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+.sectionDivider {
+  height: 1px;
+  background: #e9ecef;
+  margin: 2rem 0;
+}
+.clientDetailSections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.clientDetailSection {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(90, 124, 101, 0.04);
+  padding: 1.5rem 1rem;
+}
+.sectionTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #5a7c65;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.detailItem label {
+  font-weight: 500;
+  color: #6c757d;
+  margin-right: 0.5rem;
+}
+.detailItem span {
+  color: #212529;
+}
+.quickActionGrid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.quickActionButton {
+  background: #5a7c65 !important;
+  color: white !important;
+  padding: 0.5rem 1.2rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+}
+.quickActionButton:hover {
+  background: #4a6b55 !important;
+}
+.backButton {
+  background: #e9ecef !important;
+  color: #5a7c65 !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  padding: 0.5rem 1.2rem !important;
+  margin-right: 1rem;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+.backButton:hover {
+  background: #d4edda !important;
+}
+
+/* --- ASSESSMENTS LIST --- */
+.assessmentsList {
+  margin-top: 2.5rem;
+}
+.assessmentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+.assessmentCard {
+  background: #f8f9fa;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(90, 124, 101, 0.09);
+  padding: 1.5rem 1.25rem;
+  border: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.assessmentCard:hover {
+  box-shadow: 0 8px 32px rgba(90, 124, 101, 0.13);
+  transform: translateY(-2px) scale(1.01);
+}
+.assessmentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.assessmentHeader h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+}
+.assessmentType {
+  background: #5a7c65;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+.assessmentClient, .assessmentDate, .assessmentAssessor {
+  font-size: 0.97rem;
+  color: #495057;
+}
+.assessmentActions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .clientGrid, .progressGrid {
+    grid-template-columns: 1fr;
+  }
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+  .assessmentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .clientsView, .progressView, .programBuilderView, .clientDetailView {
+    padding: 1rem;
+  }
+  .clientCard, .progressCard, .clientDetailCard {
+    padding: 1rem 0.5rem;
+  }
+  .clientDetailSection {
+    padding: 1rem 0.5rem;
+  }
+  .assessmentsList, .assessmentCard {
+    padding: 1rem 0.5rem;
+  }
+  .programBuilderView {
+    padding: 1rem 0.5rem;
+  }
+  .programBuilderView > * {
+    padding: 1rem 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .trainerLoginCard {
+    padding: 2rem;
+    margin: 1rem;
+  }
+
+  .headerContent {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .userInfo {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .navigation {
+    padding: 1rem;
+    justify-content: flex-start;
+  }
+
+  .main {
+    padding: 1rem;
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .dataTable {
+    font-size: 0.9rem;
+  }
+
+  .dataTable th,
+  .dataTable td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .trainerLoginHeader h1 {
+    font-size: 1.5rem;
+  }
+
+  .dashboardHeader h2 {
+    font-size: 2rem;
+  }
+
+  .metricCard,
+  .actionCard {
+    padding: 1.5rem;
+  }
+
+  .formButtons {
+    flex-direction: column;
+  }
+} 

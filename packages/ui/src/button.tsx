@@ -7,15 +7,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 border border-transparent",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 border border-transparent",
         outline:
           "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-transparent",
+        ghost: "hover:bg-accent hover:text-accent-foreground border border-transparent",
+        link: "text-primary underline-offset-4 hover:underline border border-transparent",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -38,11 +38,20 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, appName, ...props }, ref) => {
+  ({ className, variant, size, ...props }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        style={{
+          backgroundColor: variant === 'default' ? 'var(--btn-primary-bg)' : 
+                          variant === 'outline' ? 'var(--btn-secondary-bg)' :
+                          variant === 'secondary' ? 'var(--btn-secondary-bg)' : 'transparent',
+          color: variant === 'default' ? 'white' : 'var(--text-color)',
+          borderColor: variant === 'outline' ? 'var(--btn-outline-border)' : 'transparent',
+          borderWidth: '1px',
+          borderStyle: 'solid',
+        }}
         {...props}
       />
     )

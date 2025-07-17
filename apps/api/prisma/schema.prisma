@@ -279,6 +279,22 @@ model Assessment {
   notes         String?
   data          Json        // Structured assessment data (PARQ, measurements, etc.)
   status        AssessmentStatus @default(COMPLETED)
+  
+  // Standardized fields for common metrics
+  weight        Float?      // kg - standardized weight measurement
+  height        Float?      // cm - standardized height measurement
+  bmi           Float?      // calculated BMI
+  bodyFatPercentage Float?  // % - standardized body fat
+  restingHeartRate Int?     // bpm - standardized resting HR
+  bloodPressureSystolic Int? // mmHg - standardized BP
+  bloodPressureDiastolic Int? // mmHg - standardized BP
+  
+  // Assessment metadata
+  version       String?     // Assessment form version
+  template      String?     // Assessment template used
+  isBaseline    Boolean     @default(false) // Is this a baseline assessment?
+  nextAssessmentDate DateTime? // When next assessment is due
+  
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   cpt           CPT         @relation(fields: [cptId], references: [id])
@@ -294,13 +310,17 @@ enum AssessmentStatus {
 }
 
 enum AssessmentType {
-  PARQ
-  FITNESS_ASSESSMENT
-  BODY_COMPOSITION
-  FLEXIBILITY
-  STRENGTH
-  CARDIOVASCULAR
-  OTHER
+  PARQ                    // Physical Activity Readiness Questionnaire
+  FITNESS_ASSESSMENT      // General fitness assessment
+  BODY_COMPOSITION        // Body composition analysis
+  FLEXIBILITY             // Flexibility assessment
+  STRENGTH                // Strength assessment
+  CARDIOVASCULAR          // Cardiovascular assessment
+  FMS                     // Functional Movement Screen
+  POSTURAL                // Postural assessment
+  BALANCE                 // Balance assessment
+  MOBILITY                // Mobility assessment
+  OTHER                   // Custom assessment
 }
 
 model Program {

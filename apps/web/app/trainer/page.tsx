@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@repo/ui/button';
 import { ThemeToggle } from '../../src/components/ThemeToggle';
-import styles from '../page.module.css';
+import styles from './trainer.module.css';
+
 
 // Import components
 import { AssessmentForm } from '../../src/components/AssessmentForm';
@@ -46,11 +47,11 @@ type Client = {
 type Assessment = {
   id: string;
   clientId: string;
-  type: 'PARQ' | 'FMS' | 'CUSTOM';
+  type: 'PARQ' | 'FITNESS_ASSESSMENT' | 'BODY_COMPOSITION' | 'FLEXIBILITY' | 'STRENGTH' | 'CARDIOVASCULAR' | 'FMS' | 'POSTURAL' | 'BALANCE' | 'MOBILITY' | 'OTHER';
   assessmentDate: string;
   assessor: string;
   notes: string;
-  status: 'PENDING' | 'COMPLETED' | 'REVIEWED';
+  status: 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
   data: any;
   createdAt: string;
   updatedAt: string;
@@ -529,9 +530,9 @@ export default function TrainerPortal() {
                     <span className={assessments.filter(a => a.status === 'COMPLETED').length > 0 ? styles.completedMetric : ''}>
                       {assessments.filter(a => a.status === 'COMPLETED').length} Completed
                     </span>
-                    <span className={assessments.filter(a => a.status === 'PENDING').length > 0 ? styles.recentMetric : ''}>
-                      {assessments.filter(a => a.status === 'PENDING').length} Pending
-                    </span>
+                                    <span className={assessments.filter(a => a.status === 'SCHEDULED').length > 0 ? styles.recentMetric : ''}>
+                  {assessments.filter(a => a.status === 'SCHEDULED').length} Scheduled
+                </span>
                   </div>
                 </div>
               </div>
@@ -699,67 +700,15 @@ export default function TrainerPortal() {
 
             <div className={styles.createSection}>
               <h3>Create New Assessment</h3>
-              <div className={styles.createForm}>
-                <div className={styles.formGroup}>
-                  <label>Client *</label>
-                  <select
-                    value={newAssessment.clientId}
-                    onChange={(e) => setNewAssessment({...newAssessment, clientId: e.target.value})}
-                    className={styles.select}
-                  >
-                    <option value="">Select a client</option>
-                    {clients.map((client) => (
-                      <option key={client.id} value={client.id}>
-                        {client.firstName} {client.lastName} ({client.codeName})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Assessment Type *</label>
-                  <select
-                    value={newAssessment.type}
-                    onChange={(e) => setNewAssessment({...newAssessment, type: e.target.value as any})}
-                    className={styles.select}
-                  >
-                    <option value="PARQ">PARQ (Physical Activity Readiness Questionnaire)</option>
-                    <option value="FMS">FMS (Functional Movement Screen)</option>
-                    <option value="CUSTOM">Custom Assessment</option>
-                  </select>
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Assessment Date *</label>
-                  <input
-                    type="date"
-                    value={newAssessment.assessmentDate}
-                    onChange={(e) => setNewAssessment({...newAssessment, assessmentDate: e.target.value})}
-                    className={styles.input}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Assessor *</label>
-                  <input
-                    type="text"
-                    value={newAssessment.assessor}
-                    onChange={(e) => setNewAssessment({...newAssessment, assessor: e.target.value})}
-                    className={styles.input}
-                    placeholder="Your name"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Notes</label>
-                  <textarea
-                    value={newAssessment.notes}
-                    onChange={(e) => setNewAssessment({...newAssessment, notes: e.target.value})}
-                    className={styles.textarea}
-                    placeholder="Additional notes..."
-                  />
-                </div>
-                <div className={styles.formActions}>
-                  <Button appName="web" onClick={createAssessment} className={styles.createButton}>
-                    Create Assessment
-                  </Button>
-                </div>
+              <AssessmentForm
+                assessment={newAssessment}
+                onChange={setNewAssessment}
+                clients={clients}
+              />
+              <div className={styles.formActions}>
+                <Button appName="web" onClick={createAssessment} className={styles.createButton}>
+                  Create Assessment
+                </Button>
               </div>
             </div>
 

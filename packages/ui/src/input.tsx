@@ -14,6 +14,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={ref}
+        style={{
+          backgroundColor: 'var(--input-bg)',
+          borderColor: 'var(--input-border)',
+          color: 'var(--text-color)',
+          borderWidth: '1px',
+          borderStyle: 'solid',
+        }}
         {...props}
       />
     )

@@ -446,20 +446,20 @@ const ProgramBuilder: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen p-6" style={{ background: 'var(--bg-primary)', color: 'var(--text-color)' }}>
+    <div className="min-h-screen p-6 bg-background text-foreground">
       {/* Header */}
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--primary-color)' }}>
+            <h1 className="text-3xl font-bold mb-2 text-primary">
               AI-Powered Program Builder
             </h1>
-            <p style={{ color: 'var(--text-light)' }}>
+            <p className="text-muted-foreground">
               Create personalized training programs with AI assistance
             </p>
           </div>
           {showSuccess && (
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#166534', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-50 text-green-800 border border-green-200">
               <CheckCircle className="h-5 w-5" />
               <span>Success!</span>
             </div>
@@ -478,19 +478,19 @@ const ProgramBuilder: React.FC = () => {
                 <div
                   className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
                     currentStep >= step
-                      ? 'border-blue-500 bg-blue-500 text-white'
-                      : 'border-gray-300 text-gray-500'
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'border-border text-muted-foreground'
                   }`}
                 >
                   <Icon className="h-5 w-5" />
                 </div>
-                <span className="ml-2 font-medium" style={{ color: currentStep >= step ? 'var(--primary-color)' : 'var(--text-light)' }}>
+                <span className={`ml-2 font-medium ${currentStep >= step ? 'text-primary' : 'text-muted-foreground'}`}>
                   {title}
                 </span>
                 {index < 2 && (
                   <div
                     className={`w-16 h-0.5 mx-4 ${
-                      currentStep > step ? 'bg-blue-500' : 'bg-gray-300'
+                      currentStep > step ? 'bg-primary' : 'bg-border'
                     }`}
                   />
                 )}
@@ -502,42 +502,41 @@ const ProgramBuilder: React.FC = () => {
         {/* Step 0: Client Selection and Goals */}
         {currentStep === 0 && (
           <div className="max-w-2xl mx-auto">
-            <Card style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+            <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2" style={{ color: 'var(--primary-color)' }}>
+                <CardTitle className="flex items-center gap-2 text-primary">
                   <User className="h-5 w-5" />
                   Select Client & Define Goals
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                  <label className="block text-sm font-medium mb-2">
                     Program Name *
                   </label>
                   <Input
                     value={programForm.programName}
                     onChange={(e) => setProgramForm(prev => ({ ...prev, programName: e.target.value }))}
                     placeholder="e.g., 12-Week Strength Program"
-                    style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                  <label className="block text-sm font-medium mb-2">
                     Select Client *
                   </label>
                   <Select value={programForm.clientId} onValueChange={(value) => setProgramForm(prev => ({ ...prev, clientId: value }))}>
-                    <SelectTrigger style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}>
+                    <SelectTrigger>
                       <SelectValue placeholder="Choose a client" />
                     </SelectTrigger>
-                    <SelectContent style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
+                    <SelectContent>
                       {clients.length === 0 ? (
-                        <SelectItem value="no-clients" disabled style={{ color: 'var(--text-light)' }}>
+                        <SelectItem value="no-clients" disabled>
                           No clients found
                         </SelectItem>
                       ) : (
                         clients.map(client => (
-                          <SelectItem key={client.id} value={client.id} style={{ color: 'var(--text-color)' }}>
+                          <SelectItem key={client.id} value={client.id}>
                             {client.firstName} {client.lastName} ({client.codeName})
                           </SelectItem>
                         ))
@@ -548,7 +547,7 @@ const ProgramBuilder: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                  <label className="block text-sm font-medium mb-2">
                     Client Age *
                   </label>
                   <Input
@@ -558,72 +557,69 @@ const ProgramBuilder: React.FC = () => {
                     placeholder="e.g., 25"
                     min="13"
                     max="100"
-                    style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                  <label className="block text-sm font-medium mb-2">
                     Primary Goal *
                   </label>
                   <Input
                     value={programForm.primaryGoal}
                     onChange={(e) => setProgramForm(prev => ({ ...prev, primaryGoal: e.target.value }))}
                     placeholder="e.g., Improve strength and muscle mass"
-                    style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                  <label className="block text-sm font-medium mb-2">
                     Secondary Goals
                   </label>
                   <Input
                     value={programForm.secondaryGoals}
                     onChange={(e) => setProgramForm(prev => ({ ...prev, secondaryGoals: e.target.value }))}
                     placeholder="e.g., Improve endurance and flexibility"
-                    style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                    <label className="block text-sm font-medium mb-2">
                       OPT Phase
                     </label>
                     <Select value={programForm.optPhase} onValueChange={(value) => setProgramForm(prev => ({ ...prev, optPhase: value as any }))}>
-                      <SelectTrigger style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}>
+                      <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                        <SelectItem value="STABILIZATION_ENDURANCE" style={{ color: 'var(--text-color)' }}>Stabilization Endurance</SelectItem>
-                        <SelectItem value="STRENGTH_ENDURANCE" style={{ color: 'var(--text-color)' }}>Strength Endurance</SelectItem>
-                        <SelectItem value="MUSCULAR_DEVELOPMENT" style={{ color: 'var(--text-color)' }}>Muscular Development</SelectItem>
-                        <SelectItem value="MAXIMAL_STRENGTH" style={{ color: 'var(--text-color)' }}>Maximal Strength</SelectItem>
-                        <SelectItem value="POWER" style={{ color: 'var(--text-color)' }}>Power</SelectItem>
+                      <SelectContent>
+                        <SelectItem value="STABILIZATION_ENDURANCE">Stabilization Endurance</SelectItem>
+                        <SelectItem value="STRENGTH_ENDURANCE">Strength Endurance</SelectItem>
+                        <SelectItem value="MUSCULAR_DEVELOPMENT">Muscular Development</SelectItem>
+                        <SelectItem value="MAXIMAL_STRENGTH">Maximal Strength</SelectItem>
+                        <SelectItem value="POWER">Power</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                    <label className="block text-sm font-medium mb-2">
                       Experience Level
                     </label>
                     <Select value={programForm.experienceLevel} onValueChange={(value) => setProgramForm(prev => ({ ...prev, experienceLevel: value as any }))}>
-                      <SelectTrigger style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}>
+                      <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                        <SelectItem value="BEGINNER" style={{ color: 'var(--text-color)' }}>Beginner</SelectItem>
-                        <SelectItem value="INTERMEDIATE" style={{ color: 'var(--text-color)' }}>Intermediate</SelectItem>
-                        <SelectItem value="ADVANCED" style={{ color: 'var(--text-color)' }}>Advanced</SelectItem>
+                      <SelectContent>
+                        <SelectItem value="BEGINNER">Beginner</SelectItem>
+                        <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
+                        <SelectItem value="ADVANCED">Advanced</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                  <label className="block text-sm font-medium mb-2">
                     Program Duration (weeks)
                   </label>
                   <Input
@@ -632,12 +628,11 @@ const ProgramBuilder: React.FC = () => {
                     onChange={(e) => setProgramForm(prev => ({ ...prev, duration: parseInt(e.target.value) || 12 }))}
                     min="4"
                     max="52"
-                    style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-color)' }}>
+                  <label className="block text-sm font-medium mb-2">
                     Additional Notes
                   </label>
                   <textarea
@@ -646,7 +641,6 @@ const ProgramBuilder: React.FC = () => {
                     placeholder="Any specific requirements, injuries, or preferences..."
                     rows={3}
                     className="w-full p-3 rounded-md resize-none"
-                    style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                   />
                 </div>
 
@@ -654,7 +648,6 @@ const ProgramBuilder: React.FC = () => {
                   onClick={() => setCurrentStep(1)}
                   disabled={!programForm.clientId || !programForm.primaryGoal || !programForm.programName || !programForm.clientAge}
                   className="w-full flex items-center justify-center gap-2"
-                  style={{ background: 'var(--primary-color)', color: 'var(--bg-primary)' }}
                 >
                   <ArrowRight className="h-4 w-4" />
                   Continue to AI Generation
@@ -667,26 +660,26 @@ const ProgramBuilder: React.FC = () => {
         {/* Step 1: AI Generation */}
         {currentStep === 1 && (
           <div className="max-w-2xl mx-auto">
-            <Card style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+            <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2" style={{ color: 'var(--primary-color)' }}>
+                <CardTitle className="flex items-center gap-2 text-primary">
                   <Bot className="h-5 w-4" />
                   Generate Program with AI
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="text-center p-6 rounded-lg" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                  <Bot className="h-12 w-12 mx-auto mb-4" style={{ color: 'var(--primary-color)' }} />
-                  <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-color)' }}>
+                <div className="text-center p-6 rounded-lg bg-card border border-border">
+                  <Bot className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-lg font-semibold mb-2">
                     Ready to Generate Your Program
                   </h3>
-                  <p style={{ color: 'var(--text-light)' }}>
+                  <p className="text-muted-foreground">
                     Our AI will create a personalized {programForm.duration}-week program based on your client's goals and experience level.
                   </p>
                 </div>
 
                 {aiError && (
-                  <div className="flex items-center gap-2 p-3 rounded-lg" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#dc2626', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 text-red-800 border border-red-200">
                     <AlertCircle className="h-5 w-5" />
                     <span>{aiError}</span>
                   </div>
@@ -697,7 +690,6 @@ const ProgramBuilder: React.FC = () => {
                     onClick={() => setCurrentStep(0)}
                     variant="outline"
                     className="flex-1"
-                    style={{ border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                   >
                     Back
                   </Button>
@@ -705,7 +697,6 @@ const ProgramBuilder: React.FC = () => {
                     onClick={generateAiProgram}
                     disabled={aiGenerating}
                     className="flex-1 flex items-center justify-center gap-2"
-                    style={{ background: 'var(--primary-color)', color: 'var(--bg-primary)' }}
                   >
                     {aiGenerating ? (
                       <>
@@ -729,9 +720,9 @@ const ProgramBuilder: React.FC = () => {
         {currentStep === 2 && program && (
           <div className="space-y-6">
             {/* Program Overview */}
-            <Card style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+            <Card>
               <CardHeader>
-                <CardTitle className="flex items-center justify-between" style={{ color: 'var(--primary-color)' }}>
+                <CardTitle className="flex items-center justify-between text-primary">
                   <div className="flex items-center gap-2">
                     <FileText className="h-5 w-5" />
                     Program Overview
@@ -741,7 +732,6 @@ const ProgramBuilder: React.FC = () => {
                       onClick={() => setShowAiAdjustment(true)}
                       variant="outline"
                       className="flex items-center gap-2"
-                      style={{ border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                     >
                       <Sparkles className="h-4 w-4" />
                       Adjust with AI
@@ -749,7 +739,6 @@ const ProgramBuilder: React.FC = () => {
                     <Button
                       onClick={saveProgram}
                       className="flex items-center gap-2"
-                      style={{ background: 'var(--primary-color)', color: 'var(--bg-primary)' }}
                     >
                       <Save className="h-4 w-4" />
                       Save Program
@@ -759,19 +748,19 @@ const ProgramBuilder: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-lg" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                    <h4 className="font-semibold mb-2" style={{ color: 'var(--text-color)' }}>Program Name</h4>
-                    <p style={{ color: 'var(--text-light)' }}>{program.name}</p>
+                  <div className="p-4 rounded-lg bg-card border border-border">
+                    <h4 className="font-semibold mb-2">Program Name</h4>
+                    <p className="text-muted-foreground">{program.name}</p>
                   </div>
-                  <div className="p-4 rounded-lg" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                    <h4 className="font-semibold mb-2" style={{ color: 'var(--text-color)' }}>Primary Goal</h4>
+                  <div className="p-4 rounded-lg bg-card border border-border">
+                    <h4 className="font-semibold mb-2">Primary Goal</h4>
                     <Badge className={getGoalColor(program.primaryGoal || '')}>
                       {program.primaryGoal}
                     </Badge>
                   </div>
-                  <div className="p-4 rounded-lg" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                    <h4 className="font-semibold mb-2" style={{ color: 'var(--text-color)' }}>Duration</h4>
-                    <p style={{ color: 'var(--text-light)' }}>{program.duration} weeks</p>
+                  <div className="p-4 rounded-lg bg-card border border-border">
+                    <h4 className="font-semibold mb-2">Duration</h4>
+                    <p className="text-muted-foreground">{program.duration} weeks</p>
                   </div>
                 </div>
               </CardContent>
@@ -779,9 +768,9 @@ const ProgramBuilder: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Exercise Library */}
-              <Card style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+              <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2" style={{ color: 'var(--primary-color)' }}>
+                  <CardTitle className="flex items-center gap-2 text-primary">
                     <Dumbbell className="h-5 w-5" />
                     Exercise Library
                   </CardTitle>
@@ -793,18 +782,17 @@ const ProgramBuilder: React.FC = () => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="w-full"
-                      style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
                     />
 
                     <div className="flex flex-wrap gap-2">
                       <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                        <SelectTrigger className="w-32" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}>
+                        <SelectTrigger className="w-32">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                          <SelectItem value="all" style={{ color: 'var(--text-color)' }}>All Categories</SelectItem>
+                        <SelectContent>
+                          <SelectItem value="all">All Categories</SelectItem>
                           {categories.map(category => (
-                            <SelectItem key={category.id} value={category.name} style={{ color: 'var(--text-color)' }}>
+                            <SelectItem key={category.id} value={category.name}>
                               {category.name}
                             </SelectItem>
                           ))}
@@ -812,14 +800,14 @@ const ProgramBuilder: React.FC = () => {
                       </Select>
 
                       <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                        <SelectTrigger className="w-32" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}>
+                        <SelectTrigger className="w-32">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                          <SelectItem value="all" style={{ color: 'var(--text-color)' }}>All Levels</SelectItem>
-                          <SelectItem value="BEGINNER" style={{ color: 'var(--text-color)' }}>Beginner</SelectItem>
-                          <SelectItem value="INTERMEDIATE" style={{ color: 'var(--text-color)' }}>Intermediate</SelectItem>
-                          <SelectItem value="ADVANCED" style={{ color: 'var(--text-color)' }}>Advanced</SelectItem>
+                        <SelectContent>
+                          <SelectItem value="all">All Levels</SelectItem>
+                          <SelectItem value="BEGINNER">Beginner</SelectItem>
+                          <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
+                          <SelectItem value="ADVANCED">Advanced</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -830,17 +818,12 @@ const ProgramBuilder: React.FC = () => {
                           key={exercise.id}
                           draggable
                           onDragStart={() => handleDragStart(exercise)}
-                          className="p-3 border rounded-md cursor-move hover:bg-gray-50"
-                          style={{ 
-                            border: '1px solid var(--border-color)', 
-                            background: 'var(--bg-primary)',
-                            color: 'var(--text-color)'
-                          }}
+                          className="p-3 border rounded-md cursor-move hover:bg-accent transition-all duration-200 bg-card border-border"
                         >
                           <div className="flex items-center justify-between">
                             <div>
-                              <h4 className="font-medium text-sm" style={{ color: 'var(--text-color)' }}>{exercise.name}</h4>
-                              <p className="text-xs" style={{ color: 'var(--text-light)' }}>{exercise.category.name}</p>
+                              <h4 className="font-medium text-sm">{exercise.name}</h4>
+                              <p className="text-xs text-muted-foreground">{exercise.category.name}</p>
                             </div>
                             <Badge className={getDifficultyColor(exercise.difficulty)}>
                               {exercise.difficulty}
@@ -855,9 +838,9 @@ const ProgramBuilder: React.FC = () => {
 
               {/* Workout Builder */}
               <div className="lg:col-span-2">
-                <Card style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2" style={{ color: 'var(--primary-color)' }}>
+                    <CardTitle className="flex items-center gap-2 text-primary">
                       <Calendar className="h-5 w-5" />
                       Workout Builder
                     </CardTitle>
@@ -875,22 +858,18 @@ const ProgramBuilder: React.FC = () => {
                         return (
                           <div
                             key={workout.id}
-                            className={`p-4 border-2 border-dashed rounded-lg min-h-48 ${
+                            className={`p-4 border-2 border-dashed rounded-lg min-h-48 transition-all duration-200 ${
                               selectedWorkoutDay === workout.id
-                                ? 'border-blue-500 bg-blue-50'
-                                : 'border-gray-300 hover:border-gray-400'
+                                ? 'border-primary bg-primary/10'
+                                : 'border-border hover:border-primary/50 bg-card'
                             }`}
-                            style={{ 
-                              background: selectedWorkoutDay === workout.id ? 'rgba(59, 130, 246, 0.1)' : 'var(--bg-primary)',
-                              border: `2px dashed ${selectedWorkoutDay === workout.id ? 'var(--primary-color)' : 'var(--border-color)'}`
-                            }}
                             onDragOver={handleDragOver}
                             onDrop={(e) => handleDrop(e, workout.id)}
                             onClick={() => setSelectedWorkoutDay(workout.id)}
                           >
                             <div className="flex items-center justify-between mb-3">
-                              <h3 className="font-semibold" style={{ color: 'var(--text-color)' }}>{workout.name}</h3>
-                              <Badge variant="secondary" style={{ background: 'var(--bg-secondary)', color: 'var(--text-color)' }}>
+                              <h3 className="font-semibold">{workout.name}</h3>
+                              <Badge variant="secondary">
                                 {exercises.length} exercises
                               </Badge>
                             </div>
@@ -905,26 +884,20 @@ const ProgramBuilder: React.FC = () => {
                                 return (
                                   <div
                                     key={exercise.id}
-                                    className="p-2 border rounded text-sm"
-                                    style={{ 
-                                      background: 'var(--bg-secondary)', 
-                                      border: '1px solid var(--border-color)',
-                                      color: 'var(--text-color)'
-                                    }}
+                                    className="p-2 border rounded text-sm bg-card border-border"
                                   >
                                     <div className="flex items-center justify-between">
-                                      <span className="font-medium" style={{ color: 'var(--text-color)' }}>{exercise.exercise.name}</span>
+                                      <span className="font-medium">{exercise.exercise.name}</span>
                                       <Button
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => removeExercise(workout.id, exercise.id)}
                                         className="h-6 w-6 p-0"
-                                        style={{ color: 'var(--text-color)' }}
                                       >
                                         <Trash2 className="h-3 w-3" />
                                       </Button>
                                     </div>
-                                    <div className="text-xs mt-1" style={{ color: 'var(--text-light)' }}>
+                                    <div className="text-xs mt-1 text-muted-foreground">
                                       {exercise.sets} sets × {exercise.reps} reps
                                     </div>
                                   </div>
@@ -933,7 +906,7 @@ const ProgramBuilder: React.FC = () => {
                             </div>
 
                             {exercises.length === 0 && (
-                              <div className="text-center text-sm py-8" style={{ color: 'var(--text-light)' }}>
+                              <div className="text-center text-sm py-8 text-muted-foreground">
                                 Drag exercises here
                               </div>
                             )}
@@ -952,18 +925,13 @@ const ProgramBuilder: React.FC = () => {
       {/* AI Adjustment Modal */}
       {showAiAdjustment && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="rounded-lg p-6 w-full max-w-md" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-            <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-color)' }}>Adjust Program with AI</h3>
+          <div className="rounded-lg p-6 w-full max-w-md bg-card border border-border shadow-lg">
+                          <h3 className="text-lg font-semibold mb-4">Adjust Program with AI</h3>
             <textarea
               value={aiAdjustmentPrompt}
               onChange={(e) => setAiAdjustmentPrompt(e.target.value)}
               placeholder="Describe how you'd like to adjust the program..."
               className="w-full p-3 border rounded-md mb-4"
-              style={{ 
-                background: 'var(--bg-secondary)', 
-                border: '1px solid var(--border-color)', 
-                color: 'var(--text-color)' 
-              }}
               rows={4}
             />
             <div className="flex justify-end gap-2">
@@ -971,7 +939,6 @@ const ProgramBuilder: React.FC = () => {
                 variant="secondary"
                 onClick={() => setShowAiAdjustment(false)}
                 disabled={aiGenerating}
-                style={{ background: 'var(--bg-secondary)', color: 'var(--text-color)', border: '1px solid var(--border-color)' }}
               >
                 Cancel
               </Button>
@@ -979,7 +946,6 @@ const ProgramBuilder: React.FC = () => {
                 onClick={adjustProgramWithAi}
                 disabled={aiGenerating || !aiAdjustmentPrompt.trim()}
                 className="flex items-center gap-2"
-                style={{ background: 'var(--primary-color)', color: 'var(--bg-primary)' }}
               >
                 {aiGenerating ? (
                   <>
