@@ -18,7 +18,8 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
     if (!id) {
       return NextResponse.json({ error: 'Program ID is required' }, { status: 400 });
     }

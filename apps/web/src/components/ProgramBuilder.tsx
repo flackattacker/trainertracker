@@ -350,6 +350,14 @@ const ProgramBuilder: React.FC = () => {
       const token = localStorage.getItem('trainer-tracker-token');
       const user = localStorage.getItem('user');
       
+      console.log('Debug - Token:', token ? 'Present' : 'Missing');
+      console.log('Debug - User:', user ? 'Present' : 'Missing');
+      
+      if (!token) {
+        setAiError('Authentication token not found. Please log in again.');
+        return;
+      }
+      
       if (!user) {
         setAiError('User information not found. Please log in again.');
         return;
@@ -358,8 +366,20 @@ const ProgramBuilder: React.FC = () => {
       const userData = JSON.parse(user);
       const cptId = userData.id;
       
+      console.log('Debug - CPT ID:', cptId);
       console.log('Adjusting program with ID:', program.id);
       console.log('Adjustment prompt:', aiAdjustmentPrompt);
+      
+      console.log('Debug - Making request to:', `${API_BASE}/api/programs/adjust`);
+      console.log('Debug - Request headers:', {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token ? 'Present' : 'Missing'}`,
+        'x-cpt-id': cptId,
+      });
+      console.log('Debug - Request body:', {
+        programId: program.id,
+        adjustment: aiAdjustmentPrompt,
+      });
       
       const response = await fetch(`${API_BASE}/api/programs/adjust`, {
         method: 'POST',
@@ -373,6 +393,9 @@ const ProgramBuilder: React.FC = () => {
           adjustment: aiAdjustmentPrompt,
         }),
       });
+      
+      console.log('Debug - Response status:', response.status);
+      console.log('Debug - Response ok:', response.ok);
 
       if (response.ok) {
         const adjustedProgram = await response.json();
