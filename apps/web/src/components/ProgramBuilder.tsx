@@ -263,11 +263,22 @@ const ProgramBuilder: React.FC = () => {
 
     try {
       const token = localStorage.getItem('trainer-tracker-token');
+      const user = localStorage.getItem('user');
+      
+      if (!user) {
+        setAiError('User information not found. Please log in again.');
+        return;
+      }
+      
+      const userData = JSON.parse(user);
+      const cptId = userData.id;
+      
       const response = await fetch(`${API_BASE}/api/programs/adjust`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
+          'x-cpt-id': cptId,
         },
         body: JSON.stringify({
           programId: program.id,
@@ -648,6 +659,34 @@ const ProgramBuilder: React.FC = () => {
                   onClick={() => setCurrentStep(1)}
                   disabled={!programForm.clientId || !programForm.primaryGoal || !programForm.programName || !programForm.clientAge}
                   className="w-full flex items-center justify-center gap-2"
+                  style={{
+                    backgroundColor: !programForm.clientId || !programForm.primaryGoal || !programForm.programName || !programForm.clientAge 
+                      ? '#9ca3af' 
+                      : '#5a7c65',
+                    color: 'white',
+                    border: 'none',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    fontWeight: '600',
+                    cursor: !programForm.clientId || !programForm.primaryGoal || !programForm.programName || !programForm.clientAge ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s ease',
+                    transform: 'translateY(0)',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!(!programForm.clientId || !programForm.primaryGoal || !programForm.programName || !programForm.clientAge)) {
+                      e.currentTarget.style.backgroundColor = '#4a6b55';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(90, 124, 101, 0.3)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!(!programForm.clientId || !programForm.primaryGoal || !programForm.programName || !programForm.clientAge)) {
+                      e.currentTarget.style.backgroundColor = '#5a7c65';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                    }
+                  }}
                 >
                   <ArrowRight className="h-4 w-4" />
                   Continue to AI Generation
@@ -690,6 +729,27 @@ const ProgramBuilder: React.FC = () => {
                     onClick={() => setCurrentStep(0)}
                     variant="outline"
                     className="flex-1"
+                    style={{
+                      backgroundColor: 'transparent',
+                      color: '#5a7c65',
+                      border: '2px solid #5a7c65',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '0.5rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      transform: 'translateY(0)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#5a7c65';
+                      e.currentTarget.style.color = 'white';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#5a7c65';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
                   >
                     Back
                   </Button>
@@ -697,6 +757,32 @@ const ProgramBuilder: React.FC = () => {
                     onClick={generateAiProgram}
                     disabled={aiGenerating}
                     className="flex-1 flex items-center justify-center gap-2"
+                    style={{
+                      backgroundColor: aiGenerating ? '#9ca3af' : '#5a7c65',
+                      color: 'white',
+                      border: 'none',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '0.5rem',
+                      fontWeight: '600',
+                      cursor: aiGenerating ? 'not-allowed' : 'pointer',
+                      transition: 'all 0.2s ease',
+                      transform: 'translateY(0)',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!aiGenerating) {
+                        e.currentTarget.style.backgroundColor = '#4a6b55';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(90, 124, 101, 0.3)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!aiGenerating) {
+                        e.currentTarget.style.backgroundColor = '#5a7c65';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                      }
+                    }}
                   >
                     {aiGenerating ? (
                       <>
@@ -732,6 +818,24 @@ const ProgramBuilder: React.FC = () => {
                       onClick={() => setShowAiAdjustment(true)}
                       variant="outline"
                       className="flex items-center gap-2"
+                      style={{
+                        backgroundColor: 'transparent',
+                        color: '#5a7c65',
+                        border: '2px solid #5a7c65',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '0.5rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#5a7c65';
+                        e.currentTarget.style.color = 'white';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '#5a7c65';
+                      }}
                     >
                       <Sparkles className="h-4 w-4" />
                       Adjust with AI
@@ -739,6 +843,25 @@ const ProgramBuilder: React.FC = () => {
                     <Button
                       onClick={saveProgram}
                       className="flex items-center gap-2"
+                      style={{
+                        backgroundColor: '#5a7c65',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '0.5rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#4a6b55';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(90, 124, 101, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#5a7c65';
+                        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                      }}
                     >
                       <Save className="h-4 w-4" />
                       Save Program
@@ -939,6 +1062,28 @@ const ProgramBuilder: React.FC = () => {
                 variant="secondary"
                 onClick={() => setShowAiAdjustment(false)}
                 disabled={aiGenerating}
+                style={{
+                  backgroundColor: '#f3f4f6',
+                  color: '#374151',
+                  border: '2px solid #d1d5db',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.5rem',
+                  fontWeight: '600',
+                  cursor: aiGenerating ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!aiGenerating) {
+                    e.currentTarget.style.borderColor = '#5a7c65';
+                    e.currentTarget.style.color = '#5a7c65';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!aiGenerating) {
+                    e.currentTarget.style.borderColor = '#d1d5db';
+                    e.currentTarget.style.color = '#374151';
+                  }
+                }}
               >
                 Cancel
               </Button>
@@ -946,6 +1091,29 @@ const ProgramBuilder: React.FC = () => {
                 onClick={adjustProgramWithAi}
                 disabled={aiGenerating || !aiAdjustmentPrompt.trim()}
                 className="flex items-center gap-2"
+                style={{
+                  backgroundColor: aiGenerating || !aiAdjustmentPrompt.trim() ? '#9ca3af' : '#5a7c65',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.5rem',
+                  fontWeight: '600',
+                  cursor: aiGenerating || !aiAdjustmentPrompt.trim() ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!aiGenerating && aiAdjustmentPrompt.trim()) {
+                    e.currentTarget.style.backgroundColor = '#4a6b55';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(90, 124, 101, 0.3)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!aiGenerating && aiAdjustmentPrompt.trim()) {
+                    e.currentTarget.style.backgroundColor = '#5a7c65';
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                  }
+                }}
               >
                 {aiGenerating ? (
                   <>
