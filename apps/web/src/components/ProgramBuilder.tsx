@@ -83,6 +83,7 @@ interface WorkoutDay {
 interface Program {
   id?: string;
   name: string;
+  programName?: string; // Add this field to match database schema
   description?: string;
   goal: string;
   experienceLevel: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
@@ -398,7 +399,14 @@ const ProgramBuilder: React.FC = () => {
       if (response.ok) {
         const adjustedProgram = await response.json();
         console.log('Received adjusted program:', adjustedProgram);
-        setProgram(adjustedProgram.program || adjustedProgram);
+        
+        // Map the adjusted program to ensure proper field names for frontend
+        const mappedProgram = adjustedProgram.program || adjustedProgram;
+        if (mappedProgram.programName && !mappedProgram.name) {
+          mappedProgram.name = mappedProgram.programName;
+        }
+        
+        setProgram(mappedProgram);
         setShowAiAdjustment(false);
         setAiAdjustmentPrompt('');
         setShowSuccess(true);
@@ -432,7 +440,7 @@ const ProgramBuilder: React.FC = () => {
         },
         body: JSON.stringify({
           ...program,
-          name: program.name || programForm.programName || 'Untitled Program',
+          name: program.name || program.programName || programForm.programName || 'Untitled Program',
           clientId: programForm.clientId,
           startDate: programForm.startDate,
           endDate: programForm.endDate,

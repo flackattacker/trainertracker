@@ -100,11 +100,16 @@ Return only the JSON object, no additional text.
     }
 
     console.log('AI Adjustment: Successfully adjusted program');
+    console.log('AI Adjustment: Adjusted program data:', JSON.stringify(adjustedProgramData, null, 2));
+    console.log('AI Adjustment: Original program name:', existingProgram.programName);
 
     // Ensure the adjusted program preserves the original program name
     if (adjustedProgramData && !adjustedProgramData.programName) {
+      console.log('AI Adjustment: Program name missing, restoring from original');
       adjustedProgramData.programName = existingProgram.programName;
     }
+
+    console.log('AI Adjustment: Final adjusted program name:', adjustedProgramData?.programName);
 
     return NextResponse.json({
       success: true,
