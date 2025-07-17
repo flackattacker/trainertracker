@@ -89,6 +89,7 @@ interface Program {
   experienceLevel: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
   duration: number;
   workouts: WorkoutDay[];
+  data?: any; // Add this field to match database schema
   notes?: string;
   clientId?: string;
   startDate?: string;
@@ -398,13 +399,34 @@ const ProgramBuilder: React.FC = () => {
 
       if (response.ok) {
         const adjustedProgram = await response.json();
-        console.log('Received adjusted program:', adjustedProgram);
+        console.log('Frontend: Received adjusted program response:', adjustedProgram);
+        console.log('Frontend: Response structure:', {
+          hasProgram: !!adjustedProgram.program,
+          hasProgramName: !!adjustedProgram.program?.programName,
+          hasName: !!adjustedProgram.program?.name,
+          programKeys: adjustedProgram.program ? Object.keys(adjustedProgram.program) : 'no program'
+        });
         
         // Map the adjusted program to ensure proper field names for frontend
         const mappedProgram = adjustedProgram.program || adjustedProgram;
+        console.log('Frontend: Mapped program before name fix:', {
+          programName: mappedProgram.programName,
+          name: mappedProgram.name,
+          duration: mappedProgram.duration,
+          workoutCount: mappedProgram.workouts?.length || mappedProgram.data?.workouts?.length
+        });
+        
         if (mappedProgram.programName && !mappedProgram.name) {
+          console.log('Frontend: Mapping programName to name');
           mappedProgram.name = mappedProgram.programName;
         }
+        
+        console.log('Frontend: Final mapped program:', {
+          programName: mappedProgram.programName,
+          name: mappedProgram.name,
+          duration: mappedProgram.duration,
+          workoutCount: mappedProgram.workouts?.length || mappedProgram.data?.workouts?.length
+        });
         
         setProgram(mappedProgram);
         setShowAiAdjustment(false);
@@ -427,24 +449,42 @@ const ProgramBuilder: React.FC = () => {
   const saveProgram = async () => {
     if (!program) return;
 
+    console.log('Frontend: Saving program with data:', {
+      programName: program.programName,
+      name: program.name,
+      duration: program.duration,
+      workoutCount: program.workouts?.length || program.data?.workouts?.length,
+      formProgramName: programForm.programName
+    });
+
     try {
       let token = localStorage.getItem('trainer-tracker-token');
       if (!token) {
         token = localStorage.getItem('token');
       }
+      
+      const saveData = {
+        ...program,
+        name: program.name || program.programName || programForm.programName || 'Untitled Program',
+        clientId: programForm.clientId,
+        startDate: programForm.startDate,
+        endDate: programForm.endDate,
+      };
+      
+      console.log('Frontend: Final save data:', {
+        name: saveData.name,
+        programName: saveData.programName,
+        duration: saveData.duration,
+        workoutCount: saveData.workouts?.length || saveData.data?.workouts?.length
+      });
+      
       const response = await fetch(`${API_BASE}/api/programs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          ...program,
-          name: program.name || program.programName || programForm.programName || 'Untitled Program',
-          clientId: programForm.clientId,
-          startDate: programForm.startDate,
-          endDate: programForm.endDate,
-        }),
+        body: JSON.stringify(saveData),
       });
 
       if (response.ok) {
