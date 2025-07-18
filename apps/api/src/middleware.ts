@@ -58,9 +58,24 @@ export function middleware(request: NextRequest) {
   const token = authHeader.replace('Bearer ', '');
   
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as { id?: string; clientId?: string };
+    
+    // Handle both trainer (id) and client (clientId) tokens
+    const userId = decoded.id || decoded.clientId;
+    if (!userId) {
+      throw new Error('No user ID found in token');
+    }
+    
     // Set the user ID in headers so routes can access it
-    response.headers.set('x-user-id', decoded.id);
+    response.headers.set('x-user-id', userId);
+    
+    // Also set a header to distinguish between trainer and client
+    if (decoded.clientId) {
+      response.headers.set('x-user-type', 'client');
+    } else {
+      response.headers.set('x-user-type', 'trainer');
+    }
+    
     return response;
   } catch (err) {
     console.log('Middleware: Token verification failed for endpoint:', request.nextUrl.pathname);

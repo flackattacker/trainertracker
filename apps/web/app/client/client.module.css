@@ -1,4 +1,4 @@
-/* Client Portal Styles */
+/* Client Portal Styles - Aligned with Trainer Portal */
 .clientContainer {
   min-height: 100vh;
   display: flex;
@@ -158,12 +158,21 @@
   margin: 0.25rem 0;
 }
 
-/* Client Dashboard Styles */
-.clientApp {
+/* Client Portal Main Styles - Aligned with Trainer Portal */
+.clientPortal {
   min-height: 100vh;
   background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
 }
 
+/* Client App Layout - Main container for logged-in state */
+.clientApp {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Client Header - Main header for logged-in state */
 .clientHeader {
   background: var(--bg-primary);
   box-shadow: 0 2px 10px var(--shadow-light);
@@ -200,56 +209,27 @@
   font-weight: 500;
 }
 
-.clientRefreshButton {
-  background: var(--accent-color);
-  color: var(--bg-primary);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.clientRefreshButton:hover {
-  background: var(--primary-color);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(90, 124, 101, 0.2);
-}
-
-.clientLogoutButton {
-  background: #dc3545;
-  color: var(--bg-primary);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.clientLogoutButton:hover {
-  background: #c82333;
-  transform: translateY(-1px);
-}
-
+/* Client Main - Main content area */
 .clientMain {
+  flex: 1;
+  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
 }
 
+/* Client Dashboard - Dashboard container */
 .clientDashboard {
   background: var(--bg-primary);
   border-radius: 20px;
-  padding: 2rem;
   box-shadow: 0 10px 30px var(--shadow-light);
+  padding: 2rem;
+  margin-bottom: 2rem;
 }
 
 .clientDashboardHeader {
-  text-align: center;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 .clientDashboardHeader h2 {
@@ -262,422 +242,604 @@
 .clientDashboardHeader p {
   color: var(--text-color);
   font-size: 1.1rem;
-}
-
-.clientMetricsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-
-.clientMetricCard {
-  background: var(--bg-secondary);
-  border-radius: 15px;
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: all 0.3s ease;
-  border: 1px solid var(--border-color);
-}
-
-.clientMetricCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px var(--shadow-light);
-}
-
-.clientMetricIcon {
-  font-size: 2rem;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  color: var(--bg-primary);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.clientMetricContent h3 {
-  color: var(--primary-color);
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin: 0 0 0.25rem 0;
-}
-
-.clientMetricContent p {
-  color: var(--text-color);
-  font-size: 0.9rem;
   margin: 0;
 }
 
+/* Client Section - Section containers */
 .clientSection {
-  margin-bottom: 3rem;
-  background: var(--bg-primary);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px var(--shadow-light);
-  overflow: hidden;
+  margin-bottom: 2rem;
+  background: var(--bg-secondary);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
 }
 
 .clientSectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  background: var(--bg-secondary);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.clientSectionHeader:hover {
-  background: var(--bg-tertiary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .clientSectionHeader h3 {
   color: var(--primary-color);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
-  padding: 0;
+}
+
+/* Client Logout Button */
+.clientLogoutButton {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
   border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.clientAccordionIcon {
-  color: var(--primary-color);
-  font-size: 1.2rem;
-  font-weight: bold;
-  transition: transform 0.3s ease;
+.clientLogoutButton:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
-.clientProgramGrid,
-.clientProgressGrid,
-.clientSessionGrid {
+/* Client Message */
+.clientMessage {
+  background: rgba(34, 197, 94, 0.1);
+  color: #166534;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  text-align: center;
+}
+
+/* Client Progress Date */
+.clientProgressDate {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Client Progress Details */
+.clientProgressDetails {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.clientProgressDetails p {
+  margin: 0.5rem 0;
+  color: var(--text-color);
+}
+
+/* Client Program Grid and Cards */
+.clientProgramGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
-  padding: 1.5rem;
+  margin-top: 1rem;
 }
 
-.clientProgramCard,
-.clientProgressCard,
-.clientSessionCard {
+.clientProgramCard {
+  background: var(--bg-primary);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+.clientProgramCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-medium);
+}
+
+.clientProgramHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.clientProgramHeader h4 {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.clientProgramDetails {
+  margin-bottom: 1.5rem;
+}
+
+.clientProgramDetails p {
+  margin: 0.5rem 0;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+/* Client Session Status */
+.clientSessionStatus {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.clientSessionStatus.scheduled {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.clientSessionStatus.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.clientSessionStatus.cancelled {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.clientSessionStatus.confirmed {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.clientSessionStatus.pending {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+/* Navigation */
+.navigation {
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  box-shadow: 0 2px 4px var(--shadow-light);
+}
+
+.navButton {
+  background: transparent;
+  color: var(--text-color);
+  border: none;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+  position: relative;
+}
+
+.navButton:hover {
+  background: var(--bg-secondary);
+  color: var(--primary-color);
+}
+
+.navButton.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  background: var(--bg-secondary);
+}
+
+/* Main Layout */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Dashboard */
+.dashboard {
+  padding: 0;
+}
+
+/* Dashboard Grid Layout */
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.calendarContainer {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px var(--shadow-light);
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.dashboardHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboardHeader h2 {
+  color: var(--primary-color);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.dashboardHeader p {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* Metrics Grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metricCard {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.metricCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow-light);
+  border-color: var(--primary-color);
+}
+
+.metricIcon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.metricContent h3 {
+  color: var(--primary-color);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+}
+
+.metricContent p {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Sections */
+.section {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+  color: #374151;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.accordionToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.accordionToggle span {
+  font-size: 12px;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.accordionToggle:hover span {
+  color: #374151;
+}
+
+.expanded {
+  transform: rotate(0deg);
+}
+
+.collapsed {
+  transform: rotate(0deg);
+}
+
+/* Make section header clickable for accordion */
+.sectionHeader[onclick] {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sectionHeader[onclick]:hover {
+  background-color: #f9fafb;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  margin: -0.5rem -0.5rem 0.5rem -0.5rem;
+}
+
+/* Grid Layouts */
+.programGrid,
+.progressGrid,
+.sessionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Optimize program grid for fewer items */
+.programGrid:has(.programCard:only-child) {
+  grid-template-columns: minmax(350px, 500px);
+  justify-content: start;
+}
+
+.programGrid:has(.programCard:nth-child(2):last-child) {
+  grid-template-columns: repeat(2, minmax(350px, 1fr));
+}
+
+.programCard,
+.progressCard,
+.sessionCard {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 15px;
+  border-radius: 10px;
   padding: 1.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
-.clientProgramCard:hover,
-.clientProgressCard:hover,
-.clientSessionCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px var(--shadow-light);
+.programCard:hover,
+.progressCard:hover,
+.sessionCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow-light);
   border-color: var(--primary-color);
 }
 
-.clientProgramHeader,
-.clientProgressHeader,
-.clientSessionHeader {
+.programHeader,
+.progressHeader,
+.sessionHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.clientProgramHeader h4,
-.clientProgressHeader h4,
-.clientSessionHeader h4 {
+.programHeader h4,
+.progressHeader h4,
+.sessionHeader h4 {
   color: var(--primary-color);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
 }
 
-.clientStatus {
+/* Status Styles */
+.status {
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
-  background: var(--bg-secondary);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
 }
 
-.clientStatus.active {
+.status.active {
+  background: #28a745;
+  color: white;
+}
+
+.status.completed {
+  background: #6c757d;
+  color: white;
+}
+
+.status.coming-soon {
+  background: #ffc107;
+  color: #212529;
+}
+
+/* Program status classes for database enum values */
+.status.ACTIVE {
+  background: #28a745;
+  color: white;
+}
+
+.status.COMPLETED {
+  background: #6c757d;
+  color: white;
+}
+
+.status.PAUSED {
+  background: #ffc107;
+  color: #212529;
+}
+
+.status.DRAFT {
+  background: #17a2b8;
+  color: white;
+}
+
+.status.ARCHIVED {
+  background: #6c757d;
+  color: white;
+  opacity: 0.7;
+}
+
+.programDetails,
+.progressDetails,
+.sessionDetails {
+  margin-bottom: 1.5rem;
+}
+
+.programDetails p,
+.progressDetails p,
+.sessionDetails p {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  line-height: 1.4;
+}
+
+.programActions,
+.progressActions,
+.sessionActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.viewButton {
+  background: var(--primary-color);
+  color: var(--bg-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.viewButton:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.secondaryButton {
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.secondaryButton:hover {
+  background: var(--primary-color);
+  color: var(--bg-primary);
+  transform: translateY(-1px);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  border: 2px dashed var(--border-color);
+}
+
+.emptyState p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.progressDate {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.sessionStatus {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sessionStatus.scheduled {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+}
+
+.sessionStatus.completed {
   background: rgba(34, 197, 94, 0.1);
   color: #166534;
 }
 
-.clientStatus.coming-soon {
-  background: var(--warning-color);
-  color: var(--bg-primary);
+.sessionStatus.cancelled {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
 }
 
-.clientProgramDetails,
-.clientProgressDetails,
-.clientSessionDetails {
-  margin-bottom: 1.5rem;
+.sessionStatus.confirmed {
+  background: rgba(34, 197, 94, 0.1);
+  color: #166534;
 }
 
-.clientProgramDetails p,
-.clientProgressDetails p,
-.clientSessionDetails p {
-  color: var(--text-light);
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
+.sessionStatus.pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
 }
 
-.clientProgramActions {
-  display: flex;
-  gap: 1rem;
-}
-
-.clientProgressActions,
-.clientSessionActions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.clientViewButton {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  color: var(--bg-primary);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  flex: 1;
-}
-
-.clientViewButton:hover {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
-  transform: translateY(-2px);
-}
-
-.clientSecondaryButton {
-  background: transparent;
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  flex: 1;
-}
-
-.clientSecondaryButton:hover {
-  background: var(--primary-color);
-  color: var(--bg-primary);
-  transform: translateY(-2px);
-}
-
-.clientActionGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  padding: 1.5rem;
-}
-
-.clientActionCard {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  padding: 1.5rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.clientActionCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px var(--shadow-light);
-  border-color: var(--primary-color);
-}
-
-.clientActionIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.clientActionCard h4 {
-  color: var(--primary-color);
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-}
-
-.clientActionCard p {
-  color: var(--text-light);
-  font-size: 0.9rem;
-  margin: 0 0 1rem 0;
-  line-height: 1.4;
-}
-
-.clientActionButton {
-  background: var(--primary-color);
-  color: var(--bg-primary);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-}
-
-.clientActionButton:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(90, 124, 101, 0.2);
-}
-
-.clientEmptyState {
-  text-align: center;
-  padding: 3rem;
-  color: var(--text-color);
-  font-style: italic;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  margin: 1rem 0;
-}
-
-.clientSessionStatus {
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
-.clientSessionStatus.scheduled {
-  background: var(--accent-color);
-  color: var(--bg-primary);
-}
-
-.clientSessionStatus.completed {
-  background: var(--success-color);
-  color: var(--bg-primary);
-}
-
-.clientSessionStatus.cancelled {
-  background: var(--error-color);
-  color: var(--bg-primary);
-}
-
-.clientSessionStatus.confirmed {
-  background: var(--primary-color);
-  color: var(--bg-primary);
-}
-
-.clientSessionStatus.pending {
-  background: var(--warning-color);
-  color: var(--bg-primary);
-}
-
-.clientProgramDetails ul {
-  margin: 0.5rem 0;
-  padding-left: 1.5rem;
-}
-
-.clientProgramDetails li {
-  color: var(--text-light);
-  font-size: 0.9rem;
-  margin: 0.25rem 0;
-  line-height: 1.4;
-}
-
-.clientProgressDate {
-  color: var(--text-light);
-  font-size: 0.8rem;
-  background: var(--bg-primary);
-  padding: 0.25rem 0.5rem;
-  border-radius: 15px;
-}
-
-/* Quick Actions Styling */
-.clientActionGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.clientActionCard {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  padding: 1.5rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.clientActionCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px var(--shadow-light);
-  border-color: var(--primary-color);
-}
-
-.clientActionIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.clientActionCard h4 {
-  color: var(--primary-color);
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-}
-
-.clientActionCard p {
-  color: var(--text-light);
-  font-size: 0.9rem;
-  margin: 0 0 1.5rem 0;
-  line-height: 1.4;
-}
-
-.clientActionButton {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  color: var(--bg-primary);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-}
-
-.clientActionButton:hover {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(90, 124, 101, 0.3);
-}
-
-/* Make metric cards clickable */
-.clientMetricCard {
-  background: var(--bg-secondary);
-  border-radius: 15px;
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: all 0.3s ease;
-  border: 1px solid var(--border-color);
-  cursor: pointer;
+/* Programs, Progress, and Sessions Views */
+.programs,
+.progress,
+.sessions {
+  padding: 0;
 }
 
 /* Responsive Design */
@@ -686,118 +848,263 @@
     padding: 2rem;
     margin: 1rem;
   }
-  
-  .clientHeaderContent {
+
+  .headerContent {
+    padding: 0 1rem;
     flex-direction: column;
     gap: 1rem;
-    text-align: center;
   }
-  
-  .clientMain {
+
+  .main {
     padding: 1rem;
   }
-  
-  .clientDashboard {
-    padding: 1.5rem;
+
+  .dashboard {
+    padding: 0;
   }
-  
-  .clientMetricsGrid {
+
+  .metricsGrid {
     grid-template-columns: 1fr;
   }
-  
-  .clientProgramGrid,
-  .clientProgressGrid {
+
+  .programGrid,
+  .progressGrid,
+  .sessionGrid {
     grid-template-columns: 1fr;
   }
-  
-  .clientProgramActions {
+
+  .programActions,
+  .progressActions,
+  .sessionActions {
     flex-direction: column;
   }
 
-  .clientActionGrid {
-    grid-template-columns: 1fr;
+  .navigation {
+    flex-wrap: wrap;
   }
 
-  .clientSessionGrid {
+  .navButton {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  /* Dashboard Grid Responsive */
+  .dashboardGrid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    gap: 1.5rem;
+  }
+
+  .calendarContainer {
+    padding: 1rem;
   }
 }
 
-/* Session Grid Styles */
-.clientSessionGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.clientSessionCard {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
+/* Calendar Styles */
+.calendarContainer {
+  background: var(--bg-primary);
+  border-radius: 12px;
   padding: 1.5rem;
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px var(--shadow-light);
+  border: 1px solid var(--border-color);
 }
 
-.clientSessionCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px var(--shadow-light);
-  border-color: var(--primary-color);
-}
-
-.clientSessionHeader {
+.calendarHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  padding: 0 0.5rem;
 }
 
-.clientSessionHeader h4 {
-  color: var(--primary-color);
+.calendarTitle {
+  margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  margin: 0;
-}
-
-.clientSessionStatus {
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.clientSessionStatus.scheduled {
-  background: var(--primary-light);
-  color: var(--primary-dark);
-}
-
-.clientSessionStatus.completed {
-  background: var(--accent-color);
-  color: var(--primary-dark);
-}
-
-.clientSessionStatus.cancelled {
-  background: #fee2e2;
-  color: #dc2626;
-}
-
-.clientSessionDetails p {
   color: var(--text-color);
-  margin: 0.5rem 0;
-  font-size: 0.9rem;
 }
 
-/* Empty State Styles */
-.clientEmptyState {
-  text-align: center;
-  padding: 3rem 2rem;
+.calendarNavButton {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.calendarNavButton:hover {
+  background-color: var(--bg-secondary);
+  color: var(--text-color);
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--border-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.calendarDayHeader {
   background: var(--bg-secondary);
-  border: 2px dashed var(--border-color);
-  border-radius: 15px;
-  color: var(--text-light);
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-color);
 }
 
-.clientEmptyState p {
-  margin: 0;
-  font-size: 1rem;
+.calendarDay {
+  background: var(--bg-primary);
+  min-height: 60px;
+  padding: 0.25rem 0.125rem;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.calendarDay:hover {
+  background: var(--bg-secondary);
+}
+
+.calendarDay.today {
+  border: 2px solid var(--primary-color);
+}
+
+.calendarDay.otherMonth {
+  opacity: 0.5;
+}
+
+.calendarDayNumber {
+  font-weight: 400;
+  font-size: 0.75rem;
+  margin-bottom: 0.125rem;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.calendarDayNumber.today {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.calendarDayNumber.otherMonth {
+  color: var(--text-muted);
+}
+
+.sessionEvent {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.125rem 0.25rem;
+  border-radius: 3px;
+  font-size: 0.6rem;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  margin-bottom: 0.125rem;
+  transition: all 0.2s ease;
+}
+
+.sessionEvent:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sessionEvent.inPerson {
+  background: #3b82f6;
+  border: 1px solid #1d4ed8;
+}
+
+.sessionEvent.virtual {
+  background: #10b981;
+  border: 1px solid #047857;
+}
+
+.sessionEvent.scheduled {
+  border-color: #1d4ed8;
+}
+
+.sessionEvent.completed {
+  border-color: #047857;
+}
+
+.sessionEvent.cancelled {
+  border-color: #dc2626;
+}
+
+.sessionEvent.missed {
+  border-color: #d97706;
+}
+
+.moreSessions {
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  text-align: center;
+}
+
+.calendarLegend {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.7rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid;
+}
+
+.legendColor.inPerson {
+  background-color: #3b82f6;
+  border-color: #1d4ed8;
+}
+
+.legendColor.virtual {
+  background-color: #10b981;
+  border-color: #047857;
+}
+
+@media (max-width: 768px) {
+  .calendarContainer {
+    padding: 1rem;
+  }
+  
+  .calendarDay {
+    min-height: 50px;
+    padding: 0.125rem 0.0625rem;
+  }
+  
+  .calendarDayNumber {
+    font-size: 0.7rem;
+  }
+  
+  .sessionEvent {
+    font-size: 0.55rem;
+    padding: 0.0625rem 0.125rem;
+  }
+  
+  .calendarLegend {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
 } 

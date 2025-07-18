@@ -60,6 +60,7 @@ interface SessionWorkoutEntryProps {
   programId: string;
   clientId: string;
   workoutId?: string; // Make optional
+  token?: string; // Add token prop
   onSave: (sessionData: any) => void;
   onCancel: () => void;
 }
@@ -68,6 +69,7 @@ export default function SessionWorkoutEntry({
   programId, 
   clientId, 
   workoutId, 
+  token, 
   onSave, 
   onCancel 
 }: SessionWorkoutEntryProps) {
@@ -99,19 +101,22 @@ export default function SessionWorkoutEntry({
       setLoading(true);
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       
-      // Get authentication token
-      let token = localStorage.getItem('trainer-tracker-token');
-      if (!token) {
-        token = localStorage.getItem('token');
+      // Get authentication token from props or localStorage
+      let authToken = token;
+      if (!authToken) {
+        authToken = localStorage.getItem('trainer-tracker-token') || undefined;
+        if (!authToken) {
+          authToken = localStorage.getItem('token') || undefined;
+        }
       }
       
-      if (!token) {
+      if (!authToken) {
         throw new Error('No authentication token found');
       }
 
       const response = await fetch(`${baseUrl}/api/programs/${programId}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${authToken}`,
         },
       });
 

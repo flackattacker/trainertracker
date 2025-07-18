@@ -7,7 +7,18 @@ const prisma = new PrismaClient();
 
 // Since middleware already verifies the token, we can get the user ID from headers
 function getCptIdFromRequest(req: NextRequest): string | null {
-  return req.headers.get('x-user-id');
+  const userType = req.headers.get('x-user-type');
+  const userId = req.headers.get('x-user-id');
+  
+  if (!userId) return null;
+  
+  // If it's a client token, we need to get the cptId from the client record
+  if (userType === 'client') {
+    return null; // We'll get the cptId from the client record
+  }
+  
+  // If it's a trainer token, the userId is the cptId
+  return userId;
 }
 
 export async function GET(
@@ -15,8 +26,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const cptId = getCptIdFromRequest(req);
-    if (!cptId) {
+    const userType = req.headers.get('x-user-type');
+    const userId = req.headers.get('x-user-id');
+    
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -45,10 +58,20 @@ export async function GET(
       return NextResponse.json({ error: 'Program not found' }, { status: 404 });
     }
 
-    // Ensure the program belongs to a client of this CPT
-    if (program.client.cptId !== cptId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // For client tokens, ensure the program belongs to this client
+    if (userType === 'client') {
+      if (program.clientId !== userId) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+    } else {
+      // For trainer tokens, ensure the program belongs to a client of this CPT
+      if (program.client.cptId !== userId) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
+
+    // Get the cptId for database queries
+    const cptId = userType === 'client' ? program.client.cptId : userId;
 
     // Get program workouts from the data field
     const programData = program.data as any;

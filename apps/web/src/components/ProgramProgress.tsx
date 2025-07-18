@@ -21,6 +21,7 @@ import {
 interface ProgramProgressProps {
   programId: string;
   clientId: string;
+  token?: string; // Optional token prop for flexibility
 }
 
 interface WeeklyProgress {
@@ -95,7 +96,7 @@ interface ProgressData {
   lastUpdated: string;
 }
 
-export default function ProgramProgress({ programId, clientId }: ProgramProgressProps) {
+export default function ProgramProgress({ programId, clientId, token }: ProgramProgressProps) {
   const [progressData, setProgressData] = useState<ProgressData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -109,19 +110,26 @@ export default function ProgramProgress({ programId, clientId }: ProgramProgress
       setLoading(true);
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       
-      // Get authentication token
-      let token = localStorage.getItem('trainer-tracker-token');
-      if (!token) {
-        token = localStorage.getItem('token');
+      // Get authentication token - use prop first, then check localStorage
+      let authToken = token;
+      if (!authToken) {
+        // Check for client portal token first, then trainer token
+        authToken = localStorage.getItem('client-portal-token') || undefined;
+        if (!authToken) {
+          authToken = localStorage.getItem('trainer-tracker-token') || undefined;
+        }
+        if (!authToken) {
+          authToken = localStorage.getItem('token') || undefined;
+        }
       }
       
-      if (!token) {
+      if (!authToken) {
         throw new Error('No authentication token found');
       }
       
       const response = await fetch(`${baseUrl}/api/programs/${programId}/progress`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${authToken}`,
         },
       });
       

@@ -183,12 +183,20 @@ export default function TrainerPortal() {
 
   // Authentication
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
+    // Check both possible token storage locations
+    let savedToken = localStorage.getItem('trainer-tracker-token');
+    let savedUser = localStorage.getItem('user');
+    
+    // Fallback to old token key if new one doesn't exist
+    if (!savedToken) {
+      savedToken = localStorage.getItem('token');
+    }
     
     if (savedToken && savedUser) {
       setToken(savedToken);
       setUser(JSON.parse(savedUser));
+      // Ensure consistent storage
+      localStorage.setItem('trainer-tracker-token', savedToken);
     }
     
     setAuthLoading(false);
@@ -204,8 +212,8 @@ export default function TrainerPortal() {
       
       setToken(response.token);
       setUser(response.user);
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('trainer-tracker-token', response.token); // <-- Add this line
+      // Store token consistently
+      localStorage.setItem('trainer-tracker-token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
       
       showMessage('Login successful!');
