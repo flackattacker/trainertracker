@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #5a9bb8 0%, #5a7c65 100%);
+  background: linear-gradient(135deg, var(--sand-light) 0%, var(--bg-primary) 100%);
   padding: 2rem;
 }
 

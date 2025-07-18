@@ -1,36 +1,20 @@
-/* Theme-aware CSS Variables */
-:root {
-  /* Light Theme - Warm Coastal Colors */
-  --sand-light: #f8f9fa;
-  --sand-medium: #e9ecef;
-  --sand-dark: #dee2e6;
-  --ocean-light: #5a9bb8;
-  --ocean-medium: #5a7c65;
-  --ocean-dark: #4a6b55;
-  --sage-light: #a8d5ba;
-  --sage-medium: #5a7c65;
-  --sage-dark: #4a6b55;
-  --text-dark: #212529;
-  --text-medium: #6c757d;
-  --text-light: #adb5bd;
-  --white: #ffffff;
-  --shadow: rgba(0, 0, 0, 0.1);
-}
-
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--sand-light) 0%, var(--white) 100%);
+  background: linear-gradient(135deg, var(--sand-light) 0%, var(--bg-primary) 100%);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text-dark);
+  transition: all 0.3s ease;
 }
 
 /* Navigation */
 .nav {
-  background: var(--white);
+  background: var(--bg-primary);
   box-shadow: 0 2px 10px var(--shadow);
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
 .navContent {
@@ -48,6 +32,7 @@
   color: var(--ocean-medium);
   margin: 0;
   line-height: 1.2;
+  transition: color 0.3s ease;
 }
 
 .logo span {
@@ -55,6 +40,7 @@
   color: var(--text-light);
   font-weight: 400;
   display: block;
+  transition: color 0.3s ease;
 }
 
 .navLinks {
@@ -99,18 +85,21 @@
   line-height: 1.1;
   margin-bottom: 1.5rem;
   color: var(--text-dark);
+  transition: color 0.3s ease;
 }
 
 .highlight {
   color: var(--ocean-medium);
   display: block;
+  transition: color 0.3s ease;
 }
 
 .heroSubtitle {
   font-size: 1.2rem;
   line-height: 1.6;
-  color: var(--text-light);
+  color: var(--text-medium);
   margin-bottom: 2.5rem;
+  transition: color 0.3s ease;
 }
 
 .heroButtons {
@@ -128,6 +117,8 @@
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(90, 155, 184, 0.3);
+  border: none;
+  cursor: pointer;
 }
 
 .primaryButton:hover {
@@ -145,6 +136,7 @@
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .secondaryButton:hover {
@@ -171,12 +163,14 @@
   font-size: 1.2rem;
   font-weight: 500;
   box-shadow: 0 10px 30px var(--shadow);
+  transition: all 0.3s ease;
 }
 
 /* Services Section */
 .services {
-  background: var(--white);
+  background: var(--bg-primary);
   padding: 5rem 2rem;
+  transition: background-color 0.3s ease;
 }
 
 .sectionContent {
@@ -190,6 +184,7 @@
   font-weight: 700;
   color: var(--text-dark);
   margin-bottom: 3rem;
+  transition: color 0.3s ease;
 }
 
 .servicesGrid {
@@ -199,12 +194,12 @@
 }
 
 .serviceCard {
-  background: var(--sand-light);
+  background: var(--bg-secondary);
   padding: 2.5rem;
   border-radius: 20px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid var(--sand-dark);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  border: 1px solid var(--border-color);
 }
 
 .serviceCard:hover {
@@ -222,11 +217,13 @@
   font-weight: 600;
   color: var(--text-dark);
   margin-bottom: 1rem;
+  transition: color 0.3s ease;
 }
 
 .serviceCard p {
-  color: var(--text-light);
+  color: var(--text-medium);
   line-height: 1.6;
+  transition: color 0.3s ease;
 }
 
 /* CTA Section */
@@ -235,6 +232,7 @@
   padding: 5rem 2rem;
   text-align: center;
   color: var(--white);
+  transition: background 0.3s ease;
 }
 
 .cta h2 {
@@ -256,11 +254,33 @@
   flex-wrap: wrap;
 }
 
+.ctaButtons .primaryButton {
+  background: var(--white);
+  color: var(--ocean-medium);
+}
+
+.ctaButtons .primaryButton:hover {
+  background: var(--sand-light);
+  color: var(--ocean-dark);
+}
+
+.ctaButtons .secondaryButton {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+.ctaButtons .secondaryButton:hover {
+  background: var(--white);
+  color: var(--ocean-medium);
+}
+
 /* Footer */
 .footer {
-  background: var(--text-dark);
-  color: var(--white);
+  background: var(--bg-primary);
+  color: var(--text-dark);
   padding: 3rem 2rem 1rem;
+  border-top: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
 .footerContent {
@@ -274,18 +294,19 @@
 
 .footerSection h3,
 .footerSection h4 {
-  color: var(--sage-light);
+  color: var(--ocean-medium);
   margin-bottom: 1rem;
+  transition: color 0.3s ease;
 }
 
 .footerSection p {
-  color: var(--text-light);
+  color: var(--text-medium);
   line-height: 1.6;
-  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
 }
 
 .footerLink {
-  color: var(--text-light);
+  color: var(--text-medium);
   text-decoration: none;
   display: block;
   margin-bottom: 0.5rem;
@@ -293,21 +314,22 @@
 }
 
 .footerLink:hover {
-  color: var(--sage-light);
+  color: var(--ocean-medium);
 }
 
 .footerBottom {
-  border-top: 1px solid var(--text-light);
+  border-top: 1px solid var(--border-color);
   padding-top: 1rem;
   text-align: center;
   color: var(--text-light);
+  transition: color 0.3s ease;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero {
     grid-template-columns: 1fr;
-    text-align: center;
+    gap: 2rem;
     padding: 2rem 1rem;
   }
 
@@ -363,6 +385,6 @@
   }
 
   .serviceCard {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem;
   }
 }

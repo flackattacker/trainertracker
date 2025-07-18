@@ -70,7 +70,7 @@ interface Assessment {
   createdAt: string;
 }
 
-export default function ClientDetailPage({ params }: { params: { id: string } }) {
+export default function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const [client, setClient] = useState<Client | null>(null);
   const [programs, setPrograms] = useState<Program[]>([]);
   const [progress, setProgress] = useState<Progress[]>([]);
@@ -78,9 +78,20 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
   const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [clientId, setClientId] = useState<string>('');
+
+  useEffect(() => {
+    const getClientId = async () => {
+      const { id } = await params;
+      setClientId(id);
+    };
+    getClientId();
+  }, [params]);
 
   useEffect(() => {
     const fetchClientData = async () => {
+      if (!clientId) return;
+      
       try {
         const token = localStorage.getItem('trainer-tracker-token');
         if (!token) {
@@ -92,11 +103,11 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
         // Fetch all client-related data
         const [clientRes, programsRes, progressRes, sessionsRes, assessmentsRes] = await Promise.all([
-          fetch(`${API_BASE}/api/clients/${params.id}`, { headers }),
-          fetch(`${API_BASE}/api/programs?clientId=${params.id}`, { headers }),
-          fetch(`${API_BASE}/api/progress?clientId=${params.id}`, { headers }),
-          fetch(`${API_BASE}/api/sessions?clientId=${params.id}`, { headers }),
-          fetch(`${API_BASE}/api/assessments?clientId=${params.id}`, { headers })
+          fetch(`${API_BASE}/api/clients/${clientId}`, { headers }),
+          fetch(`${API_BASE}/api/programs?clientId=${clientId}`, { headers }),
+          fetch(`${API_BASE}/api/progress?clientId=${clientId}`, { headers }),
+          fetch(`${API_BASE}/api/sessions?clientId=${clientId}`, { headers }),
+          fetch(`${API_BASE}/api/assessments?clientId=${clientId}`, { headers })
         ]);
 
         if (!clientRes.ok) throw new Error('Failed to fetch client');
@@ -120,7 +131,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     };
 
     fetchClientData();
-  }, [params.id]);
+  }, [clientId]);
 
   if (loading) {
     return (

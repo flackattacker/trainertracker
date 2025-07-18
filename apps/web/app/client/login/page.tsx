@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '../../page.module.css';
-import { Button } from '@repo/ui/button';
 
 export default function ClientLogin() {
   const [email, setEmail] = useState('');
@@ -60,9 +59,13 @@ export default function ClientLogin() {
             className={styles.input}
           />
           <div className={styles.loginButtons}>
-            <Button appName="web" onClick={handleLogin} disabled={loading} className={styles.primaryButton}>
+            <button 
+              onClick={handleLogin} 
+              disabled={loading} 
+              className={styles.primaryButton}
+            >
               {loading ? 'Logging in...' : 'Login'}
-            </Button>
+            </button>
           </div>
         </div>
       </div>
