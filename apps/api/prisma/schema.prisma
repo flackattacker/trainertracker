@@ -323,6 +323,130 @@ enum AssessmentType {
   OTHER                   // Custom assessment
 }
 
+// --- Session-Program-Performance Tracking ---
+model SessionWorkout {
+  id          String   @id @default(uuid())
+  sessionId   String
+  programId   String
+  workoutId   String   // References the workout ID in the program data
+  workoutName String   // Name of the workout (e.g., "Week 1 - Monday (Upper Body)")
+  weekNumber  Int      // Week number in the program
+  dayNumber   Int      // Day number in the week
+  status      SessionWorkoutStatus @default(PLANNED)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  program     Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  performances SessionPerformance[]
+  
+  @@unique([sessionId, workoutId])
+}
+
+model SessionPerformance {
+  id              String   @id @default(uuid())
+  sessionWorkoutId String
+  exerciseId      String   // References the exercise ID in the workout
+  exerciseName    String   // Name of the exercise
+  order           Int      // Order in the workout
+  
+  // Planned values (from program)
+  plannedSets     Int
+  plannedReps     Int
+  plannedWeight   Float?
+  plannedRestTime Int?     // seconds
+  plannedTempo    String?
+  plannedRpe      Int?
+  
+  // Actual values (recorded during session)
+  actualSets      Int?
+  actualReps      Int?
+  actualWeight    Float?
+  actualRestTime  Int?     // seconds
+  actualTempo     String?
+  actualRpe       Int?
+  
+  // Performance tracking
+  completed       Boolean  @default(false)
+  skipped         Boolean  @default(false)
+  notes           String?
+  difficulty      PerformanceDifficulty?
+  formQuality     FormQuality?
+  
+  // Set-by-set tracking
+  setPerformances SetPerformance[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  sessionWorkout  SessionWorkout @relation(fields: [sessionWorkoutId], references: [id], onDelete: Cascade)
+  
+  @@unique([sessionWorkoutId, exerciseId])
+}
+
+model SetPerformance {
+  id                  String   @id @default(uuid())
+  sessionPerformanceId String
+  setNumber           Int      // 1, 2, 3, etc.
+  setType             SetType  @default(WORKING)
+  
+  // Actual performance for this set
+  reps                Int?
+  weight               Float?
+  restTime             Int?     // seconds
+  tempo                String?
+  rpe                  Int?
+  
+  // Quality metrics
+  completed            Boolean  @default(false)
+  skipped              Boolean  @default(false)
+  notes                String?
+  difficulty           PerformanceDifficulty?
+  formQuality          FormQuality?
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  
+  sessionPerformance   SessionPerformance @relation(fields: [sessionPerformanceId], references: [id], onDelete: Cascade)
+  
+  @@unique([sessionPerformanceId, setNumber, setType])
+}
+
+// --- Enhanced Session Model ---
+model Session {
+  id          String   @id @default(uuid())
+  cptId       String
+  clientId    String
+  programId   String?  // Optional: session can be tied to a specific program
+  startTime   DateTime
+  endTime     DateTime?
+  status      SessionStatus @default(SCHEDULED)
+  type        SessionType   @default(IN_PERSON)
+  location    String?
+  notes       String?
+  
+  // Recurring session support
+  isRecurring Boolean  @default(false)
+  recurringPattern Json? // { frequency: 'weekly', interval: 1, daysOfWeek: [1,3,5], endDate: '2025-12-31' }
+  parentSessionId String? // For recurring session instances
+  recurringSessionId String? // ID of the recurring session template
+  
+  // Session completion tracking
+  completedAt DateTime?
+  completionNotes String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cpt         CPT      @relation(fields: [cptId], references: [id])
+  client      Client   @relation(fields: [clientId], references: [id])
+  program     Program? @relation(fields: [programId], references: [id])
+  sessionWorkouts SessionWorkout[]
+  notifications Notification[]
+}
+
+// --- Enhanced Program Model ---
 model Program {
   id          String      @id @default(uuid())
   cptId       String
@@ -335,14 +459,18 @@ model Program {
   secondaryGoals String?  // Additional goals
   notes       String?
   data        Json        // Structured OPT program data with phases, workouts, etc.
+  status      ProgramStatus @default(ACTIVE)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   cpt         CPT         @relation(fields: [cptId], references: [id])
   client      Client      @relation(fields: [clientId], references: [id])
   progresses  Progress[]
+  sessions    Session[]
+  sessionWorkouts SessionWorkout[]
   notifications Notification[]
 }
 
+// --- Enhanced Progress Model ---
 model Progress {
   id        String    @id @default(uuid())
   cptId     String
@@ -376,31 +504,7 @@ enum OPTPhase {
   POWER
 }
 
-// --- Scheduling ---
-model Session {
-  id          String   @id @default(uuid())
-  cptId       String
-  clientId    String
-  startTime   DateTime
-  endTime     DateTime?
-  status      SessionStatus @default(SCHEDULED)
-  type        SessionType   @default(IN_PERSON)
-  location    String?
-  notes       String?
-  
-  // Recurring session support
-  isRecurring Boolean  @default(false)
-  recurringPattern Json? // { frequency: 'weekly', interval: 1, daysOfWeek: [1,3,5], endDate: '2025-12-31' }
-  parentSessionId String? // For recurring session instances
-  recurringSessionId String? // ID of the recurring session template
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  cpt         CPT      @relation(fields: [cptId], references: [id])
-  client      Client   @relation(fields: [clientId], references: [id])
-  notifications Notification[]
-}
 
 enum SessionStatus {
   SCHEDULED
@@ -569,4 +673,44 @@ enum NotificationChannel {
   SMS
   PUSH
   IN_APP
+}
+
+// --- New Enums ---
+enum SessionWorkoutStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+  MODIFIED
+}
+
+enum SetType {
+  WARMUP
+  WORKING
+  DROPSET
+  SUPERSET
+  COOLDOWN
+}
+
+enum PerformanceDifficulty {
+  TOO_EASY
+  EASY
+  MODERATE
+  HARD
+  TOO_HARD
+}
+
+enum FormQuality {
+  POOR
+  FAIR
+  GOOD
+  EXCELLENT
+}
+
+enum ProgramStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
 }

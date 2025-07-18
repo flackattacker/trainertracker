@@ -110,6 +110,8 @@ const ProgramBuilder: React.FC = () => {
   const [selectedClient, setSelectedClient] = useState<string>('');
   const [aiGenerating, setAiGenerating] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [existingActiveProgram, setExistingActiveProgram] = useState<any>(null);
   const [program, setProgram] = useState<Program | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -510,14 +512,25 @@ const ProgramBuilder: React.FC = () => {
 
       if (response.ok) {
         setShowSuccess(true);
+        setSaveError(null);
+        setExistingActiveProgram(null);
         setTimeout(() => setShowSuccess(false), 3000);
       } else {
         const errorData = await response.json();
-        setAiError(errorData.error || 'Failed to save program');
+        if (response.status === 409 && errorData.existingProgramId) {
+          // Client already has an active program
+          setExistingActiveProgram({
+            id: errorData.existingProgramId,
+            name: errorData.existingProgramName
+          });
+          setSaveError(errorData.error);
+        } else {
+          setSaveError(errorData.error || 'Failed to save program');
+        }
       }
     } catch (error) {
       console.error('Error saving program:', error);
-      setAiError('Failed to save program. Please try again.');
+      setSaveError('Failed to save program. Please try again.');
     }
   };
 
@@ -620,6 +633,40 @@ const ProgramBuilder: React.FC = () => {
     });
   };
 
+  const markProgramComplete = async (programId: string) => {
+    try {
+      let token = localStorage.getItem('trainer-tracker-token');
+      if (!token) {
+        token = localStorage.getItem('token');
+      }
+      
+      const response = await fetch(`${API_BASE}/api/programs`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: programId,
+          status: 'COMPLETED'
+        }),
+      });
+
+      if (response.ok) {
+        setExistingActiveProgram(null);
+        setSaveError(null);
+        // Retry saving the new program
+        await saveProgram();
+      } else {
+        const errorData = await response.json();
+        setSaveError(`Failed to mark program complete: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error('Error marking program complete:', error);
+      setSaveError('Failed to mark program complete. Please try again.');
+    }
+  };
+
   const filteredExercises = exercises.filter(exercise => {
     const matchesSearch = exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          exercise.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -656,6 +703,29 @@ const ProgramBuilder: React.FC = () => {
             <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-50 text-green-800 border border-green-200">
               <CheckCircle className="h-5 w-5" />
               <span>Success!</span>
+            </div>
+          )}
+          {saveError && (
+            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 text-red-800 border border-red-200">
+              <AlertCircle className="h-5 w-5" />
+              <span>{saveError}</span>
+            </div>
+          )}
+          {existingActiveProgram && (
+            <div className="flex items-center justify-between px-4 py-3 rounded-lg bg-yellow-50 text-yellow-800 border border-yellow-200">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-5 w-5" />
+                <span>
+                  Client already has an active program: <strong>{existingActiveProgram.name}</strong>
+                </span>
+              </div>
+              <Button
+                onClick={() => markProgramComplete(existingActiveProgram.id)}
+                size="sm"
+                className="bg-yellow-600 hover:bg-yellow-700 text-white"
+              >
+                Mark Complete & Continue
+              </Button>
             </div>
           )}
         </div>

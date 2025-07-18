@@ -132,8 +132,8 @@ export async function POST(req: NextRequest) {
   console.log('Assessments POST: headers =', Object.fromEntries(req.headers.entries()));
   if (!cptId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   
-  const { clientId, type, assessmentDate, assessor, notes, data, isBaseline, nextAssessmentDate } = await req.json();
-  console.log('Assessments POST: request body =', { clientId, type, assessmentDate, assessor, notes, data, isBaseline, nextAssessmentDate });
+  const { clientId, type, assessmentDate, assessor, notes, data, nextAssessmentDate, isBaseline } = await req.json();
+  console.log('Assessments POST: request body =', { clientId, type, assessmentDate, assessor, notes, data, nextAssessmentDate, isBaseline });
   
   if (!clientId || !type || !assessmentDate || !assessor) {
     return NextResponse.json({ error: 'clientId, type, assessmentDate, and assessor are required.' }, { status: 400 });
@@ -181,6 +181,7 @@ export async function POST(req: NextRequest) {
         nextAssessmentDate: nextAssessmentDate ? new Date(nextAssessmentDate) : null,
         version: '1.0', // Current version
         template: type, // Use type as template identifier
+        isBaseline: isBaseline || false,
         ...standardizedFields
       },
       include: {
@@ -206,7 +207,7 @@ export async function PUT(req: NextRequest) {
   const cptId = getCptIdFromRequest(req);
   if (!cptId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   
-  const { id, clientId, type, assessmentDate, assessor, notes, data, status, isBaseline, nextAssessmentDate } = await req.json();
+  const { id, clientId, type, assessmentDate, assessor, notes, data, status, nextAssessmentDate } = await req.json();
   
   if (!id) return NextResponse.json({ error: 'Assessment id is required.' }, { status: 400 });
   

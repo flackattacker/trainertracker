@@ -26,7 +26,14 @@ export async function GET(req: NextRequest) {
     where: whereClause,
     orderBy: { createdAt: 'desc' },
   });
-  return NextResponse.json(programs);
+  
+  // Ensure all programs have a status (fallback for existing programs)
+  const programsWithStatus = programs.map(program => ({
+    ...program,
+    status: (program as any).status || 'ACTIVE'
+  }));
+  
+  return NextResponse.json(programsWithStatus);
 }
 
 export async function POST(req: NextRequest) {
@@ -77,6 +84,24 @@ export async function POST(req: NextRequest) {
         }
       };
 
+      // Check if client already has an active program
+      if (clientId) {
+        const existingActiveProgram = await prisma.program.findFirst({
+          where: {
+            clientId,
+            status: 'ACTIVE'
+          }
+        });
+
+        if (existingActiveProgram) {
+          return NextResponse.json({ 
+            error: 'Client already has an active program. Please mark the existing program as complete before creating a new one.',
+            existingProgramId: existingActiveProgram.id,
+            existingProgramName: existingActiveProgram.programName
+          }, { status: 409 });
+        }
+      }
+
       const programData = {
         cptId,
         clientId: clientId || null, // Optional for templates
@@ -87,6 +112,7 @@ export async function POST(req: NextRequest) {
         primaryGoal: goal,
         secondaryGoals: description,
         notes,
+        status: 'ACTIVE' as const, // Explicitly set as active
         data: {
           experienceLevel,
           duration,
@@ -114,6 +140,22 @@ export async function POST(req: NextRequest) {
   }
   
   try {
+    // Check if client already has an active program
+    const existingActiveProgram = await prisma.program.findFirst({
+      where: {
+        clientId,
+        status: 'ACTIVE'
+      }
+    });
+
+    if (existingActiveProgram) {
+      return NextResponse.json({ 
+        error: 'Client already has an active program. Please mark the existing program as complete before creating a new one.',
+        existingProgramId: existingActiveProgram.id,
+        existingProgramName: existingActiveProgram.programName
+      }, { status: 409 });
+    }
+
     const programData = {
       cptId,
       clientId,
@@ -124,6 +166,7 @@ export async function POST(req: NextRequest) {
       primaryGoal,
       secondaryGoals,
       notes,
+      status: 'ACTIVE' as const, // Explicitly set as active
       data: data || {},
     };
     console.log('Programs POST: Creating old format program with data =', programData);
@@ -142,17 +185,24 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const cptId = getCptIdFromRequest(req);
   if (!cptId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  const { id, data } = await req.json();
-  if (!id || !data) return NextResponse.json({ error: 'id and data required.' }, { status: 400 });
+  const { id, data, status } = await req.json();
+  if (!id) return NextResponse.json({ error: 'id required.' }, { status: 400 });
+  
   const program = await prisma.program.findUnique({ where: { id } });
   if (!program) return NextResponse.json({ error: 'Not found.' }, { status: 404 });
+  
   // Ensure the program belongs to a client of this CPT
   const client = await prisma.client.findUnique({ where: { id: program.clientId } });
   if (!client || client.cptId !== cptId) {
     return NextResponse.json({ error: 'Not found or unauthorized.' }, { status: 404 });
   }
+  
   try {
-    const updated = await prisma.program.update({ where: { id }, data: { data } });
+    const updateData: any = {};
+    if (data) updateData.data = data;
+    if (status) updateData.status = status;
+    
+    const updated = await prisma.program.update({ where: { id }, data: updateData });
     return NextResponse.json(updated);
   } catch (error) {
     return NextResponse.json({ error: 'Program update failed.' }, { status: 500 });

@@ -12,6 +12,8 @@ import { AssessmentForm } from '../../src/components/AssessmentForm';
 import OnboardingFlow from '../../src/components/OnboardingFlow';
 import TrainerSessions from '../../src/components/TrainerSessions';
 import ProgramBuilder from '../../src/components/ProgramBuilder';
+import ProgramProgress from '../../src/components/ProgramProgress';
+import SessionWorkoutEntry from '../../src/components/SessionWorkoutEntry';
 
 // Import data utilities
 import { clearAuth } from '../../src/utils/clearAuth';
@@ -68,6 +70,7 @@ type Program = {
   secondaryGoals: string;
   notes: string;
   data: any;
+  status: 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'ARCHIVED';
   createdAt: string;
   updatedAt: string;
 };
@@ -97,6 +100,17 @@ export default function TrainerPortal() {
   const [message, setMessage] = useState('');
 
   const [selectedProgressProgram, setSelectedProgressProgram] = useState<Program | null>(null);
+  const [selectedProgressClient, setSelectedProgressClient] = useState<Client | null>(null);
+  const [showCompletedPrograms, setShowCompletedPrograms] = useState(false);
+  const [selectedWorkoutForEntry, setSelectedWorkoutForEntry] = useState<string | null>(null);
+
+  // Utility function to format OPT phase names
+  const formatOptPhase = (phase: string) => {
+    return phase
+      .split('_')
+      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+      .join(' ');
+  };
   const [progressUpdateType, setProgressUpdateType] = useState<'general' | 'workout' | 'assessment'>('general');
   const [selectedWorkout, setSelectedWorkout] = useState<any>(null);
   const [workoutProgress, setWorkoutProgress] = useState<any>({});
@@ -374,6 +388,75 @@ export default function TrainerPortal() {
     }
   };
 
+  const handleUpdateProgramStatus = async (programId: string, newStatus: Program['status']) => {
+    try {
+      setLoading(true);
+      
+      // If activating a program, ensure only one active program per client
+      if (newStatus === 'ACTIVE') {
+        const programToActivate = programs.find(p => p.id === programId);
+        if (programToActivate) {
+          // Check if client already has an active program
+          const existingActiveProgram = programs.find(p => 
+            p.clientId === programToActivate.clientId && 
+            p.status === 'ACTIVE' && 
+            p.id !== programId
+          );
+          
+          if (existingActiveProgram) {
+            const confirmActivate = window.confirm(
+              `Client ${programToActivate.clientId} already has an active program. Do you want to deactivate the current program and activate this one?`
+            );
+            
+            if (!confirmActivate) {
+              setLoading(false);
+              return;
+            }
+          }
+        }
+      }
+      
+      await apiCall(`/api/programs`, {
+        method: 'PATCH',
+        body: JSON.stringify({ id: programId, status: newStatus }),
+      });
+      
+      // Update the local programs state
+      setPrograms(prevPrograms => 
+        prevPrograms.map(program => 
+          program.id === programId 
+            ? { ...program, status: newStatus }
+            : program
+        )
+      );
+      
+      showMessage(`Program status updated to ${newStatus}!`);
+    } catch (error) {
+      showMessage(`Error updating program status: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveSessionWorkout = async (sessionData: any) => {
+    try {
+      setLoading(true);
+      const response = await apiCall('/api/sessions/workout', {
+        method: 'POST',
+        body: JSON.stringify(sessionData)
+      });
+      
+      showMessage('Session workout saved successfully!');
+      setSelectedWorkoutForEntry(null);
+      fetchProgress(); // Refresh progress data
+    } catch (error) {
+      console.error('Error saving session workout:', error);
+      showMessage('Failed to save session workout');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Login Screen
   if (!token || !user) {
     return (
@@ -543,14 +626,14 @@ export default function TrainerPortal() {
               <div className={styles.metricCard}>
                 <div className={styles.metricIcon}>💪</div>
                 <div className={styles.metricContent}>
-                  <h3>{programs.length}</h3>
+                  <h3>{programs.filter(p => (p.status || 'ACTIVE') === 'ACTIVE').length}</h3>
                   <p>Active Programs</p>
                   <div className={styles.metricBreakdown}>
                     <span className={styles.activeMetric}>
-                      {programs.filter(p => p.endDate === null).length} Active
+                      {programs.filter(p => (p.status || 'ACTIVE') === 'ACTIVE').length} Active
                     </span>
                     <span className={styles.completedMetric}>
-                      {programs.filter(p => p.endDate !== null).length} Completed
+                      {programs.filter(p => (p.status || 'ACTIVE') === 'COMPLETED').length} Completed
                     </span>
                   </div>
                 </div>
@@ -598,11 +681,21 @@ export default function TrainerPortal() {
                         {client.status}
                       </span>
                     </div>
-                    <div className={styles.clientCode}>Code: {client.codeName}</div>
-                    {client.email && <div className={styles.clientEmail}>📧 {client.email}</div>}
-                    {client.phone && <div className={styles.clientPhone}>📞 {client.phone}</div>}
+                    <div className={styles.clientCode}>
+                      <strong>Code:</strong> {client.codeName}
+                    </div>
+                    {client.email && (
+                      <div className={styles.clientEmail}>
+                        <strong>Email:</strong> 📧 {client.email}
+                      </div>
+                    )}
+                    {client.phone && (
+                      <div className={styles.clientPhone}>
+                        <strong>Phone:</strong> 📞 {client.phone}
+                      </div>
+                    )}
                     <div className={styles.clientDate}>
-                      Added: {new Date(client.createdAt).toLocaleDateString()}
+                      <strong>Member Since:</strong> {new Date(client.createdAt).toLocaleDateString()}
                     </div>
                     <div className={styles.clientActions}>
                       <Button appName="web" onClick={() => handleViewClientDetails(client.id)} className={styles.viewButton}>
@@ -676,119 +769,183 @@ export default function TrainerPortal() {
         {currentView === 'progress' && (
           <div className={styles.progressView}>
             <div className={styles.viewHeader}>
-              <h2>Progress Tracking</h2>
+              <h2>Program Progress Tracking</h2>
+              <p>Track client progress through their training programs with detailed performance analytics</p>
             </div>
 
-            <div className={styles.createSection}>
-              <h3>Record Progress</h3>
-              <div className={styles.createForm}>
-                <div className={styles.formGroup}>
-                  <label>Client *</label>
-                  <select
-                    value={newProgress.clientId}
-                    onChange={(e) => setNewProgress({...newProgress, clientId: e.target.value})}
-                    className={styles.select}
-                  >
-                    <option value="">Select a client</option>
-                    {clients.map((client) => (
-                      <option key={client.id} value={client.id}>
-                        {client.firstName} {client.lastName} ({client.codeName})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Program (Optional)</label>
-                  <select
-                    value={newProgress.programId}
-                    onChange={(e) => setNewProgress({...newProgress, programId: e.target.value})}
-                    className={styles.select}
-                  >
-                    <option value="">Select a program</option>
-                    {programs.filter(p => p.clientId === newProgress.clientId).map((program) => (
-                      <option key={program.id} value={program.id}>
-                        {program.programName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Date *</label>
-                  <input
-                    type="date"
-                    value={newProgress.date}
-                    onChange={(e) => setNewProgress({...newProgress, date: e.target.value})}
-                    className={styles.input}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Weight (lbs)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={newProgress.weight}
-                    onChange={(e) => setNewProgress({...newProgress, weight: e.target.value})}
-                    className={styles.input}
-                    placeholder="Enter weight"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Body Fat %</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={newProgress.bodyFat}
-                    onChange={(e) => setNewProgress({...newProgress, bodyFat: e.target.value})}
-                    className={styles.input}
-                    placeholder="Enter body fat percentage"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Notes</label>
-                  <textarea
-                    value={newProgress.notes}
-                    onChange={(e) => setNewProgress({...newProgress, notes: e.target.value})}
-                    className={styles.textarea}
-                    placeholder="Additional notes..."
-                  />
-                </div>
-                <div className={styles.formActions}>
-                  <Button appName="web" onClick={createProgress} className={styles.createButton}>
-                    Record Progress
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.progressList}>
-              <h3>Progress History ({progress.length})</h3>
-              <div className={styles.progressGrid}>
-                {progress.map((prog) => (
-                  <div key={prog.id} className={styles.progressCard}>
-                    <div className={styles.progressHeader}>
-                      <h4>Progress Record</h4>
-                    </div>
-                    <div className={styles.progressClient}>
-                      Client: {clients.find(c => c.id === prog.clientId)?.firstName} {clients.find(c => c.id === prog.clientId)?.lastName}
-                    </div>
-                    <div className={styles.progressProgram}>
-                      Program: {programs.find(p => p.id === prog.programId)?.programName || 'General'}
-                    </div>
-                    <div className={styles.progressDate}>
-                      Date: {new Date(prog.date).toLocaleDateString()}
-                    </div>
-                    {prog.weight && <div className={styles.progressWeight}>Weight: {prog.weight} lbs</div>}
-                    {prog.bodyFat && <div className={styles.progressBodyFat}>Body Fat: {prog.bodyFat}%</div>}
-                    {prog.notes && <div className={styles.progressNotes}>Notes: {prog.notes}</div>}
-                    <div className={styles.progressActions}>
-                      <Button appName="web" className={styles.viewButton}>
-                        View Details
-                      </Button>
-                    </div>
+            {!selectedProgressProgram ? (
+              <div className={styles.programSelection}>
+                <h3>Select a Program to View Progress</h3>
+                
+                {/* Active Programs */}
+                <div className={styles.programSection}>
+                  <h4>Active Programs</h4>
+                  <div className={styles.programGrid}>
+                    {programs
+                      .filter(program => (program.status || 'ACTIVE') === 'ACTIVE')
+                      .map((program) => {
+                        const client = clients.find(c => c.id === program.clientId);
+                        
+                        return (
+                          <div 
+                            key={program.id} 
+                            className={`${styles.programCard} ${styles.active}`}
+                          >
+                            <div className={styles.programHeader}>
+                              <div>
+                                <h4>{program.programName}</h4>
+                                <span className={styles.programPhase}>{formatOptPhase(program.optPhase)}</span>
+                              </div>
+                              <div className={styles.programStatusContainer}>
+                                <span className={`${styles.programStatus} ${styles.active}`}>
+                                  ACTIVE
+                                </span>
+                              </div>
+                            </div>
+                            <div className={styles.programClient}>
+                              <strong>Client:</strong> {client?.firstName} {client?.lastName} ({client?.codeName})
+                            </div>
+                            <div className={styles.programDates}>
+                              <strong>Duration:</strong> {new Date(program.startDate).toLocaleDateString()} - {program.endDate ? new Date(program.endDate).toLocaleDateString() : 'Ongoing'}
+                            </div>
+                            <div className={styles.programGoal}>
+                              <strong>Goal:</strong> {program.primaryGoal}
+                            </div>
+                            <div className={styles.programActions}>
+                              <Button 
+                                appName="web" 
+                                onClick={() => {
+                                  setSelectedProgressProgram(program);
+                                  setSelectedProgressClient(client || null);
+                                }}
+                                className={styles.viewButton}
+                              >
+                                View Progress
+                              </Button>
+                              <Button 
+                                appName="web" 
+                                onClick={() => handleUpdateProgramStatus(program.id, 'COMPLETED')}
+                                className={`${styles.statusButton} ${styles.completed}`}
+                              >
+                                Mark Complete
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
-                ))}
+                </div>
+
+                {/* Completed Programs Accordion */}
+                {programs.filter(program => (program.status || 'ACTIVE') === 'COMPLETED').length > 0 && (
+                  <div className={styles.completedProgramsSection}>
+                    <div 
+                      className={styles.accordionHeader}
+                      onClick={() => setShowCompletedPrograms(!showCompletedPrograms)}
+                    >
+                      <h4>Completed Programs ({programs.filter(program => (program.status || 'ACTIVE') === 'COMPLETED').length})</h4>
+                      <span className={styles.accordionIcon}>
+                        {showCompletedPrograms ? '▼' : '▶'}
+                      </span>
+                    </div>
+                    {showCompletedPrograms && (
+                      <div className={styles.programGrid}>
+                        {programs
+                          .filter(program => (program.status || 'ACTIVE') === 'COMPLETED')
+                          .map((program) => {
+                            const client = clients.find(c => c.id === program.clientId);
+                            
+                            return (
+                              <div 
+                                key={program.id} 
+                                className={`${styles.programCard} ${styles.completed}`}
+                              >
+                                <div className={styles.programHeader}>
+                                  <div>
+                                    <h4>{program.programName}</h4>
+                                    <span className={styles.programPhase}>{formatOptPhase(program.optPhase)}</span>
+                                  </div>
+                                  <div className={styles.programStatusContainer}>
+                                    <span className={`${styles.programStatus} ${styles.completed}`}>
+                                      COMPLETED
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className={styles.programClient}>
+                                  <strong>Client:</strong> {client?.firstName} {client?.lastName} ({client?.codeName})
+                                </div>
+                                <div className={styles.programDates}>
+                                  <strong>Duration:</strong> {new Date(program.startDate).toLocaleDateString()} - {program.endDate ? new Date(program.endDate).toLocaleDateString() : 'Ongoing'}
+                                </div>
+                                <div className={styles.programGoal}>
+                                  <strong>Goal:</strong> {program.primaryGoal}
+                                </div>
+                                <div className={styles.programActions}>
+                                  <Button 
+                                    appName="web" 
+                                    onClick={() => {
+                                      setSelectedProgressProgram(program);
+                                      setSelectedProgressClient(client || null);
+                                    }}
+                                    className={styles.viewButton}
+                                  >
+                                    View Progress
+                                  </Button>
+                                  <Button 
+                                    appName="web" 
+                                    onClick={() => handleUpdateProgramStatus(program.id, 'ACTIVE')}
+                                    className={`${styles.statusButton} ${styles.active}`}
+                                  >
+                                    Reactivate
+                                  </Button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-            </div>
+            ) : (
+              <div className={styles.progressDetail}>
+                <div className={styles.progressHeader}>
+                  <Button 
+                    appName="web" 
+                    onClick={() => {
+                      setSelectedProgressProgram(null);
+                      setSelectedProgressClient(null);
+                    }}
+                    className={styles.backButton}
+                  >
+                    ← Back to Programs
+                  </Button>
+                  {selectedProgressProgram && selectedProgressProgram.status === 'ACTIVE' && (
+                    <Button 
+                      appName="web" 
+                      onClick={() => setSelectedWorkoutForEntry('new-session')}
+                      className={styles.primaryButton}
+                    >
+                      📝 Record Workout Session
+                    </Button>
+                  )}
+                </div>
+                
+                {selectedWorkoutForEntry ? (
+                  <SessionWorkoutEntry
+                    programId={selectedProgressProgram.id}
+                    clientId={selectedProgressProgram.clientId}
+                    onSave={handleSaveSessionWorkout}
+                    onCancel={() => setSelectedWorkoutForEntry(null)}
+                  />
+                ) : (
+                  <ProgramProgress 
+                    programId={selectedProgressProgram.id}
+                    clientId={selectedProgressProgram.clientId}
+                  />
+                )}
+              </div>
+            )}
           </div>
         )}
 
