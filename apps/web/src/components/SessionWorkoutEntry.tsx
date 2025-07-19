@@ -99,7 +99,7 @@ export default function SessionWorkoutEntry({
   const fetchProgramData = async () => {
     try {
       setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
       
       // Get authentication token from props or localStorage
       let authToken = token;
