@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     return new NextResponse(null, {
       status: 200,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://trainer-tracker-web.onrender.com',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Max-Age': '86400',
@@ -26,7 +26,7 @@ export function middleware(request: NextRequest) {
 
   // Add CORS headers to all API responses
   const response = NextResponse.next();
-  response.headers.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+  response.headers.set('Access-Control-Allow-Origin', 'https://trainer-tracker-web.onrender.com');
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -39,7 +39,9 @@ export function middleware(request: NextRequest) {
     '/api/auth/reset-password',
     '/api/exercises',
     '/api/exercise-categories',
-    '/api/prisma-test'
+    '/api/prisma-test',
+    '/api/test-db',
+    '/api/simple-test'
   ];
   if (publicEndpoints.includes(request.nextUrl.pathname)) {
     return response;
@@ -50,7 +52,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { 
       status: 401,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://trainer-tracker-web.onrender.com',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       }
@@ -85,7 +87,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid token' }, { 
       status: 401,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'https://trainer-tracker-web.onrender.com',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       }
