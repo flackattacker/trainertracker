@@ -878,18 +878,33 @@ export default function ClientPortal() {
         {/* Dashboard View */}
         {currentView === 'dashboard' && (
           <div className={styles.clientDashboard}>
+            {/* Welcome Header */}
             <div className={styles.clientDashboardHeader}>
-              <h2>Welcome to Your Dashboard</h2>
-              <p>Track your progress and view your personalized programs</p>
+              <h2>Welcome back, {client?.firstName}!</h2>
+              <p>Track your progress and manage your wellness journey</p>
             </div>
 
-            {/* Metrics Grid */}
+            {/* Quick Actions Bar */}
+            <div className={styles.quickActions}>
+              <Button appName="web" onClick={() => setCurrentView('workout-logger')} className={styles.quickActionButton}>
+                💪 Log Today's Workout
+              </Button>
+              <Button appName="web" onClick={handleBookSession} className={styles.quickActionButton}>
+                📅 Book Session
+              </Button>
+              <Button appName="web" onClick={handleMessageTrainer} className={styles.quickActionButton}>
+                💬 Message Trainer
+              </Button>
+            </div>
+
+            {/* Metrics Grid - Enhanced */}
             <div className={styles.metricsGrid}>
               <div className={styles.metricCard} onClick={() => handleMetricClick('Active Programs')}>
                 <div className={styles.metricIcon}>💪</div>
                 <div className={styles.metricContent}>
                   <h3>{activePrograms.length}</h3>
                   <p>Active Programs</p>
+                  <span className={styles.metricSubtext}>Currently following</span>
                 </div>
               </div>
 
@@ -898,6 +913,7 @@ export default function ClientPortal() {
                 <div className={styles.metricContent}>
                   <h3>{client?.progress?.length || 0}</h3>
                   <p>Progress Records</p>
+                  <span className={styles.metricSubtext}>Tracked updates</span>
                 </div>
               </div>
 
@@ -906,6 +922,7 @@ export default function ClientPortal() {
                 <div className={styles.metricContent}>
                   <h3>{calculateGoalProgress()}%</h3>
                   <p>Goal Progress</p>
+                  <span className={styles.metricSubtext}>Overall completion</span>
                 </div>
               </div>
 
@@ -914,18 +931,20 @@ export default function ClientPortal() {
                 <div className={styles.metricContent}>
                   <h3>{client?.sessions?.filter((s: any) => new Date(s.startTime) > new Date()).length || 0}</h3>
                   <p>Upcoming Sessions</p>
+                  <span className={styles.metricSubtext}>Scheduled meetings</span>
                 </div>
               </div>
             </div>
 
-                      {/* Main Content Grid */}
+            {/* Main Content Grid - Optimized Layout */}
             <div className={styles.dashboardGrid}>
-              {/* Left Column - Programs and Progress */}
-              <div className={styles.leftColumn}>
-                {/* Current Programs */}
+              {/* Primary Column - Programs and Calendar */}
+              <div className={styles.primaryColumn}>
+                {/* Active Programs - Enhanced */}
                 <div className={styles.section}>
                   <div className={styles.sectionHeader}>
-                    <h3>Your Active Programs ({activePrograms.length})</h3>
+                    <h3>Your Active Programs</h3>
+                    <span className={styles.sectionCount}>({activePrograms.length})</span>
                   </div>
                   <div className={styles.programGrid}>
                     {activePrograms.length > 0 ? (
@@ -938,18 +957,17 @@ export default function ClientPortal() {
                             </span>
                           </div>
                           <div className={styles.programDetails}>
-                            <p><strong>Start Date:</strong> {new Date(program.startDate).toLocaleDateString()}</p>
-                            {program.endDate && (
-                              <p><strong>End Date:</strong> {new Date(program.endDate).toLocaleDateString()}</p>
-                            )}
-                            <p><strong>Goal:</strong> {program.primaryGoal}</p>
-                            {program.optPhase && (
-                              <p><strong>Phase:</strong> {program.optPhase.replace(/_/g, ' ')}</p>
-                            )}
+                            <div className={styles.programInfo}>
+                              <p><strong>Goal:</strong> {program.primaryGoal}</p>
+                              {program.optPhase && (
+                                <p><strong>Phase:</strong> {program.optPhase.replace(/_/g, ' ')}</p>
+                              )}
+                              <p><strong>Duration:</strong> {new Date(program.startDate).toLocaleDateString()} - {program.endDate ? new Date(program.endDate).toLocaleDateString() : 'Ongoing'}</p>
+                            </div>
                           </div>
                           <div className={styles.programActions}>
                             <Button appName="web" onClick={() => handleViewProgram(program.id)} className={styles.viewButton}>
-                              View Program
+                              View Details
                             </Button>
                             <Button appName="web" onClick={(e) => handleLogWorkoutClick(e, program.id)} className={styles.secondaryButton}>
                               Log Workout
@@ -959,54 +977,22 @@ export default function ClientPortal() {
                       ))
                     ) : (
                       <div className={styles.emptyState}>
-                        <p>No active programs. Contact your trainer to get started!</p>
+                        <div className={styles.emptyStateIcon}>📋</div>
+                        <h4>No Active Programs</h4>
+                        <p>Contact your trainer to get started with a personalized program!</p>
+                        <Button appName="web" onClick={handleMessageTrainer} className={styles.primaryButton}>
+                          Contact Trainer
+                        </Button>
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Recent Progress */}
+                {/* Upcoming Sessions Calendar - Enhanced */}
                 <div className={styles.section}>
                   <div className={styles.sectionHeader}>
-                    <h3>Recent Progress ({client?.progress?.length || 0})</h3>
-                  </div>
-                  <div className={styles.progressGrid}>
-                    {client?.progress?.length > 0 ? (
-                      client.progress.slice(0, 6).map((prog: any, index: number) => (
-                        <div key={prog.id || index} className={styles.progressCard} onClick={() => handleViewProgressDetails(prog.id)}>
-                          <div className={styles.progressHeader}>
-                            <h4>Progress Update</h4>
-                            <span className={styles.progressDate}>
-                              {new Date(prog.date).toLocaleDateString()}
-                            </span>
-                          </div>
-                          <div className={styles.progressDetails}>
-                            {prog.weight && <p><strong>Weight:</strong> {prog.weight} lbs</p>}
-                            {prog.bodyFat && <p><strong>Body Fat:</strong> {prog.bodyFat}%</p>}
-                            {prog.notes && <p><strong>Notes:</strong> {prog.notes.substring(0, 100)}...</p>}
-                          </div>
-                          <div className={styles.progressActions}>
-                            <Button appName="web" onClick={(e) => { e.stopPropagation(); handleViewProgressDetails(prog.id); }} className={styles.viewButton}>
-                              View Details
-                            </Button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className={styles.emptyState}>
-                        <p>No progress records yet. Start logging your workouts to track your progress!</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column - Calendar and Completed Programs */}
-              <div className={styles.rightColumn}>
-                {/* Upcoming Sessions Calendar */}
-                <div className={styles.section}>
-                  <div className={styles.sectionHeader}>
-                    <h3>Upcoming Sessions ({client?.sessions?.filter((s: any) => new Date(s.startTime) > new Date()).length || 0})</h3>
+                    <h3>Upcoming Sessions</h3>
+                    <span className={styles.sectionCount}>({client?.sessions?.filter((s: any) => new Date(s.startTime) > new Date()).length || 0})</span>
                   </div>
                   <div className={styles.calendarContainer}>
                     {client?.sessions?.length > 0 ? (
@@ -1017,54 +1003,62 @@ export default function ClientPortal() {
                       />
                     ) : (
                       <div className={styles.emptyState}>
-                        <p>No upcoming sessions scheduled. Contact your trainer to book a session!</p>
+                        <div className={styles.emptyStateIcon}>📅</div>
+                        <h4>No Upcoming Sessions</h4>
+                        <p>Schedule a session with your trainer to stay on track!</p>
+                        <Button appName="web" onClick={handleBookSession} className={styles.primaryButton}>
+                          Book Session
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Secondary Column - Progress and Completed Programs */}
+              <div className={styles.secondaryColumn}>
+                {/* Recent Progress - Enhanced */}
+                <div className={styles.section}>
+                  <div className={styles.sectionHeader}>
+                    <h3>Recent Progress</h3>
+                    <span className={styles.sectionCount}>({client?.progress?.length || 0})</span>
+                  </div>
+                  <div className={styles.progressGrid}>
+                    {client?.progress?.length > 0 ? (
+                      client.progress.slice(0, 4).map((prog: any, index: number) => (
+                        <div key={prog.id || index} className={styles.progressCard} onClick={() => handleViewProgressDetails(prog.id)}>
+                          <div className={styles.progressHeader}>
+                            <h4>Progress Update</h4>
+                            <span className={styles.progressDate}>
+                              {new Date(prog.date).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <div className={styles.progressDetails}>
+                            {prog.weight && <p><strong>Weight:</strong> {prog.weight} lbs</p>}
+                            {prog.bodyFat && <p><strong>Body Fat:</strong> {prog.bodyFat}%</p>}
+                            {prog.notes && <p><strong>Notes:</strong> {prog.notes.substring(0, 80)}...</p>}
+                          </div>
+                          <div className={styles.progressActions}>
+                            <Button appName="web" onClick={(e) => { e.stopPropagation(); handleViewProgressDetails(prog.id); }} className={styles.viewButton}>
+                              View Details
+                            </Button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className={styles.emptyState}>
+                        <div className={styles.emptyStateIcon}>📈</div>
+                        <h4>No Progress Records</h4>
+                        <p>Start logging your workouts to track your progress!</p>
+                        <Button appName="web" onClick={() => setCurrentView('workout-logger')} className={styles.primaryButton}>
+                          Log Workout
+                        </Button>
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Completed Programs */}
-                {completedPrograms.length > 0 && (
-                  <div className={styles.section}>
-                    <div className={styles.sectionHeader} onClick={() => setShowCompletedPrograms(!showCompletedPrograms)}>
-                      <h3>Completed Programs ({completedPrograms.length})</h3>
-                      <div className={styles.accordionToggle}>
-                        <span className={showCompletedPrograms ? styles.expanded : styles.collapsed}>
-                          {showCompletedPrograms ? '▼' : '▶'}
-                        </span>
-                      </div>
-                    </div>
-                    {showCompletedPrograms && (
-                      <div className={styles.programGrid}>
-                        {completedPrograms.map((program: any) => (
-                          <div key={program.id} className={styles.programCard}>
-                            <div className={styles.programHeader}>
-                              <h4>{program.programName}</h4>
-                              <span className={`${styles.status} ${styles.completed}`}>
-                                Completed
-                              </span>
-                            </div>
-                            <div className={styles.programDetails}>
-                              <p><strong>Start Date:</strong> {new Date(program.startDate).toLocaleDateString()}</p>
-                              {program.endDate && (
-                                <p><strong>End Date:</strong> {new Date(program.endDate).toLocaleDateString()}</p>
-                              )}
-                              <p><strong>Goal:</strong> {program.primaryGoal}</p>
-                              {program.optPhase && (
-                                <p><strong>Phase:</strong> {program.optPhase.replace(/_/g, ' ')}</p>
-                              )}
-                            </div>
-                            <div className={styles.programActions}>
-                              <Button appName="web" onClick={() => handleViewProgram(program.id)} className={styles.viewButton}>
-                                View Program
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+
               </div>
             </div>
           </div>
@@ -1119,7 +1113,7 @@ export default function ClientPortal() {
                   </div>
                 )}
               </div>
-            </div>
+          </div>
 
             {/* Completed Programs */}
             {completedPrograms.length > 0 && (
@@ -1129,8 +1123,8 @@ export default function ClientPortal() {
                   <div className={styles.accordionToggle}>
                     <span className={showCompletedPrograms ? styles.expanded : styles.collapsed}>
                       {showCompletedPrograms ? '▼' : '▶'}
-                    </span>
-                  </div>
+              </span>
+            </div>
                 </div>
                 {showCompletedPrograms && (
                   <div className={styles.programGrid}>
@@ -1207,8 +1201,8 @@ export default function ClientPortal() {
                 )}
               </div>
             </div>
-          </div>
-        )}
+              </div>
+            )}
 
         {/* Sessions View */}
         {currentView === 'sessions' && (
@@ -1216,12 +1210,12 @@ export default function ClientPortal() {
             <div className={styles.clientDashboardHeader}>
               <h2>My Sessions</h2>
               <p>View and manage your training sessions</p>
-            </div>
+          </div>
 
             <div className={styles.section}>
               <div className={styles.sectionHeader}>
-                <h3>Upcoming Sessions ({client?.sessions?.filter((s: any) => new Date(s.startTime) > new Date()).length || 0})</h3>
-              </div>
+              <h3>Upcoming Sessions ({client?.sessions?.filter((s: any) => new Date(s.startTime) > new Date()).length || 0})</h3>
+            </div>
               <div style={{ 
                 display: 'flex', 
                 justifyContent: 'center', 
@@ -1275,7 +1269,7 @@ export default function ClientPortal() {
                         </div>
                       </div>
                     ))}
-                </div>
+                  </div>
               </div>
             )}
           </div>

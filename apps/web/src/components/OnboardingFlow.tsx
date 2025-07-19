@@ -121,7 +121,7 @@ const defaultOnboardingData: OnboardingData = {
   },
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
 
 export default function OnboardingFlow({ onComplete, user }: OnboardingFlowProps) {
   const [currentStep, setCurrentStep] = useState(1);

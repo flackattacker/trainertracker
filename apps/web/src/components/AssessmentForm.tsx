@@ -20,16 +20,55 @@ interface AssessmentFormProps {
 export function AssessmentForm({ assessment, onChange, clients }: AssessmentFormProps) {
   const [currentData, setCurrentData] = useState(assessment.data || {});
 
+  // Map assessment types to their data keys
+  const getDataKey = (type: string) => {
+    switch (type) {
+      case 'FITNESS_ASSESSMENT':
+        return 'fitness';
+      case 'BODY_COMPOSITION':
+        return 'bodyComposition';
+      case 'FLEXIBILITY':
+        return 'flexibility';
+      case 'STRENGTH':
+        return 'strength';
+      case 'CARDIOVASCULAR':
+        return 'cardiovascular';
+      case 'FMS':
+        return 'fms';
+      case 'PARQ':
+        return 'parq';
+      default:
+        return type.toLowerCase();
+    }
+  };
+
   useEffect(() => {
     // Initialize data based on assessment type
-    if (assessment.type && !currentData[assessment.type.toLowerCase()]) {
+    if (assessment.type) {
+      console.log('useEffect - assessment.type:', assessment.type);
+      const typeKey = getDataKey(assessment.type);
+      console.log('useEffect - typeKey:', typeKey);
+      console.log('useEffect - currentData:', currentData);
+      const existingData = currentData[typeKey];
+      console.log('useEffect - existingData:', existingData);
       const defaultData = assessmentDefaults[assessment.type] || {};
-      setCurrentData({ ...currentData, [assessment.type.toLowerCase()]: defaultData });
+      console.log('useEffect - defaultData:', defaultData);
+      
+      // Only initialize if the data doesn't exist or is empty
+      if (!existingData || Object.keys(existingData).length === 0) {
+        console.log('useEffect - initializing data');
+        setCurrentData((prevData: any) => ({ ...prevData, [typeKey]: defaultData }));
+      }
     }
   }, [assessment.type]);
 
   const updateData = (newData: any) => {
-    const updatedData = { ...currentData, [assessment.type.toLowerCase()]: newData };
+    console.log('updateData called with:', newData);
+    console.log('assessment.type:', assessment.type);
+    const typeKey = getDataKey(assessment.type);
+    console.log('typeKey:', typeKey);
+    const updatedData = { ...currentData, [typeKey]: newData };
+    console.log('updatedData:', updatedData);
     setCurrentData(updatedData);
     onChange({ ...assessment, data: updatedData });
   };
@@ -64,7 +103,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
         <div className="bg-blue-50 p-4 rounded-lg">
           <h3 className="text-lg font-semibold text-blue-900 mb-2">Physical Activity Readiness Questionnaire (PAR-Q+)</h3>
           <p className="text-blue-700 text-sm">Please answer the following questions to determine if you're ready for physical activity.</p>
-        </div>
+          </div>
 
         <div className="space-y-4">
           {[
@@ -81,28 +120,28 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
                 <p className="text-sm font-medium text-gray-700">{question}</p>
               </div>
               <div className="flex space-x-2">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
+              <label className="flex items-center">
+                <input
+                  type="radio"
                     name={key}
                     checked={parqData.questions?.[key] === true}
                     onChange={() => updateQuestion(key, true)}
                     className="mr-1"
-                  />
+                />
                   <span className="text-sm">Yes</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
                     name={key}
                     checked={parqData.questions?.[key] === false}
                     onChange={() => updateQuestion(key, false)}
                     className="mr-1"
-                  />
+                />
                   <span className="text-sm">No</span>
-                </label>
-              </div>
+              </label>
             </div>
+          </div>
           ))}
         </div>
 
@@ -123,7 +162,7 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
               <p className={`font-bold text-lg ${clearedForExercise ? 'text-green-600' : 'text-red-600'}`}>
                 {clearedForExercise ? 'YES' : 'NO'}
               </p>
-            </div>
+          </div>
             <div className="text-center p-3 bg-white rounded border">
               <p className="text-sm text-gray-600">Medical Clearance Required</p>
               <p className={`font-bold text-lg ${requiresMedicalClearance ? 'text-red-600' : 'text-green-600'}`}>
@@ -141,17 +180,23 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={3}
             placeholder="Additional notes about the assessment..."
-          />
+                />
         </div>
       </div>
     );
   };
 
   const renderFitnessAssessmentForm = () => {
+    console.log('currentData:', currentData);
+    console.log('assessment.type:', assessment.type);
     const fitnessData = currentData.fitness || assessmentDefaults.FITNESS_ASSESSMENT;
+    console.log('fitnessData:', fitnessData);
     
     const updateFitness = (field: string, value: any) => {
-      updateData({ ...fitnessData, [field]: value });
+      console.log('updateFitness called:', field, value);
+      const newFitnessData = { ...fitnessData, [field]: value };
+      console.log('newFitnessData:', newFitnessData);
+      updateData(newFitnessData);
     };
 
     return (
@@ -164,35 +209,45 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <h4 className="font-semibold text-gray-800">Basic Measurements</h4>
-            
-            <div>
+
+              <div>
               <label className="block text-sm font-medium">Height (cm)</label>
-              <input
-                type="number"
+          <input
+            type="number"
                 value={fitnessData.height || ''}
-                onChange={(e) => updateFitness('height', parseFloat(e.target.value) || null)}
+                onChange={(e) => {
+                  console.log('Height input changed:', e.target.value);
+                  const value = e.target.value === '' ? undefined : parseFloat(e.target.value);
+                  updateFitness('height', value);
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="170"
-              />
-            </div>
+            placeholder="170"
+          />
+        </div>
 
-            <div>
+        <div>
               <label className="block text-sm font-medium">Weight (kg)</label>
-              <input
-                type="number"
+          <input
+            type="number"
                 value={fitnessData.weight || ''}
-                onChange={(e) => updateFitness('weight', parseFloat(e.target.value) || null)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('weight', value === '' ? undefined : parseFloat(value));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="70"
-              />
-            </div>
+            placeholder="70"
+          />
+        </div>
 
-            <div>
+        <div>
               <label className="block text-sm font-medium">Body Fat Percentage (%)</label>
               <input
                 type="number"
                 value={fitnessData.bodyFatPercentage || ''}
-                onChange={(e) => updateFitness('bodyFatPercentage', parseFloat(e.target.value) || null)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('bodyFatPercentage', value === '' ? undefined : parseFloat(value));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="15"
               />
@@ -200,58 +255,72 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
 
             <div>
               <label className="block text-sm font-medium">BMI</label>
-              <input
-                type="number"
+          <input
+            type="number"
                 value={fitnessData.bmi || ''}
-                onChange={(e) => updateFitness('bmi', parseFloat(e.target.value) || null)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('bmi', value === '' ? undefined : parseFloat(value));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="24.2"
-              />
-            </div>
-          </div>
+            placeholder="24.2"
+          />
+        </div>
+      </div>
 
           <div className="space-y-4">
             <h4 className="font-semibold text-gray-800">Cardiovascular</h4>
             
-            <div>
+        <div>
               <label className="block text-sm font-medium">Resting Heart Rate (bpm)</label>
-              <input
-                type="number"
+          <input
+            type="number"
                 value={fitnessData.restingHeartRate || ''}
-                onChange={(e) => updateFitness('restingHeartRate', parseInt(e.target.value) || null)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('restingHeartRate', value === '' ? undefined : parseInt(value));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="72"
-              />
-            </div>
+            placeholder="72"
+          />
+        </div>
 
             <div className="grid grid-cols-2 gap-2">
-              <div>
+        <div>
                 <label className="block text-sm font-medium">Systolic BP</label>
-                <input
-                  type="number"
+          <input
+            type="number"
                   value={fitnessData.bloodPressure?.systolic || ''}
-                  onChange={(e) => updateFitness('bloodPressure', { 
-                    ...fitnessData.bloodPressure, 
-                    systolic: parseInt(e.target.value) || null 
-                  })}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const currentBP = fitnessData.bloodPressure || { systolic: 0, diastolic: 0 };
+                    updateFitness('bloodPressure', { 
+                      ...currentBP, 
+                      systolic: value === '' ? undefined : parseInt(value)
+                    });
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="120"
-                />
-              </div>
-              <div>
+            placeholder="120"
+          />
+        </div>
+        <div>
                 <label className="block text-sm font-medium">Diastolic BP</label>
-                <input
-                  type="number"
+          <input
+            type="number"
                   value={fitnessData.bloodPressure?.diastolic || ''}
-                  onChange={(e) => updateFitness('bloodPressure', { 
-                    ...fitnessData.bloodPressure, 
-                    diastolic: parseInt(e.target.value) || null 
-                  })}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const currentBP = fitnessData.bloodPressure || { systolic: 0, diastolic: 0 };
+                    updateFitness('bloodPressure', { 
+                      ...currentBP, 
+                      diastolic: value === '' ? undefined : parseInt(value)
+                    });
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="80"
-                />
-              </div>
-            </div>
+            placeholder="80"
+          />
+        </div>
+      </div>
           </div>
         </div>
 
@@ -259,80 +328,95 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
           <div className="space-y-4">
             <h4 className="font-semibold text-gray-800">Strength Tests</h4>
             
-            <div>
+        <div>
               <label className="block text-sm font-medium">Push-ups (max reps)</label>
-              <input
-                type="number"
+          <input
+            type="number"
                 value={fitnessData.pushUps || ''}
-                onChange={(e) => updateFitness('pushUps', parseInt(e.target.value) || null)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('pushUps', value === '' ? undefined : parseInt(value));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="20"
-              />
-            </div>
+          />
+        </div>
 
-            <div>
+        <div>
               <label className="block text-sm font-medium">Sit-ups (max reps in 1 min)</label>
-              <input
-                type="number"
+          <input
+            type="number"
                 value={fitnessData.sitUps || ''}
-                onChange={(e) => updateFitness('sitUps', parseInt(e.target.value) || null)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('sitUps', value === '' ? undefined : parseInt(value));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="30"
-              />
-            </div>
+          />
+      </div>
 
-            <div>
+        <div>
               <label className="block text-sm font-medium">Plank Time (seconds)</label>
-              <input
-                type="number"
+          <input
+            type="number"
                 value={fitnessData.plankTime || ''}
-                onChange={(e) => updateFitness('plankTime', parseInt(e.target.value) || null)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('plankTime', value === '' ? undefined : parseInt(value));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="60"
-              />
-            </div>
+            placeholder="60"
+          />
+        </div>
           </div>
 
           <div className="space-y-4">
             <h4 className="font-semibold text-gray-800">Flexibility & Balance</h4>
-            
-            <div>
-              <label className="block text-sm font-medium">Sit and Reach (cm)</label>
-              <input
-                type="number"
-                value={fitnessData.sitAndReach || ''}
-                onChange={(e) => updateFitness('sitAndReach', parseFloat(e.target.value) || null)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="25"
-              />
-            </div>
 
-            <div>
+        <div>
+              <label className="block text-sm font-medium">Sit and Reach (cm)</label>
+          <input
+            type="number"
+                value={fitnessData.sitAndReach || ''}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('sitAndReach', value === '' ? undefined : parseFloat(value));
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="25"
+          />
+      </div>
+
+        <div>
               <label className="block text-sm font-medium">Shoulder Flexibility</label>
-              <select
+          <select
                 value={fitnessData.shoulderFlexibility || ''}
                 onChange={(e) => updateFitness('shoulderFlexibility', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+          >
                 <option value="">Select rating</option>
-                <option value="POOR">Poor</option>
-                <option value="FAIR">Fair</option>
-                <option value="GOOD">Good</option>
-                <option value="EXCELLENT">Excellent</option>
-              </select>
-            </div>
+            <option value="POOR">Poor</option>
+            <option value="FAIR">Fair</option>
+            <option value="GOOD">Good</option>
+            <option value="EXCELLENT">Excellent</option>
+          </select>
+        </div>
 
-            <div>
+        <div>
               <label className="block text-sm font-medium">Single Leg Stand (seconds)</label>
-              <input
-                type="number"
+          <input
+            type="number"
                 value={fitnessData.singleLegStand || ''}
-                onChange={(e) => updateFitness('singleLegStand', parseInt(e.target.value) || null)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updateFitness('singleLegStand', value === '' ? undefined : parseInt(value));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="30"
-              />
-            </div>
-          </div>
+          />
+        </div>
+      </div>
         </div>
 
         <div className="space-y-4">
@@ -343,10 +427,10 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={3}
             placeholder="Additional notes about the fitness assessment..."
-          />
-        </div>
+        />
       </div>
-    );
+    </div>
+  );
   };
 
   const renderAssessmentSpecificForm = () => {
@@ -387,88 +471,88 @@ export function AssessmentForm({ assessment, onChange, clients }: AssessmentForm
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">Client</label>
-            <select
-              value={assessment.clientId}
-              onChange={(e) => onChange({ ...assessment, clientId: e.target.value })}
+        <select
+          value={assessment.clientId}
+          onChange={(e) => onChange({ ...assessment, clientId: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Select a client</option>
-              {clients.map(client => (
-                <option key={client.id} value={client.id}>
-                  {client.codeName} - {client.firstName} {client.lastName}
-                </option>
-              ))}
-            </select>
-          </div>
+        >
+          <option value="">Select a client</option>
+          {clients.map(client => (
+            <option key={client.id} value={client.id}>
+              {client.codeName} - {client.firstName} {client.lastName}
+            </option>
+          ))}
+        </select>
+      </div>
 
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">Assessment Type</label>
-            <select
-              value={assessment.type}
+        <select
+          value={assessment.type}
               onChange={(e) => onChange({ ...assessment, type: e.target.value as AssessmentType })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="PARQ">PARQ (Physical Activity Readiness)</option>
-              <option value="FITNESS_ASSESSMENT">Fitness Assessment</option>
-              <option value="BODY_COMPOSITION">Body Composition</option>
+        >
+          <option value="PARQ">PARQ (Physical Activity Readiness)</option>
+          <option value="FITNESS_ASSESSMENT">Fitness Assessment</option>
+          <option value="BODY_COMPOSITION">Body Composition</option>
               <option value="FMS">FMS (Functional Movement Screen)</option>
-              <option value="FLEXIBILITY">Flexibility</option>
-              <option value="STRENGTH">Strength</option>
-              <option value="CARDIOVASCULAR">Cardiovascular</option>
+          <option value="FLEXIBILITY">Flexibility</option>
+          <option value="STRENGTH">Strength</option>
+          <option value="CARDIOVASCULAR">Cardiovascular</option>
               <option value="POSTURAL">Postural</option>
               <option value="BALANCE">Balance</option>
               <option value="MOBILITY">Mobility</option>
-              <option value="OTHER">Other</option>
-            </select>
+          <option value="OTHER">Other</option>
+        </select>
           </div>
-        </div>
+      </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">Assessment Date</label>
-            <input
-              type="date"
-              value={assessment.assessmentDate}
-              onChange={(e) => onChange({ ...assessment, assessmentDate: e.target.value })}
+        <input
+          type="date"
+          value={assessment.assessmentDate}
+          onChange={(e) => onChange({ ...assessment, assessmentDate: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+        />
+      </div>
 
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">Assessor</label>
-            <input
-              type="text"
-              value={assessment.assessor}
-              onChange={(e) => onChange({ ...assessment, assessor: e.target.value })}
+        <input
+          type="text"
+          value={assessment.assessor}
+          onChange={(e) => onChange({ ...assessment, assessor: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Your name"
-            />
-          </div>
+          placeholder="Your name"
+        />
+      </div>
 
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">Status</label>
-            <select
-              value={assessment.status}
-              onChange={(e) => onChange({ ...assessment, status: e.target.value as any })}
+        <select
+          value={assessment.status}
+          onChange={(e) => onChange({ ...assessment, status: e.target.value as any })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="SCHEDULED">Scheduled</option>
-              <option value="IN_PROGRESS">In Progress</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="CANCELLED">Cancelled</option>
-            </select>
+        >
+          <option value="SCHEDULED">Scheduled</option>
+          <option value="IN_PROGRESS">In Progress</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
           </div>
-        </div>
+      </div>
 
         <div className="space-y-4 mb-6">
           <label className="block text-sm font-medium text-gray-700">General Notes</label>
-          <textarea
-            value={assessment.notes}
-            onChange={(e) => onChange({ ...assessment, notes: e.target.value })}
+        <textarea
+          value={assessment.notes}
+          onChange={(e) => onChange({ ...assessment, notes: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            rows={3}
-            placeholder="General assessment notes..."
-          />
+          rows={3}
+          placeholder="General assessment notes..."
+        />
         </div>
       </div>
 

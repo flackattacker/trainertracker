@@ -7,60 +7,161 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
   
-  /* Light theme variables */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #e9ecef;
-  --text-color: #212529;
-  --text-light: #6c757d;
-  --text-muted: #adb5bd;
-  --primary-color: #5a7c65;
-  --primary-hover: #4a6b55;
-  --border-color: #dee2e6;
-  --border-focus: #5a7c65;
-  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-heavy: 0 10px 15px rgba(0, 0, 0, 0.1);
+  /* Family Roots Therapy & Wellness Design System - Light Theme */
+  --bg-primary: #FDF8F0; /* Updated image background color */
+  --bg-secondary: #f8f7f4; /* Slightly warmer cream */
+  --bg-tertiary: #f5f4f0; /* Warmer cream for depth */
+  --bg-accent: #f0f0eb; /* Subtle cream accent */
   
-  /* Coastal Light Theme Colors */
-  --sand-light: #f8f9fa;
-  --sand-medium: #e9ecef;
-  --sand-dark: #dee2e6;
-  --ocean-light: #5a9bb8;
-  --ocean-medium: #5a7c65;
-  --ocean-dark: #4a6b55;
-  --sage-light: #a8d5ba;
-  --sage-medium: #5a7c65;
-  --sage-dark: #4a6b55;
-  --text-dark: #212529;
-  --text-medium: #6c757d;
-  --text-light: #adb5bd;
-  --white: #ffffff;
-  --shadow: rgba(0, 0, 0, 0.1);
+  /* Family Roots Color Palette - Based on Logo */
+  --sand-light: #fefefe; /* Logo background */
+  --sand-medium: #f8f7f4; /* Warm cream */
+  --sand-dark: #f5f4f0; /* Deeper cream */
+  --sand-accent: #f0f0eb; /* Cream accent */
   
-  /* Input and form variables */
-  --input-bg: #ffffff;
-  --input-border: #dee2e6;
-  --input-focus-border: #5a7c65;
-  --input-focus-shadow: 0 0 0 3px rgba(90, 124, 101, 0.1);
+  /* Dark Teal/Blue-Green from Logo (main graphic elements) */
+  --ocean-light: #4a7c59; /* Lighter teal */
+  --ocean-medium: #2d5a3d; /* Main teal from logo */
+  --ocean-dark: #1e3d2a; /* Darker teal */
+  --ocean-accent: #0f2a1c; /* Deepest teal */
   
-  /* Button variables */
-  --btn-primary-bg: #5a7c65;
-  --btn-primary-hover: #4a6b55;
-  --btn-secondary-bg: #f8f9fa;
-  --btn-secondary-hover: #e9ecef;
-  --btn-outline-border: #dee2e6;
+  /* Light Teal/Blue-Green from Logo (leaves, water) */
+  --sage-light: #7ba68c; /* Light teal */
+  --sage-medium: #5a7c65; /* Medium teal from logo */
+  --sage-dark: #4a7c59; /* Darker teal */
+  --sage-accent: #2d5a3d; /* Deep teal */
   
-  /* Select/Dropdown variables */
-  --select-bg: #ffffff;
-  --select-border: #dee2e6;
-  --select-hover-bg: #f8f9fa;
-  --select-focus-border: #5a7c65;
+  /* Sandy/Light Brown from Logo (ground/beach) */
+  --coral-light: #f5e6d3; /* Light sandy */
+  --coral-medium: #e6d5c1; /* Medium sandy from logo */
+  --coral-dark: #d4c4b0; /* Darker sandy */
+  --coral-accent: #c2b3a0; /* Deep sandy */
   
-  /* Card variables */
-  --card-bg: #ffffff;
-  --card-border: #e9ecef;
-  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  /* Seafoam - Light teal variant */
+  --seafoam-light: #a8c4b8; /* Light seafoam */
+  --seafoam-medium: #8bb3a3; /* Medium seafoam */
+  --seafoam-dark: #6ea28e; /* Darker seafoam */
+  --seafoam-accent: #5a7c65; /* Deep seafoam */
+  
+  /* Warm Cream Colors - Enhanced to match logo */
+  --cream-light: #fefefe; /* Logo background */
+  --cream-medium: #f8f7f4; /* Warm cream */
+  --cream-dark: #e6d5c1; /* Sandy cream from logo */
+  --cream-accent: #2d5a3d; /* Dark teal accent from logo */
+  --cream-warm: #f5f4f0; /* Warm cream */
+  --cream-soft: #f0f0eb; /* Soft cream */
+  --cream-muted: #e6d5c1; /* Sandy cream */
+  
+  /* Typography Colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-muted: #94a3b8;
+  --text-inverse: #ffffff;
+  
+  /* Primary Brand Colors - Dark Teal from Logo */
+  --primary-color: var(--ocean-medium); /* #2d5a3d - Main teal from logo */
+  --primary-hover: var(--ocean-dark); /* #1e3d2a - Darker teal */
+  --primary-light: var(--ocean-light); /* #4a7c59 - Lighter teal */
+  --primary-accent: var(--ocean-accent); /* #0f2a1c - Deepest teal */
+  
+  /* Secondary Brand Colors - Sandy Cream from Logo */
+  --secondary-color: var(--coral-medium); /* #e6d5c1 - Sandy cream from logo */
+  --secondary-hover: var(--coral-dark); /* #d4c4b0 - Darker sandy */
+  --secondary-light: var(--coral-light); /* #f5e6d3 - Light sandy */
+  --secondary-accent: var(--coral-accent); /* #c2b3a0 - Deep sandy */
+  
+  /* Border Colors - Family Roots Palette */
+  --border-light: #e6d5c1; /* Sandy cream border */
+  --border-medium: #d4c4b0; /* Medium sandy border */
+  --border-dark: #2d5a3d; /* Dark teal border */
+  --border-focus: var(--primary-color); /* Dark teal focus */
+  
+  /* Shadow System */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* Input and Form Variables */
+  --input-bg: var(--bg-primary);
+  --input-border: var(--border-medium);
+  --input-focus-border: var(--primary-color);
+  --input-focus-shadow: 0 0 0 3px rgba(45, 90, 61, 0.1); /* Dark teal focus shadow */
+  --input-disabled-bg: var(--bg-tertiary);
+  --input-disabled-text: var(--text-muted);
+  
+  /* Button Variables */
+  --btn-primary-bg: var(--primary-color);
+  --btn-primary-hover: var(--primary-hover);
+  --btn-primary-text: var(--text-inverse);
+  --btn-primary-shadow: var(--shadow-md);
+  
+  --btn-secondary-bg: var(--bg-secondary);
+  --btn-secondary-hover: var(--bg-tertiary);
+  --btn-secondary-text: var(--text-secondary);
+  --btn-secondary-border: var(--border-medium);
+  
+  --btn-outline-bg: transparent;
+  --btn-outline-hover: var(--bg-secondary);
+  --btn-outline-text: var(--primary-color);
+  --btn-outline-border: var(--primary-color);
+  
+  /* Card Variables */
+  --card-bg: var(--bg-primary);
+  --card-border: var(--border-light);
+  --card-shadow: var(--shadow-sm);
+  --card-shadow-hover: var(--shadow-md);
+  
+  /* Status Colors - Family Roots Palette */
+  --status-success: var(--sage-medium); /* Medium teal for success */
+  --status-success-light: var(--sage-light); /* Light teal for success background */
+  --status-warning: var(--coral-medium); /* Sandy cream for warning */
+  --status-warning-light: var(--coral-light); /* Light sandy for warning background */
+  --status-error: #dc2626; /* Standard red for errors */
+  --status-error-light: #fecaca; /* Light red for error background */
+  --status-info: var(--ocean-medium); /* Dark teal for info */
+  --status-info-light: var(--ocean-light); /* Light teal for info background */
+  
+  /* Spacing System */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -69,272 +170,359 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
     
-    /* Dark theme variables */
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
-    --bg-tertiary: #404040;
-    --text-color: #ffffff;
-    --text-light: #b0b0b0;
-    --text-muted: #808080;
-    --primary-color: #7a9c85;
-    --primary-hover: #6a8c75;
-    --border-color: #404040;
-    --border-focus: #7a9c85;
-    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.3);
-    --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --shadow-heavy: 0 10px 15px rgba(0, 0, 0, 0.3);
+    /* Enhanced Coastal Design System - Dark Theme */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-accent: #1e40af;
     
-    /* Coastal Dark Theme Colors */
-    --sand-light: #2d3748;
-    --sand-medium: #4a5568;
-    --sand-dark: #718096;
-    --ocean-light: #4fd1c7;
-    --ocean-medium: #38b2ac;
-    --ocean-dark: #319795;
-    --sage-light: #68d391;
-    --sage-medium: #48bb78;
-    --sage-dark: #38a169;
-    --text-dark: #f7fafc;
-    --text-medium: #e2e8f0;
-    --text-light: #a0aec0;
-    --white: #1a202c;
-    --shadow: rgba(0, 0, 0, 0.3);
+    /* Coastal Color Palette - Dark */
+    --sand-light: #334155;
+    --sand-medium: #475569;
+    --sand-dark: #64748b;
+    --sand-accent: #1e40af;
     
-    /* Input and form variables */
-    --input-bg: #2d2d2d;
-    --input-border: #404040;
-    --input-focus-border: #7a9c85;
-    --input-focus-shadow: 0 0 0 3px rgba(122, 156, 133, 0.2);
+    --ocean-light: #0ea5e9;
+    --ocean-medium: #38bdf8;
+    --ocean-dark: #7dd3fc;
+    --ocean-accent: #0c4a6e;
     
-    /* Button variables */
-    --btn-primary-bg: #7a9c85;
-    --btn-primary-hover: #6a8c75;
-    --btn-secondary-bg: #2d2d2d;
-    --btn-secondary-hover: #404040;
-    --btn-outline-border: #404040;
+    --sage-light: #4ade80;
+    --sage-medium: #86efac;
+    --sage-dark: #bbf7d0;
+    --sage-accent: #15803d;
     
-    /* Select/Dropdown variables */
-    --select-bg: #2d2d2d;
-    --select-border: #404040;
-    --select-hover-bg: #404040;
-    --select-focus-border: #7a9c85;
+    --coral-light: #f87171;
+    --coral-medium: #fca5a5;
+    --coral-dark: #fecaca;
+    --coral-accent: #991b1b;
     
-    /* Card variables */
-    --card-bg: #2d2d2d;
-    --card-border: #404040;
-    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    --seafoam-light: #14b8a6;
+    --seafoam-medium: #2dd4bf;
+    --seafoam-dark: #5eead4;
+    --seafoam-accent: #134e4a;
+    
+    /* Typography Colors - Dark */
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-inverse: #0f172a;
+    
+    /* Border Colors - Dark */
+    --border-light: #475569;
+    --border-medium: #64748b;
+    --border-dark: #94a3b8;
+    
+    /* Input and Form Variables - Dark */
+    --input-bg: var(--bg-secondary);
+    --input-border: var(--border-medium);
+    --input-disabled-bg: var(--bg-tertiary);
+    
+    /* Button Variables - Dark */
+    --btn-secondary-bg: var(--bg-secondary);
+    --btn-secondary-hover: var(--bg-tertiary);
+    --btn-secondary-text: var(--text-secondary);
+    --btn-secondary-border: var(--border-medium);
+    
+    /* Card Variables - Dark */
+    --card-bg: var(--bg-secondary);
+    --card-border: var(--border-light);
+    
+    /* Shadow System - Dark */
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
   }
 }
 
 /* Apply theme based on data-theme attribute */
 [data-theme="dark"] {
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #2d2d2d;
-  --bg-tertiary: #404040;
-  --text-color: #ffffff;
-  --text-light: #b0b0b0;
-  --text-muted: #808080;
-  --primary-color: #7a9c85;
-  --primary-hover: #6a8c75;
-  --border-color: #404040;
-  --border-focus: #7a9c85;
-  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.3);
-  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-heavy: 0 10px 15px rgba(0, 0, 0, 0.3);
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-accent: #1e40af;
   
-  /* Coastal Dark Theme Colors */
-  --sand-light: #2d3748;
-  --sand-medium: #4a5568;
-  --sand-dark: #718096;
-  --ocean-light: #4fd1c7;
-  --ocean-medium: #38b2ac;
-  --ocean-dark: #319795;
-  --sage-light: #68d391;
-  --sage-medium: #48bb78;
-  --sage-dark: #38a169;
-  --text-dark: #f7fafc;
-  --text-medium: #e2e8f0;
-  --text-light: #a0aec0;
-  --white: #1a202c;
-  --shadow: rgba(0, 0, 0, 0.3);
+  --sand-light: #334155;
+  --sand-medium: #475569;
+  --sand-dark: #64748b;
+  --sand-accent: #1e40af;
   
-  --input-bg: #2d2d2d;
-  --input-border: #404040;
-  --input-focus-border: #7a9c85;
-  --input-focus-shadow: 0 0 0 3px rgba(122, 156, 133, 0.2);
-  --btn-primary-bg: #7a9c85;
-  --btn-primary-hover: #6a8c75;
-  --btn-secondary-bg: #2d2d2d;
-  --btn-secondary-hover: #404040;
-  --btn-outline-border: #404040;
-  --select-bg: #2d2d2d;
-  --select-border: #404040;
-  --select-hover-bg: #404040;
-  --select-focus-border: #7a9c85;
-  --card-bg: #2d2d2d;
-  --card-border: #404040;
-  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  --ocean-light: #0ea5e9;
+  --ocean-medium: #38bdf8;
+  --ocean-dark: #7dd3fc;
+  --ocean-accent: #0c4a6e;
+  
+  --sage-light: #4ade80;
+  --sage-medium: #86efac;
+  --sage-dark: #bbf7d0;
+  --sage-accent: #15803d;
+  
+  /* Warm Cream Colors - Dark */
+  --cream-light: #fefce8;
+  --cream-medium: #fde047;
+  --cream-dark: #eab308;
+  --cream-accent: #a16207;
+  --cream-warm: #fef7e0;
+  --cream-soft: #fdf4e3;
+  --cream-muted: #f5f0e1;
+  
+  --coral-light: #f87171;
+  --coral-medium: #fca5a5;
+  --coral-dark: #fecaca;
+  --coral-accent: #991b1b;
+  
+  --seafoam-light: #14b8a6;
+  --seafoam-medium: #2dd4bf;
+  --seafoam-dark: #5eead4;
+  --seafoam-accent: #134e4a;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-inverse: #0f172a;
+  
+  --border-light: #475569;
+  --border-medium: #64748b;
+  --border-dark: #94a3b8;
+  
+  --input-bg: var(--bg-secondary);
+  --input-border: var(--border-medium);
+  --input-disabled-bg: var(--bg-tertiary);
+  
+  --btn-secondary-bg: var(--bg-secondary);
+  --btn-secondary-hover: var(--bg-tertiary);
+  --btn-secondary-text: var(--text-secondary);
+  --btn-secondary-border: var(--border-medium);
+  
+  --card-bg: var(--bg-secondary);
+  --card-border: var(--border-light);
+  
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="light"] {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #e9ecef;
-  --text-color: #212529;
-  --text-light: #6c757d;
-  --text-muted: #adb5bd;
-  --primary-color: #5a7c65;
-  --primary-hover: #4a6b55;
-  --border-color: #dee2e6;
-  --border-focus: #5a7c65;
-  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-heavy: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --bg-primary: #fefefe; /* Light cream background from logo */
+  --bg-secondary: #f8f7f4; /* Slightly warmer cream */
+  --bg-tertiary: #f5f4f0; /* Warmer cream for depth */
+  --bg-accent: #f0f0eb; /* Subtle cream accent */
   
-  /* Coastal Light Theme Colors */
-  --sand-light: #f8f9fa;
-  --sand-medium: #e9ecef;
-  --sand-dark: #dee2e6;
-  --ocean-light: #5a9bb8;
-  --ocean-medium: #5a7c65;
-  --ocean-dark: #4a6b55;
-  --sage-light: #a8d5ba;
-  --sage-medium: #5a7c65;
-  --sage-dark: #4a6b55;
-  --text-dark: #212529;
-  --text-medium: #6c757d;
-  --text-light: #adb5bd;
-  --white: #ffffff;
-  --shadow: rgba(0, 0, 0, 0.1);
+  --sand-light: #fefefe; /* Logo background */
+  --sand-medium: #f8f7f4; /* Warm cream */
+  --sand-dark: #f5f4f0; /* Deeper cream */
+  --sand-accent: #f0f0eb; /* Cream accent */
   
-  --input-bg: #ffffff;
-  --input-border: #dee2e6;
-  --input-focus-border: #5a7c65;
-  --input-focus-shadow: 0 0 0 3px rgba(90, 124, 101, 0.1);
-  --btn-primary-bg: #5a7c65;
-  --btn-primary-hover: #4a6b55;
-  --btn-secondary-bg: #f8f9fa;
-  --btn-secondary-hover: #e9ecef;
-  --btn-outline-border: #dee2e6;
-  --select-bg: #ffffff;
-  --select-border: #dee2e6;
-  --select-hover-bg: #f8f9fa;
-  --select-focus-border: #5a7c65;
-  --card-bg: #ffffff;
-  --card-border: #e9ecef;
-  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --ocean-light: #4a7c59; /* Lighter teal */
+  --ocean-medium: #2d5a3d; /* Main teal from logo */
+  --ocean-dark: #1e3d2a; /* Darker teal */
+  --ocean-accent: #0f2a1c; /* Deepest teal */
+  
+  --sage-light: #7ba68c; /* Light teal */
+  --sage-medium: #5a7c65; /* Medium teal from logo */
+  --sage-dark: #4a7c59; /* Darker teal */
+  --sage-accent: #2d5a3d; /* Deep teal */
+  
+  /* Warm Cream Colors - Family Roots Palette */
+  --cream-light: #fefefe; /* Logo background */
+  --cream-medium: #f8f7f4; /* Warm cream */
+  --cream-dark: #e6d5c1; /* Sandy cream from logo */
+  --cream-accent: #2d5a3d; /* Dark teal accent from logo */
+  --cream-warm: #f5f4f0; /* Warm cream */
+  --cream-soft: #f0f0eb; /* Soft cream */
+  --cream-muted: #e6d5c1; /* Sandy cream */
+  
+  --coral-light: #f5e6d3; /* Light sandy */
+  --coral-medium: #e6d5c1; /* Medium sandy from logo */
+  --coral-dark: #d4c4b0; /* Darker sandy */
+  --coral-accent: #c2b3a0; /* Deep sandy */
+  
+  --seafoam-light: #a8c4b8; /* Light seafoam */
+  --seafoam-medium: #8bb3a3; /* Medium seafoam */
+  --seafoam-dark: #6ea28e; /* Darker seafoam */
+  --seafoam-accent: #5a7c65; /* Deep seafoam */
+  
+  --text-primary: #2d5a3d; /* Dark teal text */
+  --text-secondary: #5a7c65; /* Medium teal text */
+  --text-tertiary: #7ba68c; /* Light teal text */
+  --text-muted: #a8c4b8; /* Muted teal text */
+  --text-inverse: #fefefe; /* Cream inverse text */
+  
+  --border-light: #e6d5c1; /* Sandy cream border */
+  --border-medium: #d4c4b0; /* Medium sandy border */
+  --border-dark: #2d5a3d; /* Dark teal border */
+  
+  --input-bg: var(--bg-primary);
+  --input-border: var(--border-medium);
+  --input-disabled-bg: var(--bg-tertiary);
+  
+  --btn-secondary-bg: var(--bg-secondary);
+  --btn-secondary-hover: var(--bg-tertiary);
+  --btn-secondary-text: var(--text-secondary);
+  --btn-secondary-border: var(--border-medium);
+  
+  --card-bg: var(--bg-primary);
+  --card-border: var(--border-light);
+  
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
 body {
-  color: var(--text-color);
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
   background: var(--bg-primary);
   transition: all 0.3s ease;
 }
 
-/* Enhanced form styling */
+body {
+  color: var(--text-primary);
+  background: var(--bg-primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Enhanced Form Elements */
 input, select, textarea {
-  background-color: var(--input-bg) !important;
-  border: 1px solid var(--input-border) !important;
-  color: var(--text-color) !important;
-  transition: all 0.3s ease;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  transition: all 0.2s ease;
 }
 
 input:focus, select:focus, textarea:focus {
-  outline: none !important;
-  border-color: var(--input-focus-border) !important;
-  box-shadow: var(--input-focus-shadow) !important;
-  transform: translateY(-1px) !important;
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: var(--input-focus-shadow);
+  background: var(--bg-primary);
 }
 
-/* Focus visible for better accessibility */
+input:disabled, select:disabled, textarea:disabled {
+  background: var(--input-disabled-bg);
+  color: var(--input-disabled-text);
+  cursor: not-allowed;
+}
+
+/* Focus Styles */
 *:focus-visible {
-  outline: 2px solid var(--primary-color) !important;
-  outline-offset: 2px !important;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
-/* Hover effects for interactive elements */
-button:hover, 
-[data-radix-select-trigger]:hover,
-input:hover,
-select:hover,
-textarea:hover {
-  transform: translateY(-1px) !important;
-  box-shadow: var(--shadow-light) !important;
-}
-
-/* Specific textarea styling */
-textarea {
-  min-height: 80px;
-  resize: vertical;
-}
-
-/* Enhanced button styling */
+/* Enhanced Button Styles */
 button {
-  border-radius: 6px !important;
-  transition: all 0.3s ease !important;
-  font-weight: 500 !important;
-  cursor: pointer !important;
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
 }
 
 button:hover {
-  transform: translateY(-1px) !important;
-  box-shadow: var(--shadow-medium) !important;
+  transform: translateY(-1px);
 }
 
 button:active {
-  transform: translateY(0) !important;
+  transform: translateY(0);
 }
 
-/* Enhanced select styling */
+/* Enhanced Select Styles */
 [data-radix-select-content] {
-  background-color: var(--select-bg) !important;
-  border: 1px solid var(--select-border) !important;
-  box-shadow: var(--shadow-medium) !important;
-  border-radius: 6px !important;
-  overflow: hidden !important;
-  z-index: 1000 !important;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-sm);
+  z-index: 1000;
 }
 
-/* Enhanced card styling */
-.card {
-  background-color: var(--card-bg) !important;
-  border: 1px solid var(--card-border) !important;
-  box-shadow: var(--card-shadow) !important;
-  border-radius: 8px !important;
-}
-
-/* Enhanced badge styling */
 .badge {
-  border-radius: 4px !important;
-  font-weight: 500 !important;
-  font-size: 0.75rem !important;
-  line-height: 1rem !important;
-  padding: 0.25rem 0.5rem !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
 }
 
 [data-radix-select-item]:hover {
-  background-color: var(--select-hover-bg) !important;
+  background: var(--bg-secondary);
 }
 
 [data-radix-select-trigger] {
-  background-color: var(--select-bg) !important;
-  border: 1px solid var(--select-border) !important;
-  color: var(--text-color) !important;
-  transition: all 0.3s ease !important;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  transition: all 0.2s ease;
 }
 
 [data-radix-select-trigger]:hover {
-  background-color: var(--select-hover-bg) !important;
+  background: var(--bg-secondary);
 }
 
 [data-radix-select-trigger]:focus {
-  outline: none !important;
-  border-color: var(--select-focus-border) !important;
-  box-shadow: var(--input-focus-shadow) !important;
+  border-color: var(--input-focus-border);
+  box-shadow: var(--input-focus-shadow);
 }
 
+/* Enhanced Card Styles */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Utility Classes */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -357,7 +545,7 @@ button:active {
   }
   
   .border-border {
-    border-color: var(--border-color);
+    border-color: var(--border-light);
   }
   
   .text-muted-foreground {
@@ -365,10 +553,10 @@ button:active {
   }
   
   .bg-accent {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-accent);
   }
   
   .text-primary-foreground {
-    color: var(--white);
+    color: var(--text-inverse);
   }
 }
