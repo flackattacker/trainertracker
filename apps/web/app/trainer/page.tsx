@@ -471,7 +471,7 @@ export default function TrainerPortal() {
       console.log('Updating program status:', { programId, newStatus });
       
       // Debug: Check the request details
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       const url = `${baseUrl}/api/programs`;
       console.log('Debug: Request URL:', url);
       console.log('Debug: Request body:', { id: programId, status: newStatus });

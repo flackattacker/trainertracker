@@ -63,7 +63,7 @@ export default function ClientPortal() {
       setLoading(true);
       
       // Call the API to authenticate and get client data
-      const response = await fetch('https://trainer-tracker-api.onrender.com/api/auth/client-login', {
+      const response = await fetch('http://localhost:3001/api/auth/client-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -225,7 +225,7 @@ export default function ClientPortal() {
     if (!token) return;
     
     try {
-      const response = await fetch('https://trainer-tracker-api.onrender.com/api/clients/me', {
+      const response = await fetch('http://localhost:3001/api/clients/me', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -245,7 +245,7 @@ export default function ClientPortal() {
   // Handle workout session save
   const handleSaveSessionWorkout = async (workoutData: any) => {
     try {
-      const response = await fetch('https://trainer-tracker-api.onrender.com/api/sessions/workout', {
+      const response = await fetch('http://localhost:3001/api/sessions/workout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
