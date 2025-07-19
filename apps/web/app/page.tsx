@@ -11,11 +11,8 @@ export default function Home() {
       <nav className={styles.nav}>
         <div className={styles.navContent}>
           <div className={styles.logo}>
-            <img 
-              src="/logo.png" 
-              alt="Family Roots Therapy & Wellness Logo" 
-              className={styles.logoImage}
-            />
+            <h1>Family Roots</h1>
+            <span>Therapy & Wellness</span>
           </div>
           <div className={styles.navLinks}>
             <Link href="/about" className={styles.navLink}>About</Link>
@@ -46,11 +43,9 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.heroImage}>
-          <img 
-            src="/hero-image.jpg" 
-            alt="Personal Training and Wellness" 
-            className={styles.heroImage}
-          />
+          <div className={styles.imagePlaceholder}>
+            <span>Wellness Image</span>
+          </div>
         </div>
       </section>
 
@@ -78,7 +73,21 @@ export default function Home() {
         </div>
       </section>
 
-
+      {/* CTA Section */}
+      <section className={styles.cta}>
+        <div className={styles.sectionContent}>
+          <h2>Ready to Begin Your Journey?</h2>
+          <p>Choose your path to wellness and start your transformation today.</p>
+          <div className={styles.ctaButtons}>
+            <Link href="/trainer" className={styles.primaryButton}>
+              Access Trainer Portal
+            </Link>
+            <Link href="/client" className={styles.secondaryButton}>
+              Access Client Portal
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className={styles.footer}>

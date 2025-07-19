@@ -14,9 +14,6 @@ import TrainerSessions from '../../src/components/TrainerSessions';
 import ProgramBuilder from '../../src/components/ProgramBuilder';
 import ProgramProgress from '../../src/components/ProgramProgress';
 import SessionWorkoutEntry from '../../src/components/SessionWorkoutEntry';
-import ProgressiveOverload from '../../src/components/ProgressiveOverload';
-import ProgramAnalytics from '../../src/components/ProgramAnalytics';
-import { TemplateManagement } from '../../src/components/TemplateManagement';
 
 // Import data utilities
 import { clearAuth } from '../../src/utils/clearAuth';
@@ -90,7 +87,7 @@ type Progress = {
   updatedAt: string;
 };
 
-type View = 'dashboard' | 'clients' | 'program-builder' | 'progress-analytics' | 'scheduling' | 'onboarding' | 'client-creation' | 'client-detail';
+type View = 'dashboard' | 'clients' | 'assessments' | 'progress' | 'scheduling' | 'program-builder' | 'onboarding' | 'client-creation' | 'client-detail';
 
 export default function TrainerPortal() {
   const [user, setUser] = useState<User | null>(null);
@@ -106,8 +103,6 @@ export default function TrainerPortal() {
   const [selectedProgressClient, setSelectedProgressClient] = useState<Client | null>(null);
   const [showCompletedPrograms, setShowCompletedPrograms] = useState(false);
   const [selectedWorkoutForEntry, setSelectedWorkoutForEntry] = useState<string | null>(null);
-  const [selectedProgressiveOverloadProgram, setSelectedProgressiveOverloadProgram] = useState<Program | null>(null);
-  const [selectedAnalyticsProgram, setSelectedAnalyticsProgram] = useState<Program | null>(null);
 
   // Utility function to format OPT phase names
   const formatOptPhase = (phase: string) => {
@@ -164,7 +159,7 @@ export default function TrainerPortal() {
 
   // API call helper
   const apiCall = async (endpoint: string, options: RequestInit = {}) => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
     const url = `${baseUrl}${endpoint}`;
     
     const config: RequestInit = {
@@ -176,34 +171,14 @@ export default function TrainerPortal() {
       ...options,
     };
 
-    console.log('Debug: API call details:', {
-      url,
-      method: config.method || 'GET',
-      hasToken: !!token,
-      tokenLength: token ? token.length : 0,
-      headers: config.headers
-    });
-
-    try {
-      const response = await fetch(url, config);
-      
-      console.log('Debug: Response status:', response.status);
-      console.log('Debug: Response ok:', response.ok);
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.log('Debug: Error response data:', errorData);
-        throw new Error(errorData.error || errorData.message || `HTTP error! status: ${response.status}`);
-      }
-      
-      return response.json();
-    } catch (error) {
-      console.error('Debug: Fetch error:', error);
-      if (error instanceof TypeError && error.message === 'Failed to fetch') {
-        throw new Error('Network error: Unable to connect to the server. Please check if the API server is running.');
-      }
-      throw error;
+    const response = await fetch(url, config);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
     }
+    
+    return response.json();
   };
 
   // Authentication
@@ -425,25 +400,6 @@ export default function TrainerPortal() {
     try {
       setLoading(true);
       
-      // Debug: Check token and localStorage
-      console.log('Debug: Current token state:', token);
-      console.log('Debug: Token exists:', !!token);
-      console.log('Debug: localStorage trainer-tracker-token:', localStorage.getItem('trainer-tracker-token'));
-      console.log('Debug: localStorage token:', localStorage.getItem('token'));
-      
-      // Try to get token from localStorage if state is null
-      let currentToken = token;
-      if (!currentToken) {
-        currentToken = localStorage.getItem('trainer-tracker-token') || localStorage.getItem('token');
-        console.log('Debug: Retrieved token from localStorage:', currentToken ? 'exists' : 'null');
-      }
-      
-      if (!currentToken) {
-        showMessage('No authentication token found. Please log in again.');
-        setLoading(false);
-        return;
-      }
-      
       // If activating a program, ensure only one active program per client
       if (newStatus === 'ACTIVE') {
         const programToActivate = programs.find(p => p.id === programId);
@@ -468,32 +424,10 @@ export default function TrainerPortal() {
         }
       }
       
-      console.log('Updating program status:', { programId, newStatus });
-      
-      // Debug: Check the request details
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-      const url = `${baseUrl}/api/programs`;
-      console.log('Debug: Request URL:', url);
-      console.log('Debug: Request body:', { id: programId, status: newStatus });
-      
-      // Use currentToken instead of relying on state token
-      const response = await fetch(url, {
+      await apiCall(`/api/programs`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${currentToken}`,
-        },
         body: JSON.stringify({ id: programId, status: newStatus }),
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.message || `HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      console.log('Program status update response:', data);
       
       // Update the local programs state
       setPrograms(prevPrograms => 
@@ -505,11 +439,7 @@ export default function TrainerPortal() {
       );
       
       showMessage(`Program status updated to ${newStatus}!`);
-      
-      // Refresh programs to ensure UI is updated
-      await fetchPrograms();
     } catch (error) {
-      console.error('Error updating program status:', error);
       showMessage(`Error updating program status: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
@@ -627,22 +557,28 @@ export default function TrainerPortal() {
           Clients
         </button>
         <button
+          className={`${styles.navButton} ${currentView === 'assessments' ? styles.active : ''}`}
+          onClick={() => setCurrentView('assessments')}
+        >
+          Assessments
+        </button>
+        <button
           className={`${styles.navButton} ${currentView === 'program-builder' ? styles.active : ''}`}
           onClick={() => setCurrentView('program-builder')}
         >
           Program Builder
         </button>
         <button
-          className={`${styles.navButton} ${currentView === 'progress-analytics' ? styles.active : ''}`}
-          onClick={() => setCurrentView('progress-analytics')}
-        >
-          Progress & Analytics
-        </button>
-        <button
           className={`${styles.navButton} ${currentView === 'scheduling' ? styles.active : ''}`}
           onClick={() => setCurrentView('scheduling')}
         >
           Scheduling
+        </button>
+        <button
+          className={`${styles.navButton} ${currentView === 'progress' ? styles.active : ''}`}
+          onClick={() => setCurrentView('progress')}
+        >
+          Progress
         </button>
       </nav>
 
@@ -690,7 +626,7 @@ export default function TrainerPortal() {
                     </span>
                                     <span className={assessments.filter(a => a.status === 'SCHEDULED').length > 0 ? styles.recentMetric : ''}>
                   {assessments.filter(a => a.status === 'SCHEDULED').length} Scheduled
-                    </span>
+                </span>
                   </div>
                 </div>
               </div>
@@ -778,73 +714,76 @@ export default function TrainerPortal() {
                 ))}
               </div>
             </div>
+          </div>
+        )}
 
-            {/* Assessment Management Section */}
-            <div className={styles.assessmentSection}>
-              <div className={styles.sectionHeader}>
-                <h3>Assessment Management</h3>
-                <p>Create and manage client assessments for personalized program recommendations</p>
+        {/* Assessments View */}
+        {currentView === 'assessments' && (
+          <div className={styles.assessmentsView}>
+            <div className={styles.viewHeader}>
+              <h2>Assessment Management</h2>
+              <div className={styles.headerActions}>
+                <Button appName="web" onClick={() => setCurrentView('assessments')} className={styles.addButton}>
+                  + New Assessment
+                </Button>
               </div>
-              
-              <div className={styles.createSection}>
-                <h4>Create New Assessment</h4>
-                <AssessmentForm
-                  assessment={newAssessment}
-                  onChange={setNewAssessment}
-                  clients={clients}
-                />
-                <div className={styles.formActions}>
-                  <Button appName="web" onClick={createAssessment} className={styles.createButton}>
-                    Create Assessment
-                  </Button>
-                </div>
-              </div>
+            </div>
 
-              <div className={styles.assessmentsList}>
-                <h4>Recent Assessments ({assessments.length})</h4>
-                <div className={styles.assessmentGrid}>
-                  {assessments.map((assessment) => (
-                    <div key={assessment.id} className={styles.assessmentCard}>
-                      <div className={styles.assessmentHeader}>
-                        <h5>{assessment.type} Assessment</h5>
-                        <span className={styles.assessmentType}>{assessment.type}</span>
-                      </div>
-                      <div className={styles.assessmentClient}>
-                        Client: {clients.find(c => c.id === assessment.clientId)?.firstName} {clients.find(c => c.id === assessment.clientId)?.lastName}
-                      </div>
-                      <div className={styles.assessmentDate}>
-                        Date: {new Date(assessment.assessmentDate).toLocaleDateString()}
-                      </div>
-                      <div className={styles.assessmentAssessor}>
-                        Assessor: {assessment.assessor}
-                      </div>
-                      <div className={styles.assessmentActions}>
-                        <Button appName="web" className={styles.viewButton}>
-                          View Details
-                        </Button>
-                      </div>
+            <div className={styles.createSection}>
+              <h3>Create New Assessment</h3>
+              <AssessmentForm
+                assessment={newAssessment}
+                onChange={setNewAssessment}
+                clients={clients}
+              />
+              <div className={styles.formActions}>
+                <Button appName="web" onClick={createAssessment} className={styles.createButton}>
+                  Create Assessment
+                </Button>
+              </div>
+            </div>
+
+            <div className={styles.assessmentsList}>
+              <h3>Recent Assessments ({assessments.length})</h3>
+              <div className={styles.assessmentGrid}>
+                {assessments.map((assessment) => (
+                  <div key={assessment.id} className={styles.assessmentCard}>
+                    <div className={styles.assessmentHeader}>
+                      <h4>{assessment.type} Assessment</h4>
+                      <span className={styles.assessmentType}>{assessment.type}</span>
                     </div>
-                  ))}
-                </div>
+                    <div className={styles.assessmentClient}>
+                      Client: {clients.find(c => c.id === assessment.clientId)?.firstName} {clients.find(c => c.id === assessment.clientId)?.lastName}
+                    </div>
+                    <div className={styles.assessmentDate}>
+                      Date: {new Date(assessment.assessmentDate).toLocaleDateString()}
+                    </div>
+                    <div className={styles.assessmentAssessor}>
+                      Assessor: {assessment.assessor}
+                    </div>
+                    <div className={styles.assessmentActions}>
+                      <Button appName="web" className={styles.viewButton}>
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         )}
 
-
-
-        {/* Progress & Analytics View */}
-        {currentView === 'progress-analytics' && (
+        {/* Progress View */}
+        {currentView === 'progress' && (
           <div className={styles.progressView}>
             <div className={styles.viewHeader}>
-              <h2>Progress & Analytics</h2>
-              <p>Track client progress, analyze performance, and get progression recommendations</p>
+              <h2>Program Progress Tracking</h2>
+              <p>Track client progress through their training programs with detailed performance analytics</p>
             </div>
 
-            {/* Main Program Selection View */}
-            {!selectedProgressProgram && !selectedProgressiveOverloadProgram && !selectedAnalyticsProgram && (
+            {!selectedProgressProgram ? (
               <div className={styles.programSelection}>
-                <h3>Select a Program to Manage</h3>
+                <h3>Select a Program to View Progress</h3>
                 
                 {/* Active Programs */}
                 <div className={styles.programSection}>
@@ -889,32 +828,14 @@ export default function TrainerPortal() {
                                 }}
                                 className={styles.viewButton}
                               >
-                                📊 Progress Tracking
-                              </Button>
-                              <Button 
-                                appName="web" 
-                                onClick={() => {
-                                  setSelectedProgressiveOverloadProgram(program);
-                                }}
-                                className={styles.viewButton}
-                              >
-                                📈 Progressive Overload
-                              </Button>
-                              <Button 
-                                appName="web" 
-                                onClick={() => {
-                                  setSelectedAnalyticsProgram(program);
-                                }}
-                                className={styles.viewButton}
-                              >
-                                📋 Analytics
+                                View Progress
                               </Button>
                               <Button 
                                 appName="web" 
                                 onClick={() => handleUpdateProgramStatus(program.id, 'COMPLETED')}
                                 className={`${styles.statusButton} ${styles.completed}`}
                               >
-                                ✅ Mark Complete
+                                Mark Complete
                               </Button>
                             </div>
                           </div>
@@ -976,14 +897,14 @@ export default function TrainerPortal() {
                                     }}
                                     className={styles.viewButton}
                                   >
-                                    📊 View Progress
+                                    View Progress
                                   </Button>
                                   <Button 
                                     appName="web" 
                                     onClick={() => handleUpdateProgramStatus(program.id, 'ACTIVE')}
                                     className={`${styles.statusButton} ${styles.active}`}
                                   >
-                                    🔄 Reactivate
+                                    Reactivate
                                   </Button>
                                 </div>
                               </div>
@@ -994,10 +915,7 @@ export default function TrainerPortal() {
                   </div>
                 )}
               </div>
-            )}
-
-            {/* Progress Tracking Detail View */}
-            {selectedProgressProgram && (
+            ) : (
               <div className={styles.progressDetail}>
                 <div className={styles.progressHeader}>
                   <Button 
@@ -1010,8 +928,7 @@ export default function TrainerPortal() {
                   >
                     ← Back to Programs
                   </Button>
-                  <h3>📊 Progress Tracking - {selectedProgressProgram.programName}</h3>
-                  {selectedProgressProgram.status === 'ACTIVE' && (
+                  {selectedProgressProgram && selectedProgressProgram.status === 'ACTIVE' && (
                     <Button 
                       appName="web" 
                       onClick={() => setSelectedWorkoutForEntry('new-session')}
@@ -1035,50 +952,6 @@ export default function TrainerPortal() {
                     clientId={selectedProgressProgram.clientId}
                   />
                 )}
-              </div>
-            )}
-
-            {/* Progressive Overload Detail View */}
-            {selectedProgressiveOverloadProgram && (
-              <div className={styles.progressiveOverloadDetail}>
-                <div className={styles.progressiveOverloadHeader}>
-                  <Button 
-                    appName="web" 
-                    onClick={() => setSelectedProgressiveOverloadProgram(null)}
-                    className={styles.backButton}
-                  >
-                    ← Back to Programs
-                  </Button>
-                  <h3>📈 Progressive Overload - {selectedProgressiveOverloadProgram.programName}</h3>
-                </div>
-                
-                <ProgressiveOverload 
-                  clientId={selectedProgressiveOverloadProgram.clientId}
-                  programId={selectedProgressiveOverloadProgram.id}
-                  currentPhase={selectedProgressiveOverloadProgram.optPhase as any}
-                  experienceLevel={selectedProgressiveOverloadProgram.data?.experienceLevel || 'BEGINNER'}
-                />
-              </div>
-            )}
-
-            {/* Analytics Detail View */}
-            {selectedAnalyticsProgram && (
-              <div className={styles.analyticsDetail}>
-                <div className={styles.analyticsHeader}>
-                  <Button 
-                    appName="web" 
-                    onClick={() => setSelectedAnalyticsProgram(null)}
-                    className={styles.backButton}
-                  >
-                    ← Back to Programs
-                  </Button>
-                  <h3>📋 Analytics - {selectedAnalyticsProgram.programName}</h3>
-                </div>
-                
-                <ProgramAnalytics 
-                  programId={selectedAnalyticsProgram.id}
-                  clientId={selectedAnalyticsProgram.clientId}
-                />
               </div>
             )}
           </div>
@@ -1167,11 +1040,14 @@ export default function TrainerPortal() {
                   <div className={styles.clientDetailSection}>
                     <h3 className={styles.sectionTitle}><span className={styles.detailIcon}>⚡</span> Quick Actions</h3>
                     <div className={styles.quickActionGrid}>
+                      <Button appName="web" onClick={() => setCurrentView('assessments')} className={styles.quickActionButton}>
+                        📝 Create Assessment
+                      </Button>
                       <Button appName="web" onClick={() => setCurrentView('program-builder')} className={styles.quickActionButton}>
                         🏋️ Build Program
                       </Button>
-                      <Button appName="web" onClick={() => setCurrentView('progress-analytics')} className={styles.quickActionButton}>
-                        📈 Progress & Analytics
+                      <Button appName="web" onClick={() => setCurrentView('progress')} className={styles.quickActionButton}>
+                        📈 Record Progress
                       </Button>
                       <Button appName="web" onClick={() => setCurrentView('scheduling')} className={styles.quickActionButton}>
                         📅 Schedule Session
@@ -1197,32 +1073,9 @@ export default function TrainerPortal() {
         {/* Program Builder View */}
         {currentView === 'program-builder' && (
           <div className={styles.programBuilderView}>
-            <div className={styles.viewHeader}>
-              <h2>Program Builder</h2>
-              <p>Create programs, manage templates, and use assessment-based recommendations</p>
-            </div>
-            
-            {/* Program Builder Section */}
-            <div className={styles.programBuilderSection}>
-              <div className={styles.sectionHeader}>
-                <h3>Program Creation</h3>
-                <p>Build custom programs for your clients</p>
-              </div>
-              <ProgramBuilder />
-            </div>
-            
-            {/* Template Management Section */}
-            <div className={styles.templateSection}>
-              <div className={styles.sectionHeader}>
-                <h3>Template Management</h3>
-                <p>Create and manage program templates for quick program creation</p>
-              </div>
-              <TemplateManagement />
-            </div>
+            <ProgramBuilder />
           </div>
         )}
-
-
 
         {/* Client Creation View */}
         {currentView === 'client-creation' && (

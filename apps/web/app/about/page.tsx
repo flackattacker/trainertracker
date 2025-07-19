@@ -9,11 +9,8 @@ export default function About() {
         <div className={styles.navContent}>
           <div className={styles.logo}>
             <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <img 
-                src="/logo.png" 
-                alt="Family Roots Therapy & Wellness Logo" 
-                className={styles.logoImage}
-              />
+              <h1>Family Roots</h1>
+              <span>Therapy & Wellness</span>
             </Link>
           </div>
           <div className={styles.navLinks}>
@@ -23,61 +20,39 @@ export default function About() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className={styles.aboutHero}>
-        <div className={styles.sectionContent}>
-          <div className={styles.aboutHeroContent}>
-            <h1 className={styles.aboutTitle}>About Family Roots</h1>
-            <p className={styles.aboutSubtitle}>
-              Nurturing wellness, building strength, and creating lasting change through 
-              comprehensive therapy and wellness services.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* About Section */}
       <section className={styles.aboutSection}>
         <div className={styles.sectionContent}>
+          <h1 className={styles.aboutTitle}>About Family Roots</h1>
           <div className={styles.aboutGrid}>
             <div className={styles.aboutContent}>
-              <div className={styles.aboutCard}>
-                <div className={styles.aboutIcon}>🎯</div>
-                <h2>Our Mission</h2>
-                <p>
-                  At Family Roots Therapy and Wellness, we believe that true healing begins with understanding 
-                  the whole person. Our mission is to provide comprehensive therapy and wellness services that 
-                  address not just the symptoms, but the root causes of life's challenges.
-                </p>
-              </div>
+              <h2>Our Mission</h2>
+              <p>
+                At Family Roots Therapy and Wellness, we believe that true healing begins with understanding 
+                the whole person. Our mission is to provide comprehensive therapy and wellness services that 
+                address not just the symptoms, but the root causes of life's challenges.
+              </p>
               
-              <div className={styles.aboutCard}>
-                <div className={styles.aboutIcon}>🌱</div>
-                <h2>Our Approach</h2>
-                <p>
-                  We take a holistic approach to wellness, combining evidence-based therapeutic techniques 
-                  with personalized wellness programs. Our team of experienced professionals works together 
-                  to create integrated treatment plans that support your physical, mental, and emotional well-being.
-                </p>
-              </div>
+              <h2>Our Approach</h2>
+              <p>
+                We take a holistic approach to wellness, combining evidence-based therapeutic techniques 
+                with personalized wellness programs. Our team of experienced professionals works together 
+                to create integrated treatment plans that support your physical, mental, and emotional well-being.
+              </p>
               
-              <div className={styles.aboutCard}>
-                <div className={styles.aboutIcon}>💎</div>
-                <h2>Our Values</h2>
-                <ul className={styles.valuesList}>
-                  <li><strong>Compassion:</strong> We approach every client with empathy and understanding</li>
-                  <li><strong>Excellence:</strong> We maintain the highest standards in all our services</li>
-                  <li><strong>Family-Centered:</strong> We recognize the importance of family in the healing process</li>
-                  <li><strong>Innovation:</strong> We continuously evolve our methods to provide the best care</li>
-                  <li><strong>Accessibility:</strong> We strive to make quality care available to everyone</li>
-                </ul>
-              </div>
+              <h2>Our Values</h2>
+              <ul>
+                <li><strong>Compassion:</strong> We approach every client with empathy and understanding</li>
+                <li><strong>Excellence:</strong> We maintain the highest standards in all our services</li>
+                <li><strong>Family-Centered:</strong> We recognize the importance of family in the healing process</li>
+                <li><strong>Innovation:</strong> We continuously evolve our methods to provide the best care</li>
+                <li><strong>Accessibility:</strong> We strive to make quality care available to everyone</li>
+              </ul>
             </div>
             
             <div className={styles.aboutImage}>
               <div className={styles.imagePlaceholder}>
-                <div className={styles.placeholderIcon}>🏥</div>
-                <span>Our Wellness Center</span>
+                <span>Team Photo</span>
               </div>
             </div>
           </div>
@@ -88,24 +63,21 @@ export default function About() {
       <section className={styles.teamSection}>
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>Our Team</h2>
-          <p className={styles.sectionSubtitle}>
-            Meet our dedicated professionals committed to your wellness journey
-          </p>
           <div className={styles.teamGrid}>
             <div className={styles.teamCard}>
               <div className={styles.teamIcon}>👨‍⚕️</div>
               <h3>Licensed Therapists</h3>
-              <p>Our team of licensed mental health professionals provides individual, family, and group therapy services with expertise in various therapeutic modalities.</p>
+              <p>Our team of licensed mental health professionals provides individual, family, and group therapy services.</p>
             </div>
             <div className={styles.teamCard}>
               <div className={styles.teamIcon}>💪</div>
               <h3>Wellness Specialists</h3>
-              <p>Certified fitness and wellness professionals who create personalized programs for physical health, nutrition, and lifestyle optimization.</p>
+              <p>Certified fitness and wellness professionals who create personalized programs for physical health.</p>
             </div>
             <div className={styles.teamCard}>
               <div className={styles.teamIcon}>👨‍👩‍👧‍👦</div>
               <h3>Family Counselors</h3>
-              <p>Specialists in family dynamics who help strengthen relationships, improve communication, and create harmonious family environments.</p>
+              <p>Specialists in family dynamics who help strengthen relationships and improve communication.</p>
             </div>
           </div>
         </div>
@@ -115,103 +87,86 @@ export default function About() {
       <section id="contact" className={styles.contactSection}>
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>Contact Us</h2>
-          <p className={styles.sectionSubtitle}>
-            Ready to begin your journey to wellness? We're here to help you take the first step.
-          </p>
           <div className={styles.contactGrid}>
             <div className={styles.contactInfo}>
-              <div className={styles.contactCard}>
-                <h3>Get in Touch</h3>
-                <p>We're here to support you on your wellness journey. Reach out to us for any questions or to schedule your first appointment.</p>
+              <h3>Get in Touch</h3>
+              <p>Ready to begin your journey to wellness? We're here to help you take the first step.</p>
+              
+              <div className={styles.contactDetails}>
+                <div className={styles.contactItem}>
+                  <span className={styles.contactIcon}>📍</span>
+                  <div>
+                    <h4>Address</h4>
+                    <p>123 Wellness Way<br />Healing City, HC 12345</p>
+                  </div>
+                </div>
                 
-                <div className={styles.contactDetails}>
-                  <div className={styles.contactItem}>
-                    <span className={styles.contactIcon}>📍</span>
-                    <div>
-                      <h4>Address</h4>
-                      <p>123 Wellness Way<br />Healing City, HC 12345</p>
-                    </div>
+                <div className={styles.contactItem}>
+                  <span className={styles.contactIcon}>📞</span>
+                  <div>
+                    <h4>Phone</h4>
+                    <p>(555) 123-4567</p>
                   </div>
-                  
-                  <div className={styles.contactItem}>
-                    <span className={styles.contactIcon}>📞</span>
-                    <div>
-                      <h4>Phone</h4>
-                      <p>(555) 123-4567</p>
-                    </div>
+                </div>
+                
+                <div className={styles.contactItem}>
+                  <span className={styles.contactIcon}>✉️</span>
+                  <div>
+                    <h4>Email</h4>
+                    <p>info@familyrootswellness.com</p>
                   </div>
-                  
-                  <div className={styles.contactItem}>
-                    <span className={styles.contactIcon}>✉️</span>
-                    <div>
-                      <h4>Email</h4>
-                      <p>info@familyrootswellness.com</p>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.contactItem}>
-                    <span className={styles.contactIcon}>🕒</span>
-                    <div>
-                      <h4>Hours</h4>
-                      <p>Monday - Friday: 8:00 AM - 8:00 PM<br />
-                      Saturday: 9:00 AM - 5:00 PM<br />
-                      Sunday: Closed</p>
-                    </div>
+                </div>
+                
+                <div className={styles.contactItem}>
+                  <span className={styles.contactIcon}>🕒</span>
+                  <div>
+                    <h4>Hours</h4>
+                    <p>Monday - Friday: 8:00 AM - 8:00 PM<br />
+                    Saturday: 9:00 AM - 5:00 PM<br />
+                    Sunday: Closed</p>
                   </div>
                 </div>
               </div>
             </div>
             
             <div className={styles.contactForm}>
-              <div className={styles.formCard}>
-                <h3>Send us a Message</h3>
-                <form className={styles.form}>
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="name">Name *</label>
-                      <input type="text" id="name" name="name" required placeholder="Your full name" />
-                    </div>
-                    
-                    <div className={styles.formGroup}>
-                      <label htmlFor="email">Email *</label>
-                      <input type="email" id="email" name="email" required placeholder="your.email@example.com" />
-                    </div>
-                  </div>
-                  
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="phone">Phone</label>
-                      <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" />
-                    </div>
-                    
-                    <div className={styles.formGroup}>
-                      <label htmlFor="service">Service Interest</label>
-                      <select id="service" name="service">
-                        <option value="">Select a service</option>
-                        <option value="therapy">Therapy Services</option>
-                        <option value="wellness">Wellness Programs</option>
-                        <option value="family">Family Support</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.formGroup}>
-                    <label htmlFor="message">Message *</label>
-                    <textarea 
-                      id="message" 
-                      name="message" 
-                      rows={5} 
-                      required 
-                      placeholder="Tell us about your wellness goals and how we can help..."
-                    ></textarea>
-                  </div>
-                  
-                  <button type="submit" className={styles.primaryButton}>
-                    Send Message
-                  </button>
-                </form>
-              </div>
+              <h3>Send us a Message</h3>
+              <form className={styles.form}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="name">Name *</label>
+                  <input type="text" id="name" name="name" required />
+                </div>
+                
+                <div className={styles.formGroup}>
+                  <label htmlFor="email">Email *</label>
+                  <input type="email" id="email" name="email" required />
+                </div>
+                
+                <div className={styles.formGroup}>
+                  <label htmlFor="phone">Phone</label>
+                  <input type="tel" id="phone" name="phone" />
+                </div>
+                
+                <div className={styles.formGroup}>
+                  <label htmlFor="service">Service Interest</label>
+                  <select id="service" name="service">
+                    <option value="">Select a service</option>
+                    <option value="therapy">Therapy Services</option>
+                    <option value="wellness">Wellness Programs</option>
+                    <option value="family">Family Support</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div className={styles.formGroup}>
+                  <label htmlFor="message">Message *</label>
+                  <textarea id="message" name="message" rows={5} required></textarea>
+                </div>
+                
+                <button type="submit" className={styles.primaryButton}>
+                  Send Message
+                </button>
+              </form>
             </div>
           </div>
         </div>

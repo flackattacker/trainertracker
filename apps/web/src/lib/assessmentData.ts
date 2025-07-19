@@ -393,10 +393,6 @@ export const defaultFitnessAssessmentData: FitnessAssessmentData = {
   weight: 0,
   bmi: 0,
   restingHeartRate: 0,
-  bloodPressure: {
-    systolic: 0,
-    diastolic: 0
-  },
 };
 
 export const defaultBodyCompositionData: BodyCompositionData = {};

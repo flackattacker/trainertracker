@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: linear-gradient(135deg, var(--sand-light) 0%, var(--bg-primary) 100%);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text-dark);
   transition: all 0.3s ease;
@@ -26,17 +26,21 @@
   align-items: center;
 }
 
-.logoImage {
-  height: 150px;
-  width: auto;
-  object-fit: contain;
-  border-radius: 20px;
-  transition: transform 0.3s ease;
-  cursor: pointer;
+.logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ocean-medium);
+  margin: 0;
+  line-height: 1.2;
+  transition: color 0.3s ease;
 }
 
-.logoImage:hover {
-  transform: scale(1.05);
+.logo span {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 400;
+  display: block;
+  transition: color 0.3s ease;
 }
 
 .navLinks {
@@ -54,7 +58,7 @@
 }
 
 .navLink:hover {
-  color: var(--cream-accent);
+  color: var(--ocean-medium);
 }
 
 /* Hero Section */
@@ -85,7 +89,7 @@
 }
 
 .highlight {
-  color: var(--cream-accent);
+  color: var(--ocean-medium);
   display: block;
   transition: color 0.3s ease;
 }
@@ -105,29 +109,29 @@
 }
 
 .primaryButton {
-  background: var(--cream-dark);
+  background: var(--ocean-medium);
   color: var(--white);
   padding: 1rem 2rem;
   border-radius: 50px;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+  box-shadow: 0 4px 15px rgba(90, 155, 184, 0.3);
   border: none;
   cursor: pointer;
 }
 
 .primaryButton:hover {
-  background: var(--cream-accent);
+  background: var(--ocean-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(234, 179, 8, 0.4);
+  box-shadow: 0 6px 20px rgba(90, 155, 184, 0.4);
 }
 
 .secondaryButton {
   background: transparent;
-  color: var(--cream-accent);
+  color: var(--ocean-medium);
   padding: 1rem 2rem;
-  border: 2px solid var(--cream-accent);
+  border: 2px solid var(--ocean-medium);
   border-radius: 50px;
   text-decoration: none;
   font-weight: 600;
@@ -136,7 +140,7 @@
 }
 
 .secondaryButton:hover {
-  background: var(--cream-accent);
+  background: var(--ocean-medium);
   color: var(--white);
   transform: translateY(-2px);
 }
@@ -147,18 +151,19 @@
   align-items: center;
 }
 
-.heroImage img {
+.imagePlaceholder {
   width: 400px;
   height: 300px;
-  object-fit: cover;
+  background: linear-gradient(135deg, var(--sage-light), var(--ocean-light));
   border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 1.2rem;
+  font-weight: 500;
   box-shadow: 0 10px 30px var(--shadow);
   transition: all 0.3s ease;
-}
-
-.heroImage img:hover {
-  transform: scale(1.02);
-  box-shadow: 0 15px 40px var(--shadow);
 }
 
 /* Services Section */
@@ -336,7 +341,7 @@
     justify-content: center;
   }
 
-  .heroImage img {
+  .imagePlaceholder {
     width: 100%;
     max-width: 300px;
     height: 200px;
@@ -380,427 +385,6 @@
   }
 
   .serviceCard {
-    padding: 1.5rem;
-  }
-}
-
-/* About Page Styles */
-.aboutHero {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-  padding: 6rem 2rem 4rem;
-  text-align: center;
-  position: relative;
-}
-
-.aboutHero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23f0f0f0" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23f0f0f0" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23f0f0f0" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="%23f0f0f0" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="%23f0f0f0" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  opacity: 0.3;
-}
-
-.aboutHeroContent {
-  position: relative;
-  z-index: 1;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.aboutTitle {
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 1.5rem;
-  line-height: 1.2;
-}
-
-.aboutSubtitle {
-  font-size: 1.3rem;
-  color: var(--text-medium);
-  line-height: 1.6;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.aboutSection {
-  padding: 5rem 2rem;
-  background: var(--bg-primary);
-}
-
-.aboutGrid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 4rem;
-  align-items: start;
-}
-
-.aboutContent {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-}
-
-.aboutCard {
-  background: var(--bg-secondary);
-  padding: 2.5rem;
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.aboutCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--cream-accent), var(--cream-dark));
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.aboutCard:hover::before {
-  transform: scaleX(1);
-}
-
-.aboutCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px var(--shadow);
-}
-
-.aboutIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.aboutCard h2 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 1rem;
-}
-
-.aboutCard p {
-  color: var(--text-medium);
-  line-height: 1.6;
-  margin-bottom: 0;
-}
-
-.valuesList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.valuesList li {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-medium);
-  line-height: 1.5;
-}
-
-.valuesList li:last-child {
-  border-bottom: none;
-}
-
-.valuesList strong {
-  color: var(--text-dark);
-  font-weight: 600;
-}
-
-.aboutImage {
-  position: sticky;
-  top: 2rem;
-}
-
-.imagePlaceholder {
-  background: var(--bg-secondary);
-  border: 2px dashed var(--border-color);
-  border-radius: 20px;
-  padding: 3rem 2rem;
-  text-align: center;
-  color: var(--text-medium);
-  transition: all 0.3s ease;
-}
-
-.imagePlaceholder:hover {
-  border-color: var(--cream-accent);
-  background: var(--bg-primary);
-}
-
-.placeholderIcon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.teamSection {
-  background: var(--bg-secondary);
-  padding: 5rem 2rem;
-}
-
-.sectionSubtitle {
-  text-align: center;
-  font-size: 1.2rem;
-  color: var(--text-medium);
-  margin-bottom: 3rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.teamGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.teamCard {
-  background: var(--bg-primary);
-  padding: 2.5rem;
-  border-radius: 20px;
-  text-align: center;
-  transition: all 0.3s ease;
-  border: 1px solid var(--border-color);
-  position: relative;
-  overflow: hidden;
-}
-
-.teamCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, transparent 0%, var(--cream-accent) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.teamCard:hover::before {
-  opacity: 0.05;
-}
-
-.teamCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px var(--shadow);
-}
-
-.teamIcon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  display: block;
-}
-
-.teamCard h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 1rem;
-}
-
-.teamCard p {
-  color: var(--text-medium);
-  line-height: 1.6;
-}
-
-.contactSection {
-  background: var(--bg-primary);
-  padding: 5rem 2rem;
-}
-
-.contactGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: start;
-}
-
-.contactCard,
-.formCard {
-  background: var(--bg-secondary);
-  padding: 2.5rem;
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  height: 100%;
-}
-
-.contactCard h3,
-.formCard h3 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 1rem;
-}
-
-.contactCard p {
-  color: var(--text-medium);
-  line-height: 1.6;
-  margin-bottom: 2rem;
-}
-
-.contactDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.contactItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
-  background: var(--bg-primary);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.contactItem:hover {
-  transform: translateX(5px);
-  box-shadow: 0 5px 15px var(--shadow);
-}
-
-.contactIcon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
-  margin-top: 0.25rem;
-}
-
-.contactItem h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 0.5rem;
-}
-
-.contactItem p {
-  color: var(--text-medium);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.formGroup label {
-  font-weight: 500;
-  color: var(--text-dark);
-  font-size: 0.9rem;
-}
-
-.formGroup input,
-.formGroup select,
-.formGroup textarea {
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: var(--bg-primary);
-  color: var(--text-dark);
-}
-
-.formGroup input:focus,
-.formGroup select:focus,
-.formGroup textarea:focus {
-  outline: none;
-  border-color: var(--cream-accent);
-  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
-}
-
-.formGroup input::placeholder,
-.formGroup textarea::placeholder {
-  color: var(--text-light);
-}
-
-.formGroup textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-/* Responsive Design for About Page */
-@media (max-width: 768px) {
-  .aboutTitle {
-    font-size: 2.5rem;
-  }
-  
-  .aboutSubtitle {
-    font-size: 1.1rem;
-  }
-  
-  .aboutGrid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .aboutImage {
-    position: static;
-  }
-  
-  .contactGrid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .formRow {
-    grid-template-columns: 1fr;
-  }
-  
-  .teamGrid {
-    grid-template-columns: 1fr;
-  }
-  
-  .aboutCard,
-  .teamCard,
-  .contactCard,
-  .formCard {
-    padding: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .aboutTitle {
-    font-size: 2rem;
-  }
-  
-  .aboutHero {
-    padding: 4rem 1rem 2rem;
-  }
-  
-  .aboutSection,
-  .teamSection,
-  .contactSection {
-    padding: 3rem 1rem;
-  }
-  
-  .aboutCard,
-  .teamCard,
-  .contactCard,
-  .formCard {
     padding: 1.5rem;
   }
 }

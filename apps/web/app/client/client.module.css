@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-primary);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
   padding: 1rem;
 }
 
@@ -29,11 +29,11 @@
 .clientLogoIcon {
   font-size: 3rem;
   display: block;
-  color: var(--cream-accent);
+  color: var(--primary-color);
 }
 
 .clientHeader h1 {
-  color: var(--cream-accent);
+  color: var(--primary-color);
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -83,9 +83,9 @@
 
 .clientInput:focus {
   outline: none;
-  border-color: var(--cream-accent);
+  border-color: var(--primary-color);
   background: var(--bg-primary);
-  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+  box-shadow: 0 0 0 3px rgba(90, 155, 184, 0.1);
 }
 
 .clientButtons {
@@ -96,7 +96,7 @@
 }
 
 .clientPrimaryButton {
-  background: var(--cream-dark);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: var(--bg-primary);
   border: none;
   padding: 0.875rem 1.5rem;
@@ -110,9 +110,9 @@
 }
 
 .clientPrimaryButton:hover {
-  background: var(--cream-accent);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);
+  box-shadow: 0 8px 20px rgba(90, 124, 101, 0.3);
 }
 
 .clientPrimaryButton:disabled {
@@ -124,8 +124,8 @@
 
 .clientSecondaryButton {
   background: transparent;
-  color: var(--cream-accent);
-  border: 2px solid var(--cream-accent);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
   padding: 0.875rem 1.5rem;
   border-radius: 10px;
   font-size: 1rem;
@@ -138,10 +138,10 @@
 }
 
 .clientSecondaryButton:hover {
-  background: var(--cream-accent);
+  background: var(--primary-color);
   color: var(--bg-primary);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);
+  box-shadow: 0 8px 20px rgba(90, 124, 101, 0.3);
 }
 
 .clientDemoInfo {
@@ -161,13 +161,13 @@
 /* Client Portal Main Styles - Aligned with Trainer Portal */
 .clientPortal {
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
 }
 
 /* Client App Layout - Main container for logged-in state */
 .clientApp {
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
   display: flex;
   flex-direction: column;
 }
@@ -192,7 +192,7 @@
 }
 
 .clientHeaderContent h1 {
-  color: var(--cream-accent);
+  color: var(--primary-color);
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
@@ -233,7 +233,7 @@
 }
 
 .clientDashboardHeader h2 {
-  color: var(--cream-accent);
+  color: var(--primary-color);
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -261,7 +261,7 @@
 }
 
 .clientSectionHeader h3 {
-  color: var(--cream-accent);
+  color: var(--primary-color);
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
@@ -349,7 +349,7 @@
 }
 
 .clientProgramHeader h4 {
-  color: var(--cream-accent);
+  color: var(--primary-color);
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
@@ -425,12 +425,12 @@
 
 .navButton:hover {
   background: var(--bg-secondary);
-  color: var(--cream-accent);
+  color: var(--primary-color);
 }
 
 .navButton.active {
-  color: var(--cream-accent);
-  border-bottom-color: var(--cream-accent);
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
   background: var(--bg-secondary);
 }
 
@@ -449,21 +449,9 @@
 /* Dashboard Grid Layout */
 .dashboardGrid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 400px;
   gap: 2rem;
   margin-top: 2rem;
-}
-
-.primaryColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.secondaryColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
 }
 
 .leftColumn {
@@ -495,7 +483,7 @@
 }
 
 .dashboardHeader h2 {
-  color: var(--cream-accent);
+  color: var(--primary-color);
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -530,7 +518,7 @@
 .metricCard:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px var(--shadow-light);
-  border-color: var(--cream-accent);
+  border-color: var(--primary-color);
 }
 
 .metricIcon {
@@ -546,7 +534,7 @@
 }
 
 .metricContent h3 {
-  color: var(--cream-accent);
+  color: var(--primary-color);
   font-size: 2rem;
   font-weight: 700;
   margin: 0 0 0.25rem 0;
@@ -557,114 +545,6 @@
   font-size: 0.9rem;
   margin: 0;
   opacity: 0.8;
-}
-
-.metricSubtext {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 0.25rem;
-  display: block;
-}
-
-/* Quick Actions Bar */
-.quickActions {
-  display: flex;
-  gap: 1rem;
-  margin: 1.5rem 0;
-  flex-wrap: wrap;
-}
-
-.quickActionButton {
-  background: var(--cream-accent);
-  color: var(--bg-primary);
-  border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  text-align: center;
-  flex: 1;
-  min-width: 140px;
-}
-
-.quickActionButton:hover {
-  background: var(--cream-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);
-}
-
-/* Section Count */
-.sectionCount {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  font-weight: 400;
-  margin-left: 0.5rem;
-}
-
-/* Enhanced Empty States */
-.emptyState {
-  text-align: center;
-  padding: 3rem 2rem;
-  background: var(--bg-secondary);
-  border-radius: 16px;
-  border: 2px dashed var(--border-color);
-}
-
-.emptyStateIcon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.6;
-}
-
-.emptyState h4 {
-  color: var(--text-color);
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.emptyState p {
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-/* Program Info Enhancement */
-.programInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.programInfo p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--text-color);
-}
-
-/* Primary Button */
-.primaryButton {
-  background: var(--cream-dark);
-  color: var(--bg-primary);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  text-align: center;
-  display: inline-block;
-}
-
-.primaryButton:hover {
-  background: var(--cream-accent);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);
 }
 
 /* Sections */
@@ -864,7 +744,7 @@
 }
 
 .viewButton {
-  background: var(--cream-dark);
+  background: var(--primary-color);
   color: var(--bg-primary);
   border: none;
   padding: 0.5rem 1rem;
@@ -878,14 +758,14 @@
 }
 
 .viewButton:hover {
-  background: var(--cream-accent);
+  background: var(--primary-dark);
   transform: translateY(-1px);
 }
 
 .secondaryButton {
   background: transparent;
-  color: var(--cream-accent);
-  border: 1px solid var(--cream-accent);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -897,7 +777,7 @@
 }
 
 .secondaryButton:hover {
-  background: var(--cream-accent);
+  background: var(--primary-color);
   color: var(--bg-primary);
   transform: translateY(-1px);
 }
@@ -967,31 +847,31 @@
   .clientCard {
     padding: 2rem;
     margin: 1rem;
-}
+  }
 
   .headerContent {
     padding: 0 1rem;
     flex-direction: column;
     gap: 1rem;
-}
+  }
 
   .main {
     padding: 1rem;
-}
+  }
 
   .dashboard {
     padding: 0;
-}
+  }
 
   .metricsGrid {
     grid-template-columns: 1fr;
-}
+  }
 
   .programGrid,
   .progressGrid,
   .sessionGrid {
     grid-template-columns: 1fr;
-}
+  }
 
   .programActions,
   .progressActions,
@@ -1006,7 +886,7 @@
   .navButton {
     flex: 1;
     min-width: 120px;
-}
+  }
 
   /* Dashboard Grid Responsive */
   .dashboardGrid {
@@ -1014,39 +894,9 @@
     gap: 1.5rem;
   }
 
-  .primaryColumn,
-  .secondaryColumn,
   .leftColumn,
   .rightColumn {
     gap: 1.5rem;
-  }
-
-  .quickActions {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .quickActionButton {
-    min-width: auto;
-  }
-
-  .metricsGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
-  .metricCard {
-    padding: 1rem;
-  }
-
-  .metricIcon {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-  }
-
-  .metricContent h3 {
-    font-size: 1.5rem;
   }
 
   .calendarContainer {
@@ -1126,32 +976,32 @@
 }
 
 .calendarDay.today {
-  border: 2px solid var(--cream-accent);
+  border: 2px solid var(--primary-color);
 }
 
 .calendarDay.otherMonth {
   opacity: 0.5;
-  }
-  
+}
+
 .calendarDayNumber {
   font-weight: 400;
   font-size: 0.75rem;
   margin-bottom: 0.125rem;
-    text-align: center;
+  text-align: center;
   color: var(--text-color);
-  }
-  
+}
+
 .calendarDayNumber.today {
   font-weight: 600;
-  color: var(--cream-accent);
+  color: var(--primary-color);
 }
-  
+
 .calendarDayNumber.otherMonth {
   color: var(--text-muted);
-  }
-  
+}
+
 .sessionEvent {
-  background: var(--cream-dark);
+  background: var(--primary-color);
   color: white;
   padding: 0.125rem 0.25rem;
   border-radius: 3px;
@@ -1168,7 +1018,7 @@
 .sessionEvent:hover {
   transform: scale(1.05);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
+}
 
 .sessionEvent.inPerson {
   background: #3b82f6;
@@ -1236,8 +1086,8 @@
 @media (max-width: 768px) {
   .calendarContainer {
     padding: 1rem;
-}
-
+  }
+  
   .calendarDay {
     min-height: 50px;
     padding: 0.125rem 0.0625rem;
@@ -1245,8 +1095,8 @@
   
   .calendarDayNumber {
     font-size: 0.7rem;
-}
-
+  }
+  
   .sessionEvent {
     font-size: 0.55rem;
     padding: 0.0625rem 0.125rem;
