@@ -159,7 +159,7 @@ export default function TrainerPortal() {
 
   // API call helper
   const apiCall = async (endpoint: string, options: RequestInit = {}) => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
     const url = `${baseUrl}${endpoint}`;
     
     const config: RequestInit = {
@@ -205,7 +205,7 @@ export default function TrainerPortal() {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       const response = await fetch(`${baseUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
