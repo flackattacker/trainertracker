@@ -38,6 +38,12 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     
+    // Convert dateOfBirth string to proper DateTime if needed
+    let dateOfBirth = body.dateOfBirth;
+    if (typeof dateOfBirth === 'string') {
+      dateOfBirth = new Date(dateOfBirth);
+    }
+    
     const updatedClient = await prisma.client.update({
       where: {
         id: id,
@@ -46,7 +52,7 @@ export async function PUT(
         codeName: body.codeName,
         firstName: body.firstName,
         lastName: body.lastName,
-        dateOfBirth: body.dateOfBirth,
+        dateOfBirth: dateOfBirth,
         gender: body.gender,
         email: body.email,
         phone: body.phone,

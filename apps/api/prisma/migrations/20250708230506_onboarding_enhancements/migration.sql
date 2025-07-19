@@ -37,8 +37,6 @@ CREATE TABLE "Certification" (
 );
 
 -- RedefineTables
-PRAGMA defer_foreign_keys=ON;
-PRAGMA foreign_keys=OFF;
 CREATE TABLE "new_CPT" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "email" TEXT NOT NULL,
@@ -58,8 +56,6 @@ INSERT INTO "new_CPT" ("createdAt", "email", "id", "passwordHash", "updatedAt") 
 DROP TABLE "CPT";
 ALTER TABLE "new_CPT" RENAME TO "CPT";
 CREATE UNIQUE INDEX "CPT_email_key" ON "CPT"("email");
-PRAGMA foreign_keys=ON;
-PRAGMA defer_foreign_keys=OFF;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "TrainerProfile_userId_key" ON "TrainerProfile"("userId");

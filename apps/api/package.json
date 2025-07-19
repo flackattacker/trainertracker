@@ -5,11 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --port 3001",
-    "build": "next build",
-    "start": "next start",
+    "build": "npx prisma generate && next build",
+    "start": "next start -p $PORT",
     "lint": "next lint --max-warnings 0",
     "check-types": "tsc --noEmit",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate deploy",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",
@@ -19,7 +23,8 @@
     "next": "^15.4.0-canary.116",
     "openai": "^5.9.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -34,5 +39,8 @@
     "prisma": "^6.12.0",
     "tsx": "^4.20.3",
     "typescript": "5.8.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

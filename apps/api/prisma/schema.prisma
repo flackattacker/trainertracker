@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -31,7 +31,7 @@ model CPT {
   trainerProfile TrainerProfile?
   certifications Certification[]
   sessions    Session[] // <-- Added for scheduling
-  notifications Notification[] // <-- Added for notifications
+  notifications Notification[] @relation("CPTNotifications") // <-- Added for notifications
   availabilities Availability[] // <-- Added for availability management
   availabilityExceptions AvailabilityException[] // <-- Added for availability exceptions
   // Periodization models
@@ -61,7 +61,7 @@ model Client {
   programs     Program[]
   progresses   Progress[]
   sessions     Session[] // <-- Added for scheduling
-  notifications Notification[] // <-- Added for notifications
+  notifications Notification[] @relation("ClientNotifications") // <-- Added for notifications
   macrocycles Macrocycle[] // <-- Added for periodization
 }
 
@@ -615,8 +615,10 @@ model Notification {
   progress    Progress? @relation(fields: [progressId], references: [id])
   
   // User relationships
-  cpt         CPT?     @relation(fields: [userId], references: [id])
-  client      Client?  @relation(fields: [userId], references: [id])
+  cptId       String?
+  cpt         CPT?     @relation("CPTNotifications", fields: [cptId], references: [id])
+  clientId    String?
+  client      Client?  @relation("ClientNotifications", fields: [clientId], references: [id])
 }
 
 model NotificationTemplate {
@@ -713,4 +715,18 @@ enum ProgramStatus {
   PAUSED
   COMPLETED
   ARCHIVED
+}
+
+// --- Password Reset System ---
+model PasswordReset {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  userType  UserType // CPT or CLIENT
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([email, userType])
+  @@index([token])
 }

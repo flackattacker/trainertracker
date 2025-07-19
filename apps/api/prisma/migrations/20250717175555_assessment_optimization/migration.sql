@@ -1,6 +1,4 @@
 -- RedefineTables
-PRAGMA defer_foreign_keys=ON;
-PRAGMA foreign_keys=OFF;
 CREATE TABLE "new_Assessment" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "cptId" TEXT NOT NULL,
@@ -30,5 +28,3 @@ CREATE TABLE "new_Assessment" (
 INSERT INTO "new_Assessment" ("assessmentDate", "assessor", "clientId", "cptId", "createdAt", "data", "id", "notes", "status", "type", "updatedAt") SELECT "assessmentDate", "assessor", "clientId", "cptId", "createdAt", "data", "id", "notes", "status", "type", "updatedAt" FROM "Assessment";
 DROP TABLE "Assessment";
 ALTER TABLE "new_Assessment" RENAME TO "Assessment";
-PRAGMA foreign_keys=ON;
-PRAGMA defer_foreign_keys=OFF;

@@ -27,17 +27,17 @@ async function seedExercises() {
 
   // Create exercise categories if they don't exist
   const categories = [
-    { name: 'Compound Movements', description: 'Multi-joint exercises that work multiple muscle groups' },
-    { name: 'Isolation Movements', description: 'Single-joint exercises that target specific muscles' },
-    { name: 'Cardiovascular', description: 'Aerobic and anaerobic conditioning exercises' },
-    { name: 'Bodyweight', description: 'Exercises using only body weight as resistance' },
-    { name: 'Plyometric', description: 'Explosive movements for power development' },
-    { name: 'Core & Stability', description: 'Exercises for core strength and stability' },
-    { name: 'Flexibility & Mobility', description: 'Stretching and mobility exercises' },
-    { name: 'Olympic Lifts', description: 'Explosive compound movements for power' },
-    { name: 'Kettlebell', description: 'Exercises using kettlebells' },
-    { name: 'Cable & Machine', description: 'Exercises using cable machines and equipment' }
-  ];
+  { name: 'Compound Movements', description: 'Multi-joint exercises that work multiple muscle groups' },
+  { name: 'Isolation Movements', description: 'Single-joint exercises that target specific muscles' },
+  { name: 'Cardiovascular', description: 'Aerobic and anaerobic conditioning exercises' },
+  { name: 'Bodyweight', description: 'Exercises using only body weight as resistance' },
+  { name: 'Plyometric', description: 'Explosive movements for power development' },
+  { name: 'Core & Stability', description: 'Exercises for core strength and stability' },
+  { name: 'Flexibility & Mobility', description: 'Stretching and mobility exercises' },
+  { name: 'Olympic Lifts', description: 'Explosive compound movements for power' },
+  { name: 'Kettlebell', description: 'Exercises using kettlebells' },
+  { name: 'Cable & Machine', description: 'Exercises using cable machines and equipment' }
+];
 
   for (const category of categories) {
     await prisma.exerciseCategory.upsert({
@@ -56,9 +56,9 @@ async function seedExercises() {
     try {
       // Map category
       const categoryName = categoryMapping[exercise.category as keyof typeof categoryMapping] || 'Compound Movements';
-      const category = await prisma.exerciseCategory.findUnique({
+    const category = await prisma.exerciseCategory.findUnique({
         where: { name: categoryName }
-      });
+    });
 
       if (!category) {
         console.warn(`Category not found: ${categoryName}, skipping exercise: ${exercise.name}`);
@@ -94,7 +94,7 @@ async function seedExercises() {
 
       if (result) {
         createdCount++;
-      }
+    }
     } catch (error) {
       console.error(`Error creating exercise ${exercise.name}:`, error);
     }
@@ -114,7 +114,7 @@ async function seedExercises() {
       _count: {
         select: { exercises: true }
       }
-    }
+      }
   });
 
   console.log('\n📋 Exercises by category:');

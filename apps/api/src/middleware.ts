@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
       status: 200,
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Max-Age': '86400',
       },
@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
   // Add CORS headers to all API responses
   const response = NextResponse.next();
   response.headers.set('Access-Control-Allow-Origin', 'http://localhost:3000');
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   // Allow public endpoints without authentication
@@ -35,6 +35,8 @@ export function middleware(request: NextRequest) {
     '/api/auth/register', 
     '/api/auth/login', 
     '/api/auth/client-login',
+    '/api/auth/forgot-password',
+    '/api/auth/reset-password',
     '/api/exercises',
     '/api/exercise-categories',
     '/api/prisma-test'
@@ -49,7 +51,7 @@ export function middleware(request: NextRequest) {
       status: 401,
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       }
     });
@@ -84,7 +86,7 @@ export function middleware(request: NextRequest) {
       status: 401,
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       }
     });

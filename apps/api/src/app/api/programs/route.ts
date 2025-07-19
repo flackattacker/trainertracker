@@ -183,17 +183,41 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  console.log('Programs PATCH: Request received');
+  console.log('Programs PATCH: Headers:', Object.fromEntries(req.headers.entries()));
+  
   const cptId = getCptIdFromRequest(req);
-  if (!cptId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  console.log('Programs PATCH: cptId =', cptId);
+  
+  if (!cptId) {
+    console.log('Programs PATCH: No cptId found, returning 401');
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  
   const { id, data, status } = await req.json();
-  if (!id) return NextResponse.json({ error: 'id required.' }, { status: 400 });
+  console.log('Programs PATCH: Request body =', { id, data, status });
+  
+  if (!id) {
+    console.log('Programs PATCH: No id provided, returning 400');
+    return NextResponse.json({ error: 'id required.' }, { status: 400 });
+  }
   
   const program = await prisma.program.findUnique({ where: { id } });
-  if (!program) return NextResponse.json({ error: 'Not found.' }, { status: 404 });
+  console.log('Programs PATCH: Found program =', program ? 'yes' : 'no');
+  
+  if (!program) {
+    console.log('Programs PATCH: Program not found, returning 404');
+    return NextResponse.json({ error: 'Not found.' }, { status: 404 });
+  }
   
   // Ensure the program belongs to a client of this CPT
   const client = await prisma.client.findUnique({ where: { id: program.clientId } });
+  console.log('Programs PATCH: Found client =', client ? 'yes' : 'no');
+  console.log('Programs PATCH: Client cptId =', client?.cptId);
+  console.log('Programs PATCH: Request cptId =', cptId);
+  
   if (!client || client.cptId !== cptId) {
+    console.log('Programs PATCH: Client not found or unauthorized, returning 404');
     return NextResponse.json({ error: 'Not found or unauthorized.' }, { status: 404 });
   }
   
@@ -202,9 +226,13 @@ export async function PATCH(req: NextRequest) {
     if (data) updateData.data = data;
     if (status) updateData.status = status;
     
+    console.log('Programs PATCH: Update data =', updateData);
+    
     const updated = await prisma.program.update({ where: { id }, data: updateData });
+    console.log('Programs PATCH: Program updated successfully =', updated);
     return NextResponse.json(updated);
   } catch (error) {
+    console.error('Programs PATCH: Error updating program =', error);
     return NextResponse.json({ error: 'Program update failed.' }, { status: 500 });
   }
 }

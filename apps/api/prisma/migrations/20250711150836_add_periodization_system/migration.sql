@@ -156,8 +156,6 @@ CREATE TABLE "ProgressionRule" (
 );
 
 -- RedefineTables
-PRAGMA defer_foreign_keys=ON;
-PRAGMA foreign_keys=OFF;
 CREATE TABLE "new_Client" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "cptId" TEXT NOT NULL,
@@ -181,8 +179,6 @@ DROP TABLE "Client";
 ALTER TABLE "new_Client" RENAME TO "Client";
 CREATE UNIQUE INDEX "Client_codeName_key" ON "Client"("codeName");
 CREATE UNIQUE INDEX "Client_email_key" ON "Client"("email");
-PRAGMA foreign_keys=ON;
-PRAGMA defer_foreign_keys=OFF;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ExerciseCategory_name_key" ON "ExerciseCategory"("name");

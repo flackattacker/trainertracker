@@ -66,8 +66,6 @@ CREATE TABLE "SetPerformance" (
 );
 
 -- RedefineTables
-PRAGMA defer_foreign_keys=ON;
-PRAGMA foreign_keys=OFF;
 CREATE TABLE "new_Program" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "cptId" TEXT NOT NULL,
@@ -115,8 +113,6 @@ CREATE TABLE "new_Session" (
 INSERT INTO "new_Session" ("clientId", "cptId", "createdAt", "endTime", "id", "isRecurring", "location", "notes", "parentSessionId", "recurringPattern", "recurringSessionId", "startTime", "status", "type", "updatedAt") SELECT "clientId", "cptId", "createdAt", "endTime", "id", "isRecurring", "location", "notes", "parentSessionId", "recurringPattern", "recurringSessionId", "startTime", "status", "type", "updatedAt" FROM "Session";
 DROP TABLE "Session";
 ALTER TABLE "new_Session" RENAME TO "Session";
-PRAGMA foreign_keys=ON;
-PRAGMA defer_foreign_keys=OFF;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SessionWorkout_sessionId_workoutId_key" ON "SessionWorkout"("sessionId", "workoutId");

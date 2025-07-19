@@ -11,6 +11,6 @@ export async function GET(request: NextRequest) {
     if (error instanceof Error) {
       console.error('Stack trace:', error.stack);
     }
-    return NextResponse.json({ ok: false, error: error?.message || error, stack: error?.stack || '' }, { status: 500 });
+    return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : '' }, { status: 500 });
   }
 } 

@@ -20,8 +20,6 @@
 
 */
 -- RedefineTables
-PRAGMA defer_foreign_keys=ON;
-PRAGMA foreign_keys=OFF;
 CREATE TABLE "new_Assessment" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "cptId" TEXT NOT NULL,
@@ -100,5 +98,3 @@ CREATE TABLE "new_Progress" (
 INSERT INTO "new_Progress" ("clientId", "createdAt", "data", "id") SELECT "clientId", "createdAt", "data", "id" FROM "Progress";
 DROP TABLE "Progress";
 ALTER TABLE "new_Progress" RENAME TO "Progress";
-PRAGMA foreign_keys=ON;
-PRAGMA defer_foreign_keys=OFF;
