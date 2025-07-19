@@ -159,7 +159,7 @@ export default function TrainerPortal() {
 
   // API call helper
   const apiCall = async (endpoint: string, options: RequestInit = {}) => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
     const url = `${baseUrl}${endpoint}`;
     
     const config: RequestInit = {
@@ -205,16 +205,26 @@ export default function TrainerPortal() {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      const response = await apiCall('/api/auth/login', {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+      const response = await fetch(`${baseUrl}/api/auth/login`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email, password }),
       });
       
-      setToken(response.token);
-      setUser(response.user);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setToken(data.token);
+      setUser(data.user);
       // Store token consistently
-      localStorage.setItem('trainer-tracker-token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('trainer-tracker-token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       
       showMessage('Login successful!');
     } catch (error) {
