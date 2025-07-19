@@ -7,7 +7,7 @@ import { Badge } from '@repo/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/tabs';
 import styles from './page.module.css';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
 
 interface Client {
   id: string;
