@@ -6,9 +6,12 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret';
 
 export function middleware(request: NextRequest) {
+  console.log('Middleware: Processing request:', request.method, request.nextUrl.pathname);
+  
   // Handle CORS preflight requests
   if (request.method === 'OPTIONS') {
-    return new NextResponse(null, {
+    console.log('Middleware: Handling OPTIONS request for:', request.nextUrl.pathname);
+    const response = new NextResponse(null, {
       status: 200,
       headers: {
         'Access-Control-Allow-Origin': 'https://trainer-tracker-web.onrender.com',
@@ -17,6 +20,8 @@ export function middleware(request: NextRequest) {
         'Access-Control-Max-Age': '86400',
       },
     });
+    console.log('Middleware: OPTIONS response headers:', Object.fromEntries(response.headers.entries()));
+    return response;
   }
 
   // Only protect /api routes
@@ -96,5 +101,13 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/:path*'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
 }; 
