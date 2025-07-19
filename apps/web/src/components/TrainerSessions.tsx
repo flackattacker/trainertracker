@@ -5,7 +5,7 @@ import RecurringSessions from './RecurringSessions';
 import AvailabilityManager from './AvailabilityManager';
 import CalendarExport from './CalendarExport';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 interface Session {
   id: string;

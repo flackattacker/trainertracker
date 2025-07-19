@@ -108,7 +108,7 @@ export default function ProgramProgress({ programId, clientId, token }: ProgramP
   const fetchProgressData = async () => {
     try {
       setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       
       // Get authentication token - use prop first, then check localStorage
       let authToken = token;

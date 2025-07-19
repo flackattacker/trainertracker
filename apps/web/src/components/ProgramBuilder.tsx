@@ -130,7 +130,7 @@ interface AIReview {
   };
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 const ProgramBuilder: React.FC = () => {
   // Core state
@@ -212,7 +212,7 @@ const ProgramBuilder: React.FC = () => {
 
   // API call helper function (similar to trainer portal)
   const apiCall = async (endpoint: string, options: RequestInit = {}) => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
     const url = `${baseUrl}${endpoint}`;
     
     // Get token from localStorage

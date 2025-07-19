@@ -114,7 +114,7 @@ export function TemplateManagement() {
       if (!token) {
         token = localStorage.getItem('token');
       }
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       const response = await fetch(`${API_BASE}/api/program-templates`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -180,7 +180,7 @@ export function TemplateManagement() {
   const handleSaveTemplate = async () => {
     try {
       setSaving(true);
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       const url = editingTemplate 
         ? `${API_BASE}/api/program-templates/${editingTemplate.id}`
         : `${API_BASE}/api/program-templates`;
@@ -220,7 +220,7 @@ export function TemplateManagement() {
     }
 
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://trainer-tracker-api.onrender.com';
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       let token = localStorage.getItem('trainer-tracker-token');
       if (!token) {
         token = localStorage.getItem('token');
